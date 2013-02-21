@@ -84,6 +84,12 @@ public class RadarHttpSessionManager {
                 if (!providerIds.isEmpty()) {
                     probeServerURL.append("&i=" + TextUtils.join(",", providerIds));
                 }
+                if (DeviceStateChecker.isOnWifi(RadarHttpSessionManager.this._app)) {
+                    probeServerURL.append("&allowThroughput=1");
+                }
+                else {
+                    probeServerURL.append("&allowThroughput=1");
+                }
                 probeServerURL.append(String.format("&rnd=%s", UUID.randomUUID().toString()));
                 
                 Log.d(TAG, "Opening " + probeServerURL.toString());
@@ -269,6 +275,19 @@ public class RadarHttpSessionManager {
                             long elapsed = new Date().getTime() - start;
                             stream.close();
                             Log.d(TAG, String.format("Time elapsed: %d ms", elapsed));
+                            
+                            long measurement = elapsed;
+                            // Calculate KBPS if this is a throughput measurement
+                            if ((23 == probeTypeNum) || (30 == probeTypeNum)) {
+                                if (!current.has("s")) {
+                                    Log.w(TAG, "Missing file size hint");
+                                    return;
+                                }
+                                double kbps = 8 * 1000 * current.getInt("s") / (double)elapsed;
+                                Log.d(TAG, "KBPS: " + kbps);
+                                measurement = (int)kbps;
+                            }
+                            
                             // Send the report synchronously
                             new RemoteProbeReportHandler(
                                 requestSignature,
@@ -277,7 +296,7 @@ public class RadarHttpSessionManager {
                                 providerId,
                                 probeTypeNum,
                                 0,
-                                elapsed).run();
+                                measurement).run();
                         }
                         catch (MalformedURLException e) {
                             e.printStackTrace();
@@ -301,18 +320,18 @@ public class RadarHttpSessionManager {
         private int _providerId;
         private int _probeTypeNum;
         private int _responseCode;
-        private long _elapsed;
+        private long _measurement;
         
         public RemoteProbeReportHandler(String requestSignature, int providerOwnerZoneId,
                 int providerOwnerCustomerId, int providerId, int probeTypeNum,
-                int responseCode, long elapsed) {
+                int responseCode, long measurement) {
             super(RadarHttpSessionManager.this._reportHost, requestSignature);
             this._providerOwnerZoneId = providerOwnerZoneId;
             this._providerOwnerCustomerId = providerOwnerCustomerId;
             this._providerId = providerId;
             this._probeTypeNum = probeTypeNum;
             this._responseCode = responseCode;
-            this._elapsed = elapsed;
+            this._measurement = measurement;
         }
         @Override
         public List<String> getReportElements() {
@@ -324,7 +343,7 @@ public class RadarHttpSessionManager {
             result.add(String.format("%d", this._providerId));
             result.add(String.format("%d", this._probeTypeNum));
             result.add(String.format("%d", this._responseCode));
-            result.add(String.format("%d", this._elapsed));
+            result.add(String.format("%d", this._measurement));
             return result;
         }
     }
