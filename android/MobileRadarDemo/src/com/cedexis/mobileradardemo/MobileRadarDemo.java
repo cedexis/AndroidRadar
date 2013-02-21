@@ -40,7 +40,11 @@ public class MobileRadarDemo extends Activity {
         this._resumed = true;
         
         // Report when the method fired
-        ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM().reportEvent("onResume");
+        ((MobileRadarDemoApplication)this.getApplication())
+            .getRadarRUM().reportEvent(
+                "onResume",
+                RadarTags.MainPage.getValue() |
+                    RadarTags.Miscellaneous.getValue());
     }
     
     @Override
@@ -48,8 +52,11 @@ public class MobileRadarDemo extends Activity {
         super.onStart();
         
         // Report when the method fired
-        ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM()
-            .reportEvent("onStart");
+        ((MobileRadarDemoApplication)this.getApplication())
+            .getRadarRUM().reportEvent(
+                "onStart",
+                RadarTags.MainPage.getValue() |
+                RadarTags.Miscellaneous.getValue());
     }
     
     @Override
@@ -78,8 +85,11 @@ public class MobileRadarDemo extends Activity {
         15000); // repeat every several seconds
         
         // Report when the method fired
-        ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM()
-            .reportEvent("onCreate");
+        ((MobileRadarDemoApplication)this.getApplication())
+            .getRadarRUM().reportEvent(
+                "onCreate",
+                RadarTags.MainPage.getValue() |
+                RadarTags.Miscellaneous.getValue());
         
         // Attach metadata to the RUM session
         // In this example, we attach a fictitious username 
@@ -102,8 +112,11 @@ public class MobileRadarDemo extends Activity {
         this._resumed = false;
         
         // Report when the method fired
-        ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM()
-            .reportEvent("onPause");
+        ((MobileRadarDemoApplication)this.getApplication())
+            .getRadarRUM().reportEvent(
+                "onPause",
+                RadarTags.MainPage.getValue() |
+                RadarTags.Miscellaneous.getValue());
     }
     
     public void showLog(MenuItem item) {

@@ -20,13 +20,19 @@ public class ShowLog extends Activity {
         Log.d(TAG, "onCreate");
         setContentView(R.layout.show_log);
         
-        ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM()
-            .reportEvent("ShowLog.onCreate");
+        ((MobileRadarDemoApplication)this.getApplication())
+            .getRadarRUM().reportEvent(
+                "onCreate",
+                RadarTags.ShowLogPage.getValue() |
+                RadarTags.Miscellaneous.getValue());
         
         this.loadLogText();
         
-        ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM()
-            .reportEvent("ShowLog text loaded");
+        ((MobileRadarDemoApplication)this.getApplication())
+            .getRadarRUM().reportEvent(
+                "text loaded", // spaces are okay
+                RadarTags.ShowLogPage.getValue() |
+                RadarTags.Miscellaneous.getValue());
     }
 
     private void loadLogText() {
@@ -53,7 +59,8 @@ public class ShowLog extends Activity {
             textView.setText(log.toString());
         }
         catch (IOException e) {
-            Log.d(TAG, "Caugh IOException: " + e.toString());
+            Log.w(TAG, "Caught IOException: " + e.toString());
+            e.printStackTrace();
         }
     }
     

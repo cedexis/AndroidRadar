@@ -50,15 +50,24 @@ public class RadarRUMSession {
         this._initHost = initHost;
         this._reportHost = reportHost;
         this._preInitQueue = new LinkedList<IRUMObject>();
-        this._preInitQueue.add(new RUMEvent("appStart", appStartTime));
+        this._preInitQueue.add(new RUMEvent("appStart", 0, appStartTime));
         this._app = app;
     }
     
     public void reportEvent(String eventName) {
-        Log.d(TAG, "Received request to report event: " + eventName);
-        this.reportRUMObject(new RUMEvent(eventName, new Date().getTime()));
+        this.reportEvent(eventName, 0);
     }
-
+    
+    public void reportEvent(String eventName, long tag) {
+        Log.d(TAG, String.format("Received request to report event \"%s\", tag %d", eventName, tag));
+        this.reportRUMObject(new RUMEvent(eventName, tag, new Date().getTime()));
+    }
+    
+    public void reportSetProperty(String name, String value) {
+        Log.d(TAG, String.format("Received request to set property \"%s\" to \"%s\"", name, value));
+        this.reportRUMObject(new RUMMetadata(name, value, new Date().getTime()));
+    }
+    
     private void reportRUMObject(IRUMObject rumObject) {
         if (null == this._futureInit) {
             // This is the first report. We initiate the init request here and
@@ -88,11 +97,6 @@ public class RadarRUMSession {
                 rumObject.createReportHandler(
                     this._initResult.getRequestSignature()));
         }
-    }
-    
-    public void reportSetProperty(String name, String value) {
-        Log.d(TAG, String.format("Received request to set property \"%s\" to \"%s\"", name, value));
-        this.reportRUMObject(new RUMMetadata(name, value, new Date().getTime()));
     }
     
     private void beginInit() {
@@ -220,20 +224,26 @@ public class RadarRUMSession {
     class RUMEvent implements IRUMObject {
         private String _eventName;
         private long _timestamp;
+        private long _tag;
         
-        public RUMEvent(String eventName, long timestamp) {
+        public RUMEvent(String eventName, long tag, long timestamp) {
             this._eventName = eventName;
             this._timestamp = timestamp;
+            this._tag = tag;
         }
         
         public String getEventName() {
             return this._eventName;
         }
         
+        public long getTag() {
+            return this._tag;
+        }
+        
         public long getTimestamp() {
             return this._timestamp;
         }
-
+        
         @Override
         public ReportHandler createReportHandler(String requestSignature) {
             return new RUMEventReportHandler(this, requestSignature);
@@ -241,8 +251,8 @@ public class RadarRUMSession {
         
         @Override
         public String toString() {
-            return String.format(Locale.getDefault(), "RUMEvent (%s, %d)",
-                    this._eventName, this._timestamp);
+            return String.format(Locale.getDefault(), "RUMEvent (%s, %d, %d)",
+                    this._eventName, this._tag, this._timestamp);
         }
     }
     
@@ -260,6 +270,7 @@ public class RadarRUMSession {
             List<String> result = new ArrayList<String>();
             result.add("r1");
             result.add(this._event.getEventName());
+            result.add(String.format("%d", this._event.getTag()));
             result.add(String.format("%d", this._event.getTimestamp()));
             result.add(this.getRequestSignature());
             return result;
