@@ -54,6 +54,16 @@ public class RadarRUMSession {
         this._app = app;
     }
     
+    public void reportSliceStart(String sliceName) {
+        Log.d(TAG, String.format("Received request to start slice \"%s\"", sliceName));
+        this.reportRUMObject(new RUMSlice(sliceName, new Date().getTime(), true));
+    }
+    
+    public void reportSliceEnd(String sliceName) {
+        Log.d(TAG, String.format("Received request to end slice \"%s\"", sliceName));
+        this.reportRUMObject(new RUMSlice(sliceName, new Date().getTime(), false));
+    }
+    
     public void reportEvent(String eventName) {
         this.reportEvent(eventName, 0);
     }
@@ -256,43 +266,103 @@ public class RadarRUMSession {
         }
     }
     
-    class RUMEventReportHandler extends ReportHandler {
+    abstract class RUMReportHandler<T> extends ReportHandler {
+        private T _object;
         
-        private RUMEvent _event;
-        
-        public RUMEventReportHandler(RUMEvent event, String requestSignature) {
+        public RUMReportHandler(T object, String requestSignature) {
             super(_reportHost, requestSignature);
-            this._event = event;
+            this._object = object;
+        }
+        
+        protected T getObject() {
+            return this._object;
+        }
+    }
+    
+    class RUMEventReportHandler extends RUMReportHandler<RUMEvent> {
+        
+        public RUMEventReportHandler(RUMEvent event, String requestSignaure) {
+            super(event, requestSignaure);
         }
         
         @Override
         public List<String> getReportElements() {
             List<String> result = new ArrayList<String>();
             result.add("r1");
-            result.add(this._event.getEventName());
-            result.add(String.format("%d", this._event.getTag()));
-            result.add(String.format("%d", this._event.getTimestamp()));
+            result.add(this.getObject().getEventName());
+            result.add(String.format("%d", this.getObject().getTag()));
+            result.add(String.format("%d", this.getObject().getTimestamp()));
             result.add(this.getRequestSignature());
             return result;
         }
     }
     
-    class RUMMetadataReportHandler extends ReportHandler {
-        
-        private RUMMetadata _metadata;
+    class RUMMetadataReportHandler extends RUMReportHandler<RUMMetadata> {
         
         public RUMMetadataReportHandler(RUMMetadata metadata, String requestSignature) {
-            super(_reportHost, requestSignature);
-            this._metadata = metadata;
+            super(metadata, requestSignature);
         }
         
         @Override
         public List<String> getReportElements() {
             List<String> result = new ArrayList<String>();
             result.add("r2");
-            result.add(this._metadata.getName());
-            result.add(this._metadata.getValue());
-            result.add(String.format("%d", this._metadata.getTimestamp()));
+            result.add(this.getObject().getName());
+            result.add(this.getObject().getValue());
+            result.add(String.format("%d", this.getObject().getTimestamp()));
+            result.add(this.getRequestSignature());
+            return result;
+        }
+    }
+    
+    class RUMSlice implements IRUMObject {
+        private String _sliceName;
+        private long _timestamp;
+        private boolean _start;
+        
+        public RUMSlice(String sliceName, long timestamp, boolean isStartOfSlice) {
+            this._sliceName = sliceName;
+            this._timestamp = timestamp;
+            this._start = isStartOfSlice;
+        }
+        
+        public String getSliceName() {
+            return this._sliceName;
+        }
+        
+        public long getTimestamp() {
+            return this._timestamp;
+        }
+        
+        public boolean isStartOfSlice() {
+            return this._start;
+        }
+        
+        @Override
+        public ReportHandler createReportHandler(String requestSignature) {
+            return new RUMSliceReportHandler(this, requestSignature);
+        }
+        
+        @Override
+        public String toString() {
+            return String.format(Locale.getDefault(), "RUMSlice (%s, %d, %b)",
+                this._sliceName, this._timestamp, this._start);
+        }
+    }
+    
+    class RUMSliceReportHandler extends RUMReportHandler<RUMSlice> {
+        
+        public RUMSliceReportHandler(RUMSlice slice, String requestSignature) {
+            super(slice, requestSignature);
+        }
+        
+        @Override
+        public List<String> getReportElements() {
+            List<String> result = new ArrayList<String>();
+            result.add("r3");
+            result.add(this.getObject().getSliceName());
+            result.add(String.format("%d", this.getObject().isStartOfSlice() ? 1 : 0));
+            result.add(String.format("%d", this.getObject().getTimestamp()));
             result.add(this.getRequestSignature());
             return result;
         }

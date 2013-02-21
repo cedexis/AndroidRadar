@@ -23,16 +23,16 @@ public class ShowLog extends Activity {
         ((MobileRadarDemoApplication)this.getApplication())
             .getRadarRUM().reportEvent(
                 "onCreate",
-                RadarTags.ShowLogPage.getValue() |
-                RadarTags.Miscellaneous.getValue());
+                RadarRUMTags.ShowLogPage.getValue() |
+                RadarRUMTags.Miscellaneous.getValue());
         
         this.loadLogText();
         
         ((MobileRadarDemoApplication)this.getApplication())
             .getRadarRUM().reportEvent(
                 "text loaded", // spaces are okay
-                RadarTags.ShowLogPage.getValue() |
-                RadarTags.Miscellaneous.getValue());
+                RadarRUMTags.ShowLogPage.getValue() |
+                RadarRUMTags.Miscellaneous.getValue());
     }
 
     private void loadLogText() {

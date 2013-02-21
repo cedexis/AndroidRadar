@@ -3,6 +3,8 @@ package com.cedexis.mobileradardemo;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.cedexis.mobileradarlib.rum.RadarRUMSession;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import android.view.MenuItem;
 public class MobileRadarDemo extends Activity {
     
     private final static String TAG = "MobileRadarDemo";
+    private final static String OUTER_SLICE_NAME = "Main Page Outer";
+    private final static String INNER_SLICE_NAME = "Main Page Inner";
     
     private boolean _resumed = false;
     
@@ -33,30 +37,33 @@ public class MobileRadarDemo extends Activity {
     }
     
     @Override
-    protected void onResume() {
-        super.onResume();
-        
-        // Mark the activity as resumed
-        this._resumed = true;
-        
-        // Report when the method fired
-        ((MobileRadarDemoApplication)this.getApplication())
-            .getRadarRUM().reportEvent(
-                "onResume",
-                RadarTags.MainPage.getValue() |
-                    RadarTags.Miscellaneous.getValue());
-    }
-    
-    @Override
     protected void onStart() {
         super.onStart();
         
+        // Begin a new Radar RUM slice
+        RadarRUMSession rumSession = ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM();
+        rumSession.reportSliceStart(MobileRadarDemo.INNER_SLICE_NAME);
+        
         // Report when the method fired
-        ((MobileRadarDemoApplication)this.getApplication())
-            .getRadarRUM().reportEvent(
-                "onStart",
-                RadarTags.MainPage.getValue() |
-                RadarTags.Miscellaneous.getValue());
+        rumSession.reportEvent(
+            "onStart",
+            RadarRUMTags.MainPage.getValue() |
+            RadarRUMTags.Miscellaneous.getValue());
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        
+        // End Radar RUM slice
+        RadarRUMSession rumSession = ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM();
+        rumSession.reportSliceEnd(MobileRadarDemo.INNER_SLICE_NAME);
+        
+        // Report when the method fired
+        rumSession.reportEvent(
+            "onStop",
+            RadarRUMTags.MainPage.getValue() |
+            RadarRUMTags.Miscellaneous.getValue());
     }
     
     @Override
@@ -84,19 +91,30 @@ public class MobileRadarDemo extends Activity {
         2000, // start in 2 seconds
         15000); // repeat every several seconds
         
+        // Start Create/Destroy slice
+        RadarRUMSession rumSession = ((MobileRadarDemoApplication)this.getApplication())
+            .getRadarRUM(); 
+        rumSession.reportSliceStart(MobileRadarDemo.OUTER_SLICE_NAME);
+        
         // Report when the method fired
-        ((MobileRadarDemoApplication)this.getApplication())
-            .getRadarRUM().reportEvent(
-                "onCreate",
-                RadarTags.MainPage.getValue() |
-                RadarTags.Miscellaneous.getValue());
+        rumSession.reportEvent(
+            "onCreate",
+            RadarRUMTags.MainPage.getValue() |
+            RadarRUMTags.Miscellaneous.getValue());
         
         // Attach metadata to the RUM session
         // In this example, we attach a fictitious username 
-        ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM()
-            .reportSetProperty("username", "someusername");
+        rumSession.reportSetProperty("user name", "some user name");
     }
-
+    
+    @Override
+    protected void onDestroy() {
+        // End outer slice
+        ((MobileRadarDemoApplication)this.getApplication())
+            .getRadarRUM().reportSliceEnd(MobileRadarDemo.OUTER_SLICE_NAME);
+        super.onDestroy();
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -115,8 +133,23 @@ public class MobileRadarDemo extends Activity {
         ((MobileRadarDemoApplication)this.getApplication())
             .getRadarRUM().reportEvent(
                 "onPause",
-                RadarTags.MainPage.getValue() |
-                RadarTags.Miscellaneous.getValue());
+                RadarRUMTags.MainPage.getValue() |
+                RadarRUMTags.Miscellaneous.getValue());
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        // Mark the activity as resumed
+        this._resumed = true;
+        
+        // Report when the method fired
+        ((MobileRadarDemoApplication)this.getApplication())
+            .getRadarRUM().reportEvent(
+                "onResume",
+                RadarRUMTags.MainPage.getValue() |
+                RadarRUMTags.Miscellaneous.getValue());
     }
     
     public void showLog(MenuItem item) {
