@@ -37,6 +37,8 @@
 		1640431C16D7D91C009005B8 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 1640431B16D7D91C009005B8 /* Default.png */; };
 		1640431F16D7DB42009005B8 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1640431E16D7DB42009005B8 /* SVProgressHUD.m */; };
 		1640432116D7DB76009005B8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1640432016D7DB76009005B8 /* QuartzCore.framework */; };
+		1640439916D804E4009005B8 /* libRadar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1640439816D804E4009005B8 /* libRadar.a */; };
+		1640439D16D8336D009005B8 /* RadarVars.m in Sources */ = {isa = PBXBuildFile; fileRef = 1640439C16D8336D009005B8 /* RadarVars.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +83,9 @@
 		1640431D16D7DB42009005B8 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		1640431E16D7DB42009005B8 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		1640432016D7DB76009005B8 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		1640439816D804E4009005B8 /* libRadar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libRadar.a; path = "../Radar/build/Release-iphoneos/libRadar.a"; sourceTree = "<group>"; };
+		1640439B16D8250D009005B8 /* RadarVars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadarVars.h; sourceTree = "<group>"; };
+		1640439C16D8336D009005B8 /* RadarVars.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadarVars.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1640439916D804E4009005B8 /* libRadar.a in Frameworks */,
 				1640432116D7DB76009005B8 /* QuartzCore.framework in Frameworks */,
 				164042C416D6D6AA009005B8 /* UIKit.framework in Frameworks */,
 				164042C616D6D6AA009005B8 /* Foundation.framework in Frameworks */,
@@ -101,7 +107,7 @@
 		164042B716D6D6AA009005B8 = {
 			isa = PBXGroup;
 			children = (
-				1640432016D7DB76009005B8 /* QuartzCore.framework */,
+				1640439816D804E4009005B8 /* libRadar.a */,
 				164042C916D6D6AA009005B8 /* ScaryBugs */,
 				164042C216D6D6AA009005B8 /* Frameworks */,
 				164042C116D6D6AA009005B8 /* Products */,
@@ -119,6 +125,7 @@
 		164042C216D6D6AA009005B8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1640432016D7DB76009005B8 /* QuartzCore.framework */,
 				164042C316D6D6AA009005B8 /* UIKit.framework */,
 				164042C516D6D6AA009005B8 /* Foundation.framework */,
 				164042C716D6D6AA009005B8 /* CoreGraphics.framework */,
@@ -129,6 +136,7 @@
 		164042C916D6D6AA009005B8 /* ScaryBugs */ = {
 			isa = PBXGroup;
 			children = (
+				1640439A16D824D4009005B8 /* Radar */,
 				1640430916D6FCBD009005B8 /* Art */,
 				1640430816D6FCAF009005B8 /* Helpers */,
 				1640430416D6FC63009005B8 /* Views */,
@@ -215,6 +223,15 @@
 				1640431016D6FCEF009005B8 /* shockedface2_half.png */,
 			);
 			name = Art;
+			sourceTree = "<group>";
+		};
+		1640439A16D824D4009005B8 /* Radar */ = {
+			isa = PBXGroup;
+			children = (
+				1640439B16D8250D009005B8 /* RadarVars.h */,
+				1640439C16D8336D009005B8 /* RadarVars.m */,
+			);
+			name = Radar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -305,6 +322,7 @@
 				1640430716D6FC80009005B8 /* RateView.m in Sources */,
 				1640430C16D6FCCF009005B8 /* UIImageExtras.m in Sources */,
 				1640431F16D7DB42009005B8 /* SVProgressHUD.m in Sources */,
+				1640439D16D8336D009005B8 /* RadarVars.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +414,7 @@
 				INFOPLIST_FILE = "ScaryBugs/ScaryBugs-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "../Radar/**";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -408,6 +427,7 @@
 				INFOPLIST_FILE = "ScaryBugs/ScaryBugs-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "../Radar/**";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

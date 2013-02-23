@@ -2,7 +2,6 @@
 //  ScaryBugsMasterViewController.m
 //  ScaryBugs
 //
-//  Created by Jacob Wan on 2/21/13.
 //  Copyright (c) 2013 Cedexis. All rights reserved.
 //
 
@@ -10,13 +9,33 @@
 #import "ScaryBugsDetailViewController.h"
 #import "ScaryBugDoc.h"
 #import "ScaryBugData.h"
+#import "Radar.h"
+#import "RadarVars.h"
 
 @implementation ScaryBugsMasterViewController
 
 @synthesize bugs = _bugs;
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    // Report the RUM event
+    [Radar reportEvent:RadarEventsViewWillDisappear
+              WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
+}
+
+
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    // Report the RUM event
+    [Radar reportEvent:RadarEventsViewDidAppear
+              WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
 }
 
 - (void)awakeFromNib
@@ -40,6 +59,10 @@
 
     self.detailViewController = (ScaryBugsDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.title = @"Scary Bugs";
+    
+    // Report the RUM event
+    [Radar reportEvent:RadarEventsViewDidLoad
+              WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
 }
 
 - (void)didReceiveMemoryWarning
@@ -50,6 +73,11 @@
 
 - (void)addTapped:(id)sender
 {
+    // Report the RUM event.  Do this early in the event handler in order to trap any processing
+    // that it contains.
+    [Radar reportEvent:RadarEventsAddTapped
+              WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
+    
     ScaryBugDoc *newDoc = [[ScaryBugDoc alloc]
                            initWithTitle:@"New Bug"
                            AndRating:0

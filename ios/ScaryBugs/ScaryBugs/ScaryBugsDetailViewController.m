@@ -2,7 +2,6 @@
 //  ScaryBugsDetailViewController.m
 //  ScaryBugs
 //
-//  Created by Jacob Wan on 2/21/13.
 //  Copyright (c) 2013 Cedexis. All rights reserved.
 //
 
@@ -11,6 +10,8 @@
 #import "ScaryBugData.h"
 #import "UIImageExtras.h"
 #import "SVProgressHUD.h"
+#import "Radar.h"
+#import "RadarVars.h"
 
 @interface ScaryBugsDetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -20,6 +21,30 @@
 @implementation ScaryBugsDetailViewController
 
 @synthesize picker = _picker;
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    // Report the RUM event
+    [Radar reportEvent:RadarEventsViewWillDisappear
+              WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
+    
+    // End the slice
+    [Radar reportSlice:RadarSlicesDetailView Start:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    // Start a slice to gather all the events that take place during the user's visit to
+    // this page
+    [Radar reportSlice:RadarSlicesDetailView Start:YES];
+    
+    // Report the RUM event
+    [Radar reportEvent:RadarEventsViewDidAppear
+              WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
+}
+
 
 #pragma mark - Managing the detail item
 
@@ -68,16 +93,22 @@
 
 #pragma mark - Split view
 
-- (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
+- (void)splitViewController:(UISplitViewController *)splitController
+     willHideViewController:(UIViewController *)viewController
+          withBarButtonItem:(UIBarButtonItem *)barButtonItem
+       forPopoverController:(UIPopoverController *)popoverController
 {
     barButtonItem.title = NSLocalizedString(@"Master", @"Master");
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
 }
 
-- (void)splitViewController:(UISplitViewController *)splitController willShowViewController:(UIViewController *)viewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+- (void)splitViewController:(UISplitViewController *)splitController
+     willShowViewController:(UIViewController *)viewController
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
 {
-    // Called when the view is shown again in the split view, invalidating the button and popover controller.
+    // Called when the view is shown again in the split view, invalidating the button and popover
+    // controller.
     [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     self.masterPopoverController = nil;
 }
@@ -102,14 +133,18 @@
             
             // 4) Present picker in main thread
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.navigationController presentViewController:_picker animated:YES completion:^(void) {}];
+                [self.navigationController presentViewController:_picker
+                                                        animated:YES
+                                                      completion:^(void) {}];
                 [SVProgressHUD dismiss];
             });
             
         });
         
     }  else {
-        [self.navigationController presentViewController:_picker animated:YES completion:^(void) {}];
+        [self.navigationController presentViewController:_picker
+                                                animated:YES
+                                              completion:^(void) {}];
     }
 }
 
@@ -135,7 +170,18 @@
 # pragma mark RateViewDelegate
 
 - (void)rateView:(RateView *)rateView ratingDidChange:(float)rating {
-    self.detailItem.data.rating = rating;
+    if (self.detailItem.data.rating != rating) {
+        self.detailItem.data.rating = rating;
+    
+        // Report the RUM event
+        NSUInteger reportId = [Radar reportEvent:RadarEventsRatingChanged
+                                        WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
+        
+        // Report metadata for the RUM event
+        [Radar reportProperty:RadarPropertiesRating
+                        Value:[NSString stringWithFormat:@"%f", rating]
+                    ForReport:reportId];
+    }
 }
 
 # pragma mark UIImagePickerControllerDelegate
@@ -144,8 +190,14 @@
     [self dismissViewControllerAnimated:YES completion:^(void) {}];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+- (void)imagePickerController:(UIImagePickerController *)picker
+        didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self dismissViewControllerAnimated:YES completion:^(void){}];
+    
+    // Report the RUM event
+    [Radar reportEvent:RadarEventsNewImageSelected
+              WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
+    
     UIImage *fullImage = (UIImage *) [info objectForKey:UIImagePickerControllerOriginalImage];
     
     // 1) Show status
@@ -153,7 +205,7 @@
     
     // 2) Get a concurrent queue form the system
     dispatch_queue_t concurrentQueue =
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
     // 3) Resize image in background
     dispatch_async(concurrentQueue, ^{
@@ -166,6 +218,10 @@
             self.detailItem.thumbImage = thumbImage;
             self.imageView.image = fullImage;
             [SVProgressHUD dismiss];
+            
+            // Report the RUM event
+            [Radar reportEvent:RadarEventsNewImagePresented
+                      WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
         });
         
     });
