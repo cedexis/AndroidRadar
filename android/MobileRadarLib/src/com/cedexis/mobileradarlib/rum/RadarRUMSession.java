@@ -307,6 +307,7 @@ public class RadarRUMSession {
         public List<String> getReportElements() {
             List<String> result = new ArrayList<String>();
             result.add("r2");
+            result.add(String.format("%d", 0)); // until report id is supported
             result.add(this.getObject().getName());
             result.add(this.getObject().getValue());
             result.add(String.format("%d", this.getObject().getTimestamp()));
