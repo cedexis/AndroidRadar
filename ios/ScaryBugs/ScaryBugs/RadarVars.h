@@ -29,7 +29,6 @@ FOUNDATION_EXPORT NSString *const RadarEventsAppWillResignActive;
 FOUNDATION_EXPORT NSString *const RadarEventsAppDidEnterBackground;
 FOUNDATION_EXPORT NSString *const RadarEventsAppWillEnterForeground;
 FOUNDATION_EXPORT NSString *const RadarEventsAppDidBecomeActive;
-FOUNDATION_EXPORT NSString *const RadarEventsAppWillTerminate;
 FOUNDATION_EXPORT NSString *const RadarEventsViewDidAppear;
 FOUNDATION_EXPORT NSString *const RadarEventsViewWillDisappear;
 FOUNDATION_EXPORT NSString *const RadarEventsViewDidLoad;

@@ -10,6 +10,15 @@
 		1640438B16D8021E009005B8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1640438A16D8021E009005B8 /* Foundation.framework */; };
 		1640439016D8021E009005B8 /* Radar.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1640438F16D8021E009005B8 /* Radar.h */; };
 		1640439216D8021E009005B8 /* Radar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1640439116D8021E009005B8 /* Radar.m */; };
+		164043AA16D96EFC009005B8 /* RadarCommunication.m in Sources */ = {isa = PBXBuildFile; fileRef = 164043A916D96EFC009005B8 /* RadarCommunication.m */; };
+		164043AF16D97617009005B8 /* InitData.m in Sources */ = {isa = PBXBuildFile; fileRef = 164043AE16D97617009005B8 /* InitData.m */; };
+		164043B316DAF6C9009005B8 /* RUMData.m in Sources */ = {isa = PBXBuildFile; fileRef = 164043B216DAF6C8009005B8 /* RUMData.m */; };
+		164043B616DB2794009005B8 /* RUMProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 164043B516DB2794009005B8 /* RUMProperty.m */; };
+		164043B916DB2C71009005B8 /* RUMSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 164043B816DB2C70009005B8 /* RUMSlice.m */; };
+		164043BE16DB43F6009005B8 /* ProbeServerQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 164043BD16DB43F5009005B8 /* ProbeServerQuery.m */; };
+		164043C416DB71D6009005B8 /* ProbeReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 164043C316DB71D5009005B8 /* ProbeReport.m */; };
+		164043CB16DB8249009005B8 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 164043CA16DB8249009005B8 /* Reachability.m */; };
+		164043D216DB855C009005B8 /* NetworkTypeReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 164043D116DB855C009005B8 /* NetworkTypeReport.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +40,26 @@
 		1640438E16D8021E009005B8 /* Radar-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Radar-Prefix.pch"; sourceTree = "<group>"; };
 		1640438F16D8021E009005B8 /* Radar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Radar.h; sourceTree = "<group>"; };
 		1640439116D8021E009005B8 /* Radar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Radar.m; sourceTree = "<group>"; };
+		164043A816D96EFC009005B8 /* RadarCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadarCommunication.h; sourceTree = "<group>"; };
+		164043A916D96EFC009005B8 /* RadarCommunication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadarCommunication.m; sourceTree = "<group>"; };
+		164043AD16D97617009005B8 /* InitData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitData.h; sourceTree = "<group>"; };
+		164043AE16D97617009005B8 /* InitData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitData.m; sourceTree = "<group>"; };
+		164043B016D97647009005B8 /* CommunicationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunicationData.h; sourceTree = "<group>"; };
+		164043B116DAF6C8009005B8 /* RUMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUMData.h; sourceTree = "<group>"; };
+		164043B216DAF6C8009005B8 /* RUMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUMData.m; sourceTree = "<group>"; };
+		164043B416DB2793009005B8 /* RUMProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUMProperty.h; sourceTree = "<group>"; };
+		164043B516DB2794009005B8 /* RUMProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUMProperty.m; sourceTree = "<group>"; };
+		164043B716DB2C6F009005B8 /* RUMSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUMSlice.h; sourceTree = "<group>"; };
+		164043B816DB2C70009005B8 /* RUMSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUMSlice.m; sourceTree = "<group>"; };
+		164043BC16DB43F5009005B8 /* ProbeServerQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProbeServerQuery.h; sourceTree = "<group>"; };
+		164043BD16DB43F5009005B8 /* ProbeServerQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProbeServerQuery.m; sourceTree = "<group>"; };
+		164043C216DB71D5009005B8 /* ProbeReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProbeReport.h; sourceTree = "<group>"; };
+		164043C316DB71D5009005B8 /* ProbeReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProbeReport.m; sourceTree = "<group>"; };
+		164043C916DB8249009005B8 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		164043CA16DB8249009005B8 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		164043CC16DB82B6009005B8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		164043D016DB855C009005B8 /* NetworkTypeReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkTypeReport.h; sourceTree = "<group>"; };
+		164043D116DB855C009005B8 /* NetworkTypeReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkTypeReport.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +77,8 @@
 		1640437E16D8021E009005B8 = {
 			isa = PBXGroup;
 			children = (
+				164043CC16DB82B6009005B8 /* SystemConfiguration.framework */,
+				164043C516DB7FF6009005B8 /* Classes */,
 				1640438C16D8021E009005B8 /* Radar */,
 				1640438916D8021E009005B8 /* Frameworks */,
 				1640438816D8021E009005B8 /* Products */,
@@ -73,6 +104,7 @@
 		1640438C16D8021E009005B8 /* Radar */ = {
 			isa = PBXGroup;
 			children = (
+				164043AB16D96FE0009005B8 /* Data */,
 				1640438F16D8021E009005B8 /* Radar.h */,
 				1640439116D8021E009005B8 /* Radar.m */,
 				1640438D16D8021E009005B8 /* Supporting Files */,
@@ -86,6 +118,39 @@
 				1640438E16D8021E009005B8 /* Radar-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		164043AB16D96FE0009005B8 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				164043A816D96EFC009005B8 /* RadarCommunication.h */,
+				164043A916D96EFC009005B8 /* RadarCommunication.m */,
+				164043AD16D97617009005B8 /* InitData.h */,
+				164043AE16D97617009005B8 /* InitData.m */,
+				164043B016D97647009005B8 /* CommunicationData.h */,
+				164043B116DAF6C8009005B8 /* RUMData.h */,
+				164043B216DAF6C8009005B8 /* RUMData.m */,
+				164043B416DB2793009005B8 /* RUMProperty.h */,
+				164043B516DB2794009005B8 /* RUMProperty.m */,
+				164043B716DB2C6F009005B8 /* RUMSlice.h */,
+				164043B816DB2C70009005B8 /* RUMSlice.m */,
+				164043BC16DB43F5009005B8 /* ProbeServerQuery.h */,
+				164043BD16DB43F5009005B8 /* ProbeServerQuery.m */,
+				164043C216DB71D5009005B8 /* ProbeReport.h */,
+				164043C316DB71D5009005B8 /* ProbeReport.m */,
+				164043D016DB855C009005B8 /* NetworkTypeReport.h */,
+				164043D116DB855C009005B8 /* NetworkTypeReport.m */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		164043C516DB7FF6009005B8 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				164043C916DB8249009005B8 /* Reachability.h */,
+				164043CA16DB8249009005B8 /* Reachability.m */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,6 +205,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				1640439216D8021E009005B8 /* Radar.m in Sources */,
+				164043AA16D96EFC009005B8 /* RadarCommunication.m in Sources */,
+				164043AF16D97617009005B8 /* InitData.m in Sources */,
+				164043B316DAF6C9009005B8 /* RUMData.m in Sources */,
+				164043B616DB2794009005B8 /* RUMProperty.m in Sources */,
+				164043B916DB2C71009005B8 /* RUMSlice.m in Sources */,
+				164043BE16DB43F6009005B8 /* ProbeServerQuery.m in Sources */,
+				164043C416DB71D6009005B8 /* ProbeReport.m in Sources */,
+				164043CB16DB8249009005B8 /* Reachability.m in Sources */,
+				164043D216DB855C009005B8 /* NetworkTypeReport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +279,7 @@
 				DSTROOT = /tmp/Radar.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Radar/Radar-Prefix.pch";
+				HEADER_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -217,6 +292,7 @@
 				DSTROOT = /tmp/Radar.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Radar/Radar-Prefix.pch";
+				HEADER_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -242,6 +318,7 @@
 				1640439716D8021E009005B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

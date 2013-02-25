@@ -7,6 +7,7 @@
 
 #import "ScaryBugsMasterViewController.h"
 #import "ScaryBugsDetailViewController.h"
+#import "ScaryBugsAppDelegate.h"
 #import "ScaryBugDoc.h"
 #import "ScaryBugData.h"
 #import "Radar.h"
@@ -16,12 +17,17 @@
 
 @synthesize bugs = _bugs;
 
+- (ScaryBugsAppDelegate *)appDelegate {
+    return (ScaryBugsAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsViewWillDisappear
-              WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
+    [[[self appDelegate] radar]
+     reportEvent:RadarEventsViewWillDisappear
+        WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
 }
 
 
@@ -34,8 +40,9 @@
     [super viewDidAppear:animated];
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsViewDidAppear
-              WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
+    [[[self appDelegate] radar]
+     reportEvent:RadarEventsViewDidAppear
+        WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
 }
 
 - (void)awakeFromNib
@@ -61,8 +68,9 @@
     self.title = @"Scary Bugs";
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsViewDidLoad
-              WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
+    [[[self appDelegate] radar]
+     reportEvent:RadarEventsViewDidLoad
+        WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,8 +83,9 @@
 {
     // Report the RUM event.  Do this early in the event handler in order to trap any processing
     // that it contains.
-    [Radar reportEvent:RadarEventsAddTapped
-              WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
+    [[[self appDelegate] radar]
+     reportEvent:RadarEventsAddTapped
+        WithTags:RadarTagsMasterViewController | RadarTagsLevelDebug];
     
     ScaryBugDoc *newDoc = [[ScaryBugDoc alloc]
                            initWithTitle:@"New Bug"
@@ -160,7 +169,5 @@
     ScaryBugDoc *doc = [self.bugs objectAtIndex:self.tableView.indexPathForSelectedRow.row];
     detailController.detailItem = doc;
 }
-
-
 
 @end

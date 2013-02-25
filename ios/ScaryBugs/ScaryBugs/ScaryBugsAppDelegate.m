@@ -11,14 +11,32 @@
 #import "Radar.h"
 #import "RadarVars.h"
 
+@interface Radar()
+
+@end
+
 @implementation ScaryBugsAppDelegate
 
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+@synthesize radar = _radar;
+
+- (BOOL)application:(UIApplication *)application
+    willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    // This is the earliest spot in the application to run code.  Therefore we use it to initialize
+    // This is the earliest spot in the application to run code.  We use it to initialize
     // RUM measurements.  Actual network use is postponed, so this shouldn't cause any delay.
     // Basically, Radar just records the current time and queues a report to be sent later.
-    [Radar initializeRUMSession];
+    
+    radar_comm_complete_block_t initComplete = ^(NSDictionary *result) {
+        // Here we can read the network type received from the init request (if available).
+        NSLog(@"Network type: %@", [result valueForKey:@"networkType"]);
+        NSLog(@"RUM request signature: %@", [result valueForKey:@"requestSignature"]);
+    };
+    
+    _radar = [[Radar alloc] initWithRequestorZoneId:1
+                                RequestorCustomerId:10660];
+    
+    [self.radar startRUMInitCompletionQueue:dispatch_get_main_queue()
+                             InitCompletion:initComplete];
     
     return YES;
 }
@@ -56,14 +74,14 @@
     }
     
     // Allow Radar measurements
-    [Radar enableReporting:YES];
+    [self.radar enableReporting:YES WithPollingInterval:5];
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsAppDidFinishLaunching
-              WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    [self.radar reportEvent:RadarEventsAppDidFinishLaunching
+                   WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
     
     // Attach any useful properties to the RUM session
-    [Radar reportProperty:RadarPropertiesUserId Value:@"some user id"];
+    [self.radar reportProperty:RadarPropertiesUserId Value:@"some user id"];
     
     return YES;
 }
@@ -78,11 +96,11 @@
     
     // Disable Radar measurements.  We do this here (before reporting the RUM event below) to
     // ensure there's minimal impact from Radar on the device as the app is becoming inactive.
-    [Radar enableReporting:NO];
+    [self.radar enableReporting:NO];
     
     // Report the RUM event.  This report will be sent once the app becomes active again.
-    [Radar reportEvent:RadarEventsAppWillResignActive
-              WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    [self.radar reportEvent:RadarEventsAppWillResignActive
+                   WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -94,8 +112,11 @@
     // applicationWillTerminate: when the user quits.
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsAppDidEnterBackground
-              WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    [self.radar reportEvent:RadarEventsAppDidEnterBackground
+                   WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    
+    // Flush any remaining reports
+    [self.radar flush];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -104,8 +125,8 @@
     // many of the changes made on entering the background.
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsAppWillEnterForeground
-              WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    [self.radar reportEvent:RadarEventsAppWillEnterForeground
+                   WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -122,29 +143,16 @@
     
     // This event means the application is now in the foreground and active (the normal state for
     // most applications).  This is a good point to re-enable Radar reporting.
-    [Radar enableReporting:YES];
+    [self.radar enableReporting:YES];
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsAppDidBecomeActive
-              WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    // Called when the application is about to terminate. Save data if appropriate. See also
-    // applicationDidEnterBackground:.
-    
-    // This app is shutting down.  Send any final Radar reports.
-    [Radar enableReporting:YES];
-    
-    // Report the RUM event
-    [Radar reportEvent:RadarEventsAppWillTerminate
+    [self.radar reportEvent:RadarEventsAppDidBecomeActive
               WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
 }
 
 - (void)scheduleRadarHTTP:(NSTimer *)timer {
     NSLog(@"Scheduling Radar HTTP session");
-    [Radar scheduleRemoteProbing];
+    [self.radar scheduleRemoteProbing];
     
     // Now schedule a repeating timer to continue indefinitely, but at a longer interval
     [NSTimer scheduledTimerWithTimeInterval:120 // seconds

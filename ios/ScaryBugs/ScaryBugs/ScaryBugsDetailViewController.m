@@ -6,6 +6,7 @@
 //
 
 #import "ScaryBugsDetailViewController.h"
+#import "ScaryBugsAppDelegate.h"
 #import "ScaryBugDoc.h"
 #import "ScaryBugData.h"
 #import "UIImageExtras.h"
@@ -22,15 +23,19 @@
 
 @synthesize picker = _picker;
 
+- (ScaryBugsAppDelegate *)appDelegate {
+    return (ScaryBugsAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsViewWillDisappear
-              WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
+    [[[self appDelegate] radar] reportEvent:RadarEventsViewWillDisappear
+                                   WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
     
     // End the slice
-    [Radar reportSlice:RadarSlicesDetailView Start:NO];
+    [[[self appDelegate] radar] reportSlice:RadarSlicesDetailView Start:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -38,11 +43,11 @@
     
     // Start a slice to gather all the events that take place during the user's visit to
     // this page
-    [Radar reportSlice:RadarSlicesDetailView Start:YES];
+    [[[self appDelegate] radar] reportSlice:RadarSlicesDetailView Start:YES];
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsViewDidAppear
-              WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
+    [[[self appDelegate] radar] reportEvent:RadarEventsViewDidAppear
+                                   WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
 }
 
 
@@ -174,13 +179,15 @@
         self.detailItem.data.rating = rating;
     
         // Report the RUM event
-        NSUInteger reportId = [Radar reportEvent:RadarEventsRatingChanged
-                                        WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
+        NSUInteger reportId = [[[self appDelegate] radar]
+                               reportEvent:RadarEventsRatingChanged
+                                  WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
         
         // Report metadata for the RUM event
-        [Radar reportProperty:RadarPropertiesRating
-                        Value:[NSString stringWithFormat:@"%f", rating]
-                    ForReport:reportId];
+        [[[self appDelegate] radar]
+            reportProperty:RadarPropertiesRating
+                     Value:[NSString stringWithFormat:@"%d", (int)rating]
+                 ForReport:reportId];
     }
 }
 
@@ -195,8 +202,9 @@
     [self dismissViewControllerAnimated:YES completion:^(void){}];
     
     // Report the RUM event
-    [Radar reportEvent:RadarEventsNewImageSelected
-              WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
+    [[[self appDelegate] radar]
+        reportEvent:RadarEventsNewImageSelected
+           WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
     
     UIImage *fullImage = (UIImage *) [info objectForKey:UIImagePickerControllerOriginalImage];
     
@@ -220,8 +228,9 @@
             [SVProgressHUD dismiss];
             
             // Report the RUM event
-            [Radar reportEvent:RadarEventsNewImagePresented
-                      WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
+            [[[self appDelegate] radar]
+                reportEvent:RadarEventsNewImagePresented
+                   WithTags:RadarTagsDetailViewController | RadarTagsLevelDebug];
         });
         
     });

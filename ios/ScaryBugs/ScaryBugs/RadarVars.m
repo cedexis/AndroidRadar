@@ -13,7 +13,6 @@ NSString *const RadarEventsAppWillResignActive = @"app will resign active";
 NSString *const RadarEventsAppDidEnterBackground = @"app did enter background";
 NSString *const RadarEventsAppWillEnterForeground = @"app will enter foreground";
 NSString *const RadarEventsAppDidBecomeActive = @"app did become active";
-NSString *const RadarEventsAppWillTerminate = @"app will terminate";
 NSString *const RadarEventsViewDidAppear = @"view did appear";
 NSString *const RadarEventsViewWillDisappear = @"view will disappear";
 NSString *const RadarEventsViewDidLoad = @"view did load";

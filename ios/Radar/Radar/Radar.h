@@ -6,17 +6,25 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "RadarCommunication.h"
 
 @interface Radar : NSObject
 
-+ (void)initializeRUMSession;
-+ (void)enableReporting:(BOOL)enabled;
+- (id)initWithRequestorZoneId:(NSUInteger)requestorZoneId
+          RequestorCustomerId:(NSUInteger)requestorCustomerId;
 
-+ (void)scheduleRemoteProbing;
-+ (NSUInteger)reportEvent:(NSString *)eventName;
-+ (NSUInteger)reportEvent:(NSString *)eventName WithTags:(NSUInteger)tags;
-+ (NSUInteger)reportSlice:(NSString *)sliceName Start:(BOOL)start;
-+ (NSUInteger)reportProperty:(NSString *)property Value:(NSString *)value;
-+ (NSUInteger)reportProperty:(NSString *)property Value:(NSString *)value ForReport:(NSUInteger)reportId;
+- (void)startRUMInitCompletionQueue:(dispatch_queue_t)initCompletionQueue
+                     InitCompletion:(radar_comm_complete_block_t)initCompletion;
+
+- (void)enableReporting:(BOOL)enabled;
+- (void)enableReporting:(BOOL)enabled WithPollingInterval:(NSInteger)interval;
+- (void)flush;
+
+- (void)scheduleRemoteProbing;
+- (NSUInteger)reportEvent:(NSString *)eventName;
+- (NSUInteger)reportEvent:(NSString *)eventName WithTags:(NSUInteger)tags;
+- (void)reportSlice:(NSString *)name Start:(BOOL)start;
+- (void)reportProperty:(NSString *)property Value:(NSString *)value ForReport:(NSUInteger)reportId;
+- (void)reportProperty:(NSString *)property Value:(NSString *)value;
 
 @end

@@ -39,6 +39,7 @@
 		1640432116D7DB76009005B8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1640432016D7DB76009005B8 /* QuartzCore.framework */; };
 		1640439916D804E4009005B8 /* libRadar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1640439816D804E4009005B8 /* libRadar.a */; };
 		1640439D16D8336D009005B8 /* RadarVars.m in Sources */ = {isa = PBXBuildFile; fileRef = 1640439C16D8336D009005B8 /* RadarVars.m */; };
+		164043CF16DB82D5009005B8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164043CE16DB82D5009005B8 /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +87,7 @@
 		1640439816D804E4009005B8 /* libRadar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libRadar.a; path = "../Radar/build/Release-iphoneos/libRadar.a"; sourceTree = "<group>"; };
 		1640439B16D8250D009005B8 /* RadarVars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadarVars.h; sourceTree = "<group>"; };
 		1640439C16D8336D009005B8 /* RadarVars.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadarVars.m; sourceTree = "<group>"; };
+		164043CE16DB82D5009005B8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				164043CF16DB82D5009005B8 /* SystemConfiguration.framework in Frameworks */,
 				1640439916D804E4009005B8 /* libRadar.a in Frameworks */,
 				1640432116D7DB76009005B8 /* QuartzCore.framework in Frameworks */,
 				164042C416D6D6AA009005B8 /* UIKit.framework in Frameworks */,
@@ -107,6 +110,7 @@
 		164042B716D6D6AA009005B8 = {
 			isa = PBXGroup;
 			children = (
+				164043CE16DB82D5009005B8 /* SystemConfiguration.framework */,
 				1640439816D804E4009005B8 /* libRadar.a */,
 				164042C916D6D6AA009005B8 /* ScaryBugs */,
 				164042C216D6D6AA009005B8 /* Frameworks */,
