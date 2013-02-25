@@ -11,6 +11,7 @@
 @property NSUInteger requestorZoneId;
 @property NSUInteger requestorCustomerId;
 @property NSArray* providerIds;
+@property BOOL wifi;
 
 @end
 
@@ -19,14 +20,17 @@
 @synthesize requestorZoneId = _requestorZoneId;
 @synthesize requestorCustomerId = _requestorCustomerId;
 @synthesize providerIds = _providerIds;
+@synthesize wifi = _wifi;
 
 - (id)initWithRequestorZoneId:(NSUInteger)requestorZoneId
           RequestorCustomerId:(NSUInteger)requestorCustomerId
-                  ProviderIds:(NSArray *)providerIds {
+                  ProviderIds:(NSArray *)providerIds
+                       OnWifi:(BOOL)wifi {
     if (self = [super init]) {
         self.requestorZoneId = requestorZoneId;
         self.requestorCustomerId = requestorCustomerId;
         self.providerIds = providerIds;
+        self.wifi = wifi;
     }
     return self;
 }
@@ -57,6 +61,11 @@
     
     [result appendString:@"&fmt=json"];
     [result appendString:@"&m=1"];
+    
+    if (self.wifi) {
+        [result appendString:@"allowThroughput=1"];
+    }
+    
     return result;
 }
 

@@ -473,10 +473,14 @@
             NSMutableArray *providerIds = [[NSMutableArray alloc] init];
             BOOL keepGoing = YES;
             while (keepGoing) {
+                
+                BOOL onWifi = [self reachability] == ReachableViaWiFi;
+                
                 RadarCommunication *probeServerComm = [[RadarCommunication alloc] init];
                 probeServerComm.data = [[ProbeServerQuery alloc] initWithRequestorZoneId:self.requestorZoneId
                                                                      RequestorCustomerId:self.requestorCustomerId
-                                                                             ProviderIds:providerIds];
+                                                                             ProviderIds:providerIds
+                                                                                  OnWifi:onWifi];
                 
                 NSURL *url = [NSURL URLWithString:[probeServerComm url]];
                 NSLog(@"Probe server URL: %@", url);

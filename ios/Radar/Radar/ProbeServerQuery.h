@@ -12,6 +12,7 @@
 
 - (id)initWithRequestorZoneId:(NSUInteger)requestorZoneId
           RequestorCustomerId:(NSUInteger)requestorCustomerId
-                  ProviderIds:(NSArray *)providerIds;
+                  ProviderIds:(NSArray *)providerIds
+                       OnWifi:(BOOL)wifi;
 
 @end
