@@ -1,2 +1,7 @@
 .DS_Store
 
+# Some things may be left behind by ignored files in orphan
+# branches.  We don't want those here either.
+.bundle/
+vendor/
+
