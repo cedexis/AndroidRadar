@@ -2,17 +2,18 @@ package com.cedexis.mobileradardemo;
 
 import java.util.Date;
 
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 
-import com.cedexis.mobileradarlib.RadarApplication;
+import com.cedexis.mobileradarlib.IProvidesBatteryStatus;
 import com.cedexis.mobileradarlib.http.RadarHttpSessionManager;
 import com.cedexis.mobileradarlib.rum.RadarRUMSession;
 
-public class MobileRadarDemoApplication extends RadarApplication {
+public class MobileRadarDemoApplication extends Application implements IProvidesBatteryStatus {
     
     private RadarRUMSession _radarRUM;
     private RadarHttpSessionManager _radarHttp;

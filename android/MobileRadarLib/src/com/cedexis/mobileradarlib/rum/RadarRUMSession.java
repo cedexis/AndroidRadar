@@ -15,12 +15,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import android.app.Application;
 import android.util.Log;
 
 import com.cedexis.mobileradarlib.DeviceStateChecker;
 import com.cedexis.mobileradarlib.InitHandler;
 import com.cedexis.mobileradarlib.InitResult;
-import com.cedexis.mobileradarlib.RadarApplication;
 import com.cedexis.mobileradarlib.ReportHandler;
 
 public class RadarRUMSession {
@@ -34,16 +34,16 @@ public class RadarRUMSession {
     private Future<InitResult> _futureInit;
     private InitResult _initResult;
     private Queue<IRUMObject> _preInitQueue;
-    private RadarApplication _app;
+    private Application _app;
     private Timer _initTimer;
     
-    public RadarRUMSession(RadarApplication app, long appStartTime, int zoneId,
+    public RadarRUMSession(Application app, long appStartTime, int zoneId,
             int customerId) {
         this(app, appStartTime, zoneId, customerId, "init.cedexis-radar.net",
                 "report.init.cedexis-radar.net");
     }
     
-    public RadarRUMSession(RadarApplication app, long appStartTime, int zoneId,
+    public RadarRUMSession(Application app, long appStartTime, int zoneId,
             int customerId, String initHost, String reportHost) {
         this._zoneId = zoneId;
         this._customerId = customerId;

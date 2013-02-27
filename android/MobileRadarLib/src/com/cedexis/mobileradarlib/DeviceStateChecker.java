@@ -10,7 +10,7 @@ public class DeviceStateChecker {
     
     public static final String TAG = "DeviceStateChecker";
     
-    public static boolean okToMeasure(RadarApplication app) {
+    public static boolean okToMeasure(Application app) {
         ConnectivityManager connectivity = (ConnectivityManager)app
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeConnection = connectivity
@@ -34,22 +34,23 @@ public class DeviceStateChecker {
         }
         
         // Check the battery state
-        int batteryStatus = app.getBatteryStatus();
+        IProvidesBatteryStatus batteryStatusProvider = (IProvidesBatteryStatus)app;
+        int batteryStatus = batteryStatusProvider.getBatteryStatus();
         Log.d(TAG, "Battery info: " + batteryStatus);
-        float batteryLevel = app.getBatteryLevel();
+        float batteryLevel = batteryStatusProvider.getBatteryLevel();
         Log.d(TAG, "Battery level: " + batteryLevel);
-        boolean isBatteryCharging = app.isBatteryCharging();
+        boolean isBatteryCharging = batteryStatusProvider.isBatteryCharging();
         Log.d(TAG, "Battery charging: " + isBatteryCharging);
         
         // Skip if below a certain battery level when charging
         if (isBatteryCharging) {
-            if (batteryLevel < app.getMinimumBatteryLevelWhenCharging()) {
+            if (batteryLevel < batteryStatusProvider.getMinimumBatteryLevelWhenCharging()) {
                 Log.d(TAG, "Battery below minimum charging level...skipping");
                 return false;
             }
         }
         // Skip if below a certain battery level when NOT charging
-        else if (batteryLevel < app.getMinimumBatteryLevel()) {
+        else if (batteryLevel < batteryStatusProvider.getMinimumBatteryLevel()) {
             Log.d(TAG, "Battery below minimum non-charging level...skipping");
             return false;
         }

@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,7 +28,6 @@ import android.util.Log;
 
 import com.cedexis.mobileradarlib.DeviceStateChecker;
 import com.cedexis.mobileradarlib.InitResult;
-import com.cedexis.mobileradarlib.RadarApplication;
 import com.cedexis.mobileradarlib.ReportHandler;
 
 public class RadarHttpSessionManager {
@@ -37,20 +37,20 @@ public class RadarHttpSessionManager {
     private static final int RETRY_DELAY = 1000;
     
     private ExecutorService _threadPool;
-    private RadarApplication _app;
+    private Application _app;
     private int _zoneId;
     private int _customerId;
     private String _initHost;
     private String _reportHost;
     private String _probeServerHost;
     
-    public RadarHttpSessionManager(RadarApplication context, int zoneId,
+    public RadarHttpSessionManager(Application context, int zoneId,
             int customerId) {
         this(context, zoneId, customerId, "init.cedexis-radar.net",
                 "report.init.cedexis-radar.net", "probes.cedexis.com");
     }
     
-    public RadarHttpSessionManager(RadarApplication context, int zoneId,
+    public RadarHttpSessionManager(Application context, int zoneId,
             int customerId, String initHost, String reportHost,
             String probeServerHost) {
         this._app = context;
