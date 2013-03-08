@@ -77,7 +77,7 @@ public class MobileRadarDemoApplication extends Application implements IProvides
         // session object. Nothing is being reported here. The main reason to
         // do this here is to get the timestamp, but you could just save the
         // timestamp and create the object later if preferred.
-        this._radarRUM = new RadarRUMSession(
+        this._radarRUM = RadarRUMSession.createSession(
                 this, // application-level context
                 new Date().getTime(), // app start timestamp
                 1, // zone id

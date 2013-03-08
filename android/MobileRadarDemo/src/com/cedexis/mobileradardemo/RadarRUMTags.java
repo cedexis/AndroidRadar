@@ -2,17 +2,19 @@ package com.cedexis.mobileradardemo;
 
 class RadarRUMTags {
     
-    private int _value;
+    private long _value;
     
-    protected RadarRUMTags(int value) {
+    protected RadarRUMTags(long value) {
         this._value = value;
     }
     
-    public static final RadarRUMTags MainPage = new RadarRUMTags(0x00000001);
-    public static final RadarRUMTags ShowLogPage = new RadarRUMTags(0x00000002);
-    public static final RadarRUMTags Miscellaneous = new RadarRUMTags(0x00000004);
+    // In Java we can only use up to 
+    public static final RadarRUMTags MainPage = new RadarRUMTags(0x1);
+    public static final RadarRUMTags Miscellaneous = new RadarRUMTags(0x2);
+    // In Java we can only use up to 63 bits
+    public static final RadarRUMTags MaxTag = new RadarRUMTags(0x4000000000000000L);
     
-    public int getValue() {
+    public long getValue() {
         return this._value;
     }
 }

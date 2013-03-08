@@ -5,10 +5,5 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/menu_settings"/>
-    
-    <item
-    	android:id="@+id/show_log"
-    	android:title="@string/show_log"
-    	android:onClick="showLog"/>
 
 </menu>

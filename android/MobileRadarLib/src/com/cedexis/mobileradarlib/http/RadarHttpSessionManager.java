@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +28,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.cedexis.mobileradarlib.DeviceStateChecker;
+import com.cedexis.mobileradarlib.IPostReportHandler;
 import com.cedexis.mobileradarlib.InitResult;
+import com.cedexis.mobileradarlib.ReportData;
 import com.cedexis.mobileradarlib.ReportHandler;
 
 public class RadarHttpSessionManager {
@@ -35,6 +38,12 @@ public class RadarHttpSessionManager {
     private static final String TAG = "RadarHttpSessionManager";
     private static final int MAX_RETRIES = 10;
     private static final int RETRY_DELAY = 1000;
+    private static final List<String> PROBE_TYPES_TO_MEASURE = new ArrayList<String>(
+            Arrays.asList(
+                    "v1",
+                    "custom-page",
+                    "custom-js",
+                    "custom-img"));
     
     private ExecutorService _threadPool;
     private Application _app;
@@ -43,11 +52,14 @@ public class RadarHttpSessionManager {
     private String _initHost;
     private String _reportHost;
     private String _probeServerHost;
+    List<IPostReportHandler> _postReportHandlers;
     
     public RadarHttpSessionManager(Application context, int zoneId,
             int customerId) {
-        this(context, zoneId, customerId, "init.cedexis-radar.net",
-                "report.init.cedexis-radar.net", "probes.cedexis.com");
+        this(context, zoneId, customerId,
+                "init.cedexis-radar.net",
+                "report.init.cedexis-radar.net",
+                "probes.cedexis.com");
     }
     
     public RadarHttpSessionManager(Application context, int zoneId,
@@ -59,6 +71,25 @@ public class RadarHttpSessionManager {
         this._initHost = initHost;
         this._reportHost = reportHost;
         this._probeServerHost = probeServerHost;
+        this._postReportHandlers = new ArrayList<IPostReportHandler>();
+    }
+    
+    /**
+     * Enable caller to register a function to be called after a report is sent.
+     * 
+     * @param handler
+     */
+    public void addPostReportHandler(IPostReportHandler handler) {
+        this._postReportHandlers.add(handler);
+    }
+    
+    /**
+     * Remove a callback registered with RadarHttpSession.addPostReportHandler.
+     * 
+     * @param handler
+     */
+    public void removePostReportHandler(IPostReportHandler handler) {
+        this._postReportHandlers.remove(handler);
     }
     
     private ExecutorService getThreadPool() {
@@ -190,8 +221,26 @@ public class RadarHttpSessionManager {
                                     // we generally prefer to only do one download
                                     // at a time anyway.
                                     if (providerType.equals("networktype")) {
-                                        new NetworkTypeReportHandler(
-                                                initResult.getRequestSignature()).run();
+                                        //new NetworkTypeReportHandler(
+                                        //        initResult.getRequestSignature()).run();
+                                        ConnectivityManager manager =
+                                                (ConnectivityManager)RadarHttpSessionManager
+                                                .this._app.getSystemService(Context.CONNECTIVITY_SERVICE);
+                                        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+                                        if (null != networkInfo) {
+                                            int networkType = networkInfo.getType();
+                                            int subType = networkInfo.getSubtype();
+                                            String subTypeName = networkInfo.getSubtypeName();
+                                            ReportData data = new NetworkTypeData(
+                                                    networkType,
+                                                    subType,
+                                                    subTypeName);
+                                            new ReportHandler(data,
+                                                    RadarHttpSessionManager.this._reportHost,
+                                                    initResult.getRequestSignature(),
+                                                    RadarHttpSessionManager.this._postReportHandlers)
+                                                    .run();
+                                        }
                                     }
                                     else if (providerType.equals("probe")) {
                                         this.measureRemoteProbe(
@@ -246,9 +295,13 @@ public class RadarHttpSessionManager {
                     for (int i = 0; i < probes.length(); i++) {
                         JSONObject current = probes.getJSONObject(i);
                         String probeType = current.getString("a");
+                        Log.d(TAG, "Probe type: " + probeType);
+                        if (!RadarHttpSessionManager.PROBE_TYPES_TO_MEASURE.contains(probeType)) {
+                            Log.d(TAG, String.format("Skipping probe type %s", probeType));
+                            continue;
+                        }
                         int probeTypeNum = current.getInt("t");
                         String rawUrl = current.getString("u");
-                        Log.d(TAG, "Probe type: " + probeType);
                         Log.d(TAG, "Probe type number: " + probeTypeNum);
                         Log.d(TAG, "Raw URL: " + rawUrl);
                         
@@ -289,14 +342,18 @@ public class RadarHttpSessionManager {
                             }
                             
                             // Send the report synchronously
-                            new RemoteProbeReportHandler(
-                                requestSignature,
-                                providerOwnerZoneId,
-                                providerOwnerCustomerId,
-                                providerId,
-                                probeTypeNum,
-                                0,
-                                measurement).run();
+                            ReportData data = new RemoteProbingData(
+                                    providerOwnerZoneId,
+                                    providerOwnerCustomerId,
+                                    providerId,
+                                    probeTypeNum,
+                                    0,
+                                    measurement);
+                            new ReportHandler(
+                                    data,
+                                    RadarHttpSessionManager.this._reportHost,
+                                    requestSignature,
+                                    RadarHttpSessionManager.this._postReportHandlers).run();
                         }
                         catch (MalformedURLException e) {
                             e.printStackTrace();
@@ -313,66 +370,31 @@ public class RadarHttpSessionManager {
         });
     }
     
-    class RemoteProbeReportHandler extends ReportHandler {
-        
-        private int _providerOwnerZoneId;
-        private int _providerOwnerCustomerId;
-        private int _providerId;
-        private int _probeTypeNum;
-        private int _responseCode;
-        private long _measurement;
-        
-        public RemoteProbeReportHandler(String requestSignature, int providerOwnerZoneId,
-                int providerOwnerCustomerId, int providerId, int probeTypeNum,
-                int responseCode, long measurement) {
-            super(RadarHttpSessionManager.this._reportHost, requestSignature);
-            this._providerOwnerZoneId = providerOwnerZoneId;
-            this._providerOwnerCustomerId = providerOwnerCustomerId;
-            this._providerId = providerId;
-            this._probeTypeNum = probeTypeNum;
-            this._responseCode = responseCode;
-            this._measurement = measurement;
-        }
-        @Override
-        public List<String> getReportElements() {
-            List<String> result = new ArrayList<String>();
-            result.add("f1");
-            result.add(this.getRequestSignature());
-            result.add(String.format("%d", this._providerOwnerZoneId));
-            result.add(String.format("%d", this._providerOwnerCustomerId));
-            result.add(String.format("%d", this._providerId));
-            result.add(String.format("%d", this._probeTypeNum));
-            result.add(String.format("%d", this._responseCode));
-            result.add(String.format("%d", this._measurement));
-            return result;
-        }
-    }
-    
-    class NetworkTypeReportHandler extends ReportHandler {
-        
-        public NetworkTypeReportHandler(String requestSignature) {
-            super(RadarHttpSessionManager.this._reportHost, requestSignature);
-        }
-        
-        @Override
-        public List<String> getReportElements() {
-            List<String> result = new ArrayList<String>();
-            result.add("f3");
-            
-            ConnectivityManager manager = (ConnectivityManager)RadarHttpSessionManager
-                    .this._app.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-            if (null == networkInfo) {
-                return null;
-            }
-            
-            int networkType = networkInfo.getType();
-            int subType = networkInfo.getSubtype();
-            Log.d(TAG, String.format("Network info: %d, %d, %s", networkType, subType, networkInfo.getSubtypeName()));
-            result.add(String.format("%d", networkType));
-            result.add(String.format("%d", subType));
-            result.add(this.getRequestSignature());
-            return result;
-        }
-    }
+    //class NetworkTypeReportHandler extends ReportHandler {
+    //    
+    //    public NetworkTypeReportHandler(String requestSignature) {
+    //        super(RadarHttpSessionManager.this._reportHost, requestSignature, null);
+    //    }
+    //    
+    //    @Override
+    //    public List<String> getReportElements() {
+    //        List<String> result = new ArrayList<String>();
+    //        result.add("f3");
+    //        
+    //        ConnectivityManager manager = (ConnectivityManager)RadarHttpSessionManager
+    //                .this._app.getSystemService(Context.CONNECTIVITY_SERVICE);
+    //        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+    //        if (null == networkInfo) {
+    //            return null;
+    //        }
+    //        
+    //        int networkType = networkInfo.getType();
+    //        int subType = networkInfo.getSubtype();
+    //        Log.d(TAG, String.format("Network info: %d, %d, %s", networkType, subType, networkInfo.getSubtypeName()));
+    //        result.add(String.format("%d", networkType));
+    //        result.add(String.format("%d", subType));
+    //        result.add(this.getRequestSignature());
+    //        return result;
+    //    }
+    //}
 }

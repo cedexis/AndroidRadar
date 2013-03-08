@@ -6,9 +6,17 @@
     android:orientation="vertical"
     tools:context=".MobileRadarDemo" >
 
-    <TextView
-        android:id="@+id/messages_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/messages_view"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            tools:ignore="SelectableText" />
+
+    </ScrollView>
 
 </LinearLayout>

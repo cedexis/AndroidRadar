@@ -14,18 +14,24 @@ import java.util.UUID;
 
 import android.util.Log;
 
-public abstract class ReportHandler implements IReportHandler {
+public class ReportHandler implements Runnable {
     
     private static final String TAG = "ReportHandler";
+    private ReportData _reportData;
     private String _reportHost;
     private String _requestSignature;
+    private List<IPostReportHandler> _postReportHandlers;
     
-    public ReportHandler(String reportHost, String requestSignature) {
+    public ReportHandler(ReportData reportObject,
+            String reportHost, String requestSignature,
+            List<IPostReportHandler> postReportHandlers) {
+        this._reportData = reportObject;
         this._reportHost = reportHost;
         this._requestSignature = requestSignature;
+        this._postReportHandlers = postReportHandlers;
     }
     
-    public abstract List<String> getReportElements();
+    //public abstract List<String> getReportElements();
     
     protected String getRequestSignature() {
         return this._requestSignature;
@@ -37,7 +43,7 @@ public abstract class ReportHandler implements IReportHandler {
         StringBuilder temp = new StringBuilder();
         temp.append("http://");
         temp.append(this._reportHost);
-        List<String> elements = this.getReportElements();
+        List<String> elements = this._reportData.getReportElements(this._requestSignature);
         if (null == elements) {
             Log.w(TAG, "No report elements.");
             return;
@@ -66,6 +72,11 @@ public abstract class ReportHandler implements IReportHandler {
                     String line;
                     while (null != (line = reader.readLine())) {
                         Log.d(TAG, line);
+                    }
+                    if (null != this._postReportHandlers) {
+                        for (IPostReportHandler handler: this._postReportHandlers) {
+                            handler.execute(this._reportData);
+                        }
                     }
                 }
                 finally {
