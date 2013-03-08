@@ -42,12 +42,31 @@ public class RadarRUMSession {
                 zoneId,
                 customerId,
                 "init.cedexis-radar.net",
-                "report.init.cedexis-radar.net");
+                "report.init.cedexis-radar.net",
+                null,
+                null);
     }
     
     public static RadarRUMSession createSession(Application app,
             long appStartTime, int zoneId, int customerId,
-            String initHost, String reportHost) {
+            String agentName,
+            String agentVersion) {
+        return RadarRUMSession.createSession(
+                app,
+                appStartTime,
+                zoneId,
+                customerId,
+                "init.cedexis-radar.net",
+                "report.init.cedexis-radar.net",
+                agentName,
+                agentVersion);
+    }
+    
+    public static RadarRUMSession createSession(Application app,
+            long appStartTime, int zoneId, int customerId,
+            String initHost, String reportHost,
+            String agentName,
+            String agentVersion) {
         RadarRUMSession result = new RadarRUMSession(
                 new Queueing(
                         app,
@@ -56,6 +75,8 @@ public class RadarRUMSession {
                         customerId,
                         initHost,
                         reportHost,
+                        agentName,
+                        agentVersion,
                         new ArrayList<IPostReportHandler>()));
         
         result.reportEvent("appStart", 0, appStartTime);
@@ -312,17 +333,23 @@ public class RadarRUMSession {
         private int _customerId;
         private String _initHost;
         private String _reportHost;
+        private String _agentName;
+        private String _agentVersion;
         
         private Application _app;
         
         public Queueing(Application app, long appStartTime, int zoneId,
             int customerId, String initHost, String reportHost,
+            String agentName,
+            String agentVersion,
             List<IPostReportHandler> postReportHandlers) {
             this._app = app;
             this._zoneId = zoneId;
             this._customerId = customerId;
             this._initHost = initHost;
             this._reportHost = reportHost;
+            this._agentName = agentName;
+            this._agentVersion = agentVersion;
             this._preInitQueue = new LinkedList<RUMData>();
             this._postReportHandlers = postReportHandlers;
         }
@@ -421,6 +448,8 @@ public class RadarRUMSession {
             ReportHandler handler = new ReportHandler(
                     data,
                     this._reportHost,
+                    this._agentName,
+                    this._agentVersion,
                     this._initResult.getRequestSignature(),
                     this._postReportHandlers);
             this._threadPool.execute(handler);

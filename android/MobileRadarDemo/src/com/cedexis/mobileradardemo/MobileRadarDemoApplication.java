@@ -15,6 +15,9 @@ import com.cedexis.mobileradarlib.rum.RadarRUMSession;
 
 public class MobileRadarDemoApplication extends Application implements IProvidesBatteryStatus {
     
+    public static String RADAR_AGENT_NAME = "Mobile Radar Demo";
+    public static String RADAR_AGENT_VERSION = "0.0.1";
+    
     private RadarRUMSession _radarRUM;
     private RadarHttpSessionManager _radarHttp;
     private BroadcastReceiver _batteryInfoReceiver = new BroadcastReceiver() {
@@ -39,10 +42,17 @@ public class MobileRadarDemoApplication extends Application implements IProvides
     
     public RadarHttpSessionManager getRadarHttp() {
         if (null == this._radarHttp) {
-            this._radarHttp = new RadarHttpSessionManager(
-                    this, // application-level context
-                    1, // zone id
-                    10660); // customer id
+            this._radarHttp = RadarHttpSessionManager.createManager(
+                    // application-level context
+                    this,
+                    // zone id
+                    1,
+                    // customer id
+                    10660,
+                    // customer agent name
+                    RADAR_AGENT_NAME,
+                    // customer agent version
+                    RADAR_AGENT_VERSION);
         }
         return this._radarHttp;
     }
@@ -78,10 +88,18 @@ public class MobileRadarDemoApplication extends Application implements IProvides
         // do this here is to get the timestamp, but you could just save the
         // timestamp and create the object later if preferred.
         this._radarRUM = RadarRUMSession.createSession(
-                this, // application-level context
-                new Date().getTime(), // app start timestamp
-                1, // zone id
-                10660); // customer id
+                // application-level context
+                this,
+                // app start timestamp
+                new Date().getTime(),
+                // zone id
+                1,
+                // customer id
+                10660,
+                // customer agent name
+                RADAR_AGENT_NAME,
+                // customer agent version
+                RADAR_AGENT_VERSION);
         
         // Register a broadcast receiver to detect changes in battery level
         this.registerReceiver(this._batteryInfoReceiver,

@@ -52,19 +52,59 @@ public class RadarHttpSessionManager {
     private String _initHost;
     private String _reportHost;
     private String _probeServerHost;
+    private String _agentName;
+    private String _agentVersion;
     List<IPostReportHandler> _postReportHandlers;
     
-    public RadarHttpSessionManager(Application context, int zoneId,
+    public static RadarHttpSessionManager createManager(
+            Application context,
+            int zoneId,
             int customerId) {
+        return RadarHttpSessionManager.createManager(
+                context,
+                zoneId,
+                customerId,
+                null,
+                null);
+    }
+    
+    public static RadarHttpSessionManager createManager(
+            Application context,
+            int zoneId,
+            int customerId,
+            String agentName,
+            String agentVersion) {
+        return new RadarHttpSessionManager(
+                context,
+                zoneId,
+                customerId,
+                agentName,
+                agentVersion);
+    }
+    
+    public RadarHttpSessionManager(
+            Application context,
+            int zoneId,
+            int customerId,
+            String agentName,
+            String agentVersion) {
         this(context, zoneId, customerId,
                 "init.cedexis-radar.net",
                 "report.init.cedexis-radar.net",
-                "probes.cedexis.com");
+                "probes.cedexis.com",
+                agentName,
+                agentVersion);
     }
     
-    public RadarHttpSessionManager(Application context, int zoneId,
-            int customerId, String initHost, String reportHost,
-            String probeServerHost) {
+    public RadarHttpSessionManager(
+            Application context,
+            int zoneId,
+            int customerId,
+            String initHost,
+            String reportHost,
+            String probeServerHost,
+            String agentName,
+            String agentVersion) {
         this._app = context;
         this._zoneId = zoneId;
         this._customerId = customerId;
@@ -72,6 +112,8 @@ public class RadarHttpSessionManager {
         this._reportHost = reportHost;
         this._probeServerHost = probeServerHost;
         this._postReportHandlers = new ArrayList<IPostReportHandler>();
+        this._agentName = agentName;
+        this._agentVersion = agentVersion;
     }
     
     /**
@@ -237,6 +279,8 @@ public class RadarHttpSessionManager {
                                                     subTypeName);
                                             new ReportHandler(data,
                                                     RadarHttpSessionManager.this._reportHost,
+                                                    RadarHttpSessionManager.this._agentName,
+                                                    RadarHttpSessionManager.this._agentVersion,
                                                     initResult.getRequestSignature(),
                                                     RadarHttpSessionManager.this._postReportHandlers)
                                                     .run();
@@ -352,6 +396,8 @@ public class RadarHttpSessionManager {
                             new ReportHandler(
                                     data,
                                     RadarHttpSessionManager.this._reportHost,
+                                    RadarHttpSessionManager.this._agentName,
+                                    RadarHttpSessionManager.this._agentVersion,
                                     requestSignature,
                                     RadarHttpSessionManager.this._postReportHandlers).run();
                         }
@@ -369,32 +415,4 @@ public class RadarHttpSessionManager {
             }
         });
     }
-    
-    //class NetworkTypeReportHandler extends ReportHandler {
-    //    
-    //    public NetworkTypeReportHandler(String requestSignature) {
-    //        super(RadarHttpSessionManager.this._reportHost, requestSignature, null);
-    //    }
-    //    
-    //    @Override
-    //    public List<String> getReportElements() {
-    //        List<String> result = new ArrayList<String>();
-    //        result.add("f3");
-    //        
-    //        ConnectivityManager manager = (ConnectivityManager)RadarHttpSessionManager
-    //                .this._app.getSystemService(Context.CONNECTIVITY_SERVICE);
-    //        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-    //        if (null == networkInfo) {
-    //            return null;
-    //        }
-    //        
-    //        int networkType = networkInfo.getType();
-    //        int subType = networkInfo.getSubtype();
-    //        Log.d(TAG, String.format("Network info: %d, %d, %s", networkType, subType, networkInfo.getSubtypeName()));
-    //        result.add(String.format("%d", networkType));
-    //        result.add(String.format("%d", subType));
-    //        result.add(this.getRequestSignature());
-    //        return result;
-    //    }
-    //}
 }

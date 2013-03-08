@@ -19,19 +19,24 @@ public class ReportHandler implements Runnable {
     private static final String TAG = "ReportHandler";
     private ReportData _reportData;
     private String _reportHost;
+    private String _agentName;
+    private String _agentVersion;
     private String _requestSignature;
     private List<IPostReportHandler> _postReportHandlers;
     
     public ReportHandler(ReportData reportObject,
-            String reportHost, String requestSignature,
+            String reportHost,
+            String agentName,
+            String agentVersion,
+            String requestSignature,
             List<IPostReportHandler> postReportHandlers) {
         this._reportData = reportObject;
         this._reportHost = reportHost;
+        this._agentName = agentName;
+        this._agentVersion = agentVersion;
         this._requestSignature = requestSignature;
         this._postReportHandlers = postReportHandlers;
     }
-    
-    //public abstract List<String> getReportElements();
     
     protected String getRequestSignature() {
         return this._requestSignature;
@@ -66,6 +71,12 @@ public class ReportHandler implements Runnable {
             try {
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                 try {
+                    connection.setRequestProperty(
+                            "User-Agent",
+                            String.format(
+                                    "Radar Mobile Client/0.0.1 (Android) %s/%s",
+                                    this._agentName,
+                                    this._agentVersion));
                     InputStream in = connection.getInputStream();
                     InputStreamReader rawReader = new InputStreamReader(in);
                     BufferedReader reader = new BufferedReader(rawReader);
