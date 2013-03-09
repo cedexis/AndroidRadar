@@ -15,9 +15,6 @@ import com.cedexis.mobileradarlib.rum.RadarRUMSession;
 
 public class MobileRadarDemoApplication extends Application implements IProvidesBatteryStatus {
     
-    public static String RADAR_AGENT_NAME = "Mobile Radar Demo";
-    public static String RADAR_AGENT_VERSION = "0.0.1";
-    
     private RadarRUMSession _radarRUM;
     private RadarHttpSessionManager _radarHttp;
     private BroadcastReceiver _batteryInfoReceiver = new BroadcastReceiver() {
@@ -50,9 +47,9 @@ public class MobileRadarDemoApplication extends Application implements IProvides
                     // customer id
                     10660,
                     // customer agent name
-                    RADAR_AGENT_NAME,
+                    this.getString(R.string.radar_client_name),
                     // customer agent version
-                    RADAR_AGENT_VERSION);
+                    this.getString(R.string.radar_client_version));
         }
         return this._radarHttp;
     }
@@ -97,9 +94,9 @@ public class MobileRadarDemoApplication extends Application implements IProvides
                 // customer id
                 10660,
                 // customer agent name
-                RADAR_AGENT_NAME,
+                this.getString(R.string.radar_client_name),
                 // customer agent version
-                RADAR_AGENT_VERSION);
+                this.getString(R.string.radar_client_version));
         
         // Register a broadcast receiver to detect changes in battery level
         this.registerReceiver(this._batteryInfoReceiver,

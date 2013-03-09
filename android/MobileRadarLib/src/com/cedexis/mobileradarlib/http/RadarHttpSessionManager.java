@@ -88,7 +88,9 @@ public class RadarHttpSessionManager {
             int customerId,
             String agentName,
             String agentVersion) {
-        this(context, zoneId, customerId,
+        this(context,
+                zoneId,
+                customerId,
                 "init.cedexis-radar.net",
                 "report.init.cedexis-radar.net",
                 "probes.cedexis.com",
