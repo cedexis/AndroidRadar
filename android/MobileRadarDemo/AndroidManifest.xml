@@ -25,11 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="ShowLog"
-            android:label="@string/show_log"
-            android:parentActivityName="com.cedexis.mobileradardemo.MobileRadarDemo">
-        </activity>
+        <activity android:name=".DemoPreferenceActivity"></activity>
     </application>
 
 </manifest>
