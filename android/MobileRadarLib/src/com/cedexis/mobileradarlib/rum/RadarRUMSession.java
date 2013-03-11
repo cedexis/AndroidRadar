@@ -136,7 +136,8 @@ public class RadarRUMSession {
         public String toString() {
             return String.format(
                     Locale.getDefault(),
-                    "RUMMetadata (%s, %s, %d)",
+                    "RUMMetadata (%d, %s, %s, %d)",
+                    this.getReportId(),
                     this._name,
                     this._value,
                     this.getTimestamp());
