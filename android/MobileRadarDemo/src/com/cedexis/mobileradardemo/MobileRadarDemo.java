@@ -84,7 +84,6 @@ public class MobileRadarDemo extends Activity {
             radar.reportEvent("App Start", 0, app.getOnCreateTimestamp());
             
             // Attach metadata to the RUM session
-            // In this example, we attach a fictitious username
             radar.reportSetProperty("device manufacturer", android.os.Build.MANUFACTURER);
             radar.reportSetProperty("device model", android.os.Build.MODEL);
         }
