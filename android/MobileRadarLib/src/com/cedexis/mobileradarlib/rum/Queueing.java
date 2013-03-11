@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.cedexis.mobileradarlib.DeviceStateChecker;
 import com.cedexis.mobileradarlib.IPostReportHandler;
@@ -22,8 +21,6 @@ import com.cedexis.mobileradarlib.InitResult;
 import com.cedexis.mobileradarlib.ReportHandler;
 
 public class Queueing {
-
-    private static String TAG = "Queueing";
     
     private ExecutorService _threadPool;
     private Future<InitResult> _futureInit;
@@ -72,9 +69,7 @@ public class Queueing {
             this.beginInit();
         }
         else if (null == this._initResult) {
-            // The init request has already been initiated, but hasn't
-            // completed.
-            Log.d(TAG, "Enqueueing report: " + rumObject);
+            // The init request has already been initiated, but hasn't completed.
             this._preInitQueue.add(rumObject);
         }
         else {
@@ -92,7 +87,6 @@ public class Queueing {
     
     private void beginInit() {
         if (DeviceStateChecker.okToMeasure(this._app)) {
-            Log.d(TAG, "Submitting InitHandler to the thread pool");
             this._futureInit = this.getThreadPool()
                 .submit(new InitHandler(
                     this._zoneId, this._customerId, this._initHost));
@@ -108,7 +102,6 @@ public class Queueing {
     private void waitForInit() {
         try {
             this._initResult = this._futureInit.get(0, TimeUnit.MILLISECONDS);
-            Log.d(TAG, "waitForInit got result: " + this._initResult);
             
             if (null != this._initTimer) {
                 this._initTimer.cancel();
@@ -135,7 +128,6 @@ public class Queueing {
             e.printStackTrace();
         }
         catch (TimeoutException e) {
-            Log.d(TAG, "Init timeout");
             // Schedule a task to wait before trying again
             if (null == this._initTimer) {
                 this._initTimer = new Timer();
@@ -150,7 +142,6 @@ public class Queueing {
     }
 
     private void sendReport(RUMData data) {
-        Log.d(TAG, String.format("Sending %s", data.toString()));
         ReportHandler handler = new ReportHandler(
                 data,
                 this._reportHost,

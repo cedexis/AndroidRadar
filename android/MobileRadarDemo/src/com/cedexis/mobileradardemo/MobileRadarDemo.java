@@ -15,7 +15,6 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import com.cedexis.mobileradarlib.ReportData;
 
 public class MobileRadarDemo extends Activity {
     
-    private final static String TAG = "MobileRadarDemo";
     private final static String OUTER_SLICE_NAME = "Main Page Outer";
     private final static String INNER_SLICE_NAME = "Main Page Inner";
     
@@ -50,9 +48,6 @@ public class MobileRadarDemo extends Activity {
                             temp.insert(0, data);
                             view.setText(temp.toString());
                         }
-                        else {
-                            Log.w(TAG, "Couldn't get the text view");
-                        }
                     }
                 });
             }
@@ -68,7 +63,6 @@ public class MobileRadarDemo extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i(TAG, "onCreate");
         MobileRadarDemoApplication app = (MobileRadarDemoApplication)this.getApplication();
         Radar radar = this.getRadar();
         
@@ -117,7 +111,6 @@ public class MobileRadarDemo extends Activity {
     
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "onDestroy");
         Radar radar = this.getRadar();
         
         // End outer slice
@@ -132,7 +125,6 @@ public class MobileRadarDemo extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(TAG, "onResume");
         
         // Begin a new Radar RUM slice
         Radar radar = this.getRadar();
@@ -161,7 +153,6 @@ public class MobileRadarDemo extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i(TAG, "onPause");
         
         // Stop Radar remote probing
         this._resumed = false;

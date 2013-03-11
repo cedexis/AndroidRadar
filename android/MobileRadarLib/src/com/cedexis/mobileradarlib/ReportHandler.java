@@ -12,11 +12,8 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
 
-import android.util.Log;
-
 public class ReportHandler implements Runnable {
     
-    private static final String TAG = "ReportHandler";
     private ReportData _reportData;
     private String _reportHost;
     private String _agentName;
@@ -44,13 +41,11 @@ public class ReportHandler implements Runnable {
     
     @Override
     public void run() {
-        Log.d(TAG, "Sending report to " + this._reportHost);
         StringBuilder temp = new StringBuilder();
         temp.append("http://");
         temp.append(this._reportHost);
         List<String> elements = this._reportData.getReportElements(this._requestSignature);
         if (null == elements) {
-            Log.w(TAG, "No report elements.");
             return;
         }
         for (String item: elements) {
@@ -63,7 +58,6 @@ public class ReportHandler implements Runnable {
             }
         }
         temp.append(String.format("?rnd=%s", UUID.randomUUID().toString()));
-        Log.d(TAG, temp.toString());
         
         URL url;
         try {
@@ -80,9 +74,7 @@ public class ReportHandler implements Runnable {
                     InputStream in = connection.getInputStream();
                     InputStreamReader rawReader = new InputStreamReader(in);
                     BufferedReader reader = new BufferedReader(rawReader);
-                    String line;
-                    while (null != (line = reader.readLine())) {
-                        Log.d(TAG, line);
+                    while (null != (reader.readLine())) {
                     }
                     if (null != this._postReportHandlers) {
                         for (IPostReportHandler handler: this._postReportHandlers) {

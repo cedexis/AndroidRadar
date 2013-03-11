@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.BatteryManager;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.cedexis.mobileradarlib.IProvidesBatteryStatus;
 import com.cedexis.mobileradarlib.Radar;
@@ -18,8 +17,6 @@ import com.cedexis.mobileradarlib.Radar;
 public class MobileRadarDemoApplication
     extends Application
     implements IProvidesBatteryStatus {
-    
-    private static final String TAG = "MobileRadarDemoApplication";
     
     private Radar _radar;
     private long _onCreateTimestamp;
@@ -72,10 +69,6 @@ public class MobileRadarDemoApplication
                         "customerId",
                         this.getString(R.string.default_customer_id)));
                 
-                Log.d(TAG, String.format("Settings zone id: %d customer id: %d",
-                        zoneId,
-                        customerId));
-                
                 this._radar = Radar.createRadar(
                         this,
                         zoneId,
@@ -122,7 +115,6 @@ public class MobileRadarDemoApplication
     }
     
     public void restartRadar() {
-        Log.i(TAG, "restartRadar");
         synchronized(this) {
             this._onCreateTimestamp = new Date().getTime();
             this._radar = null;

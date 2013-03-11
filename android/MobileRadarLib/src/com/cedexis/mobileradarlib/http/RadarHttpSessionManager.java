@@ -25,7 +25,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.cedexis.mobileradarlib.DeviceStateChecker;
 import com.cedexis.mobileradarlib.IPostReportHandler;
@@ -35,7 +34,6 @@ import com.cedexis.mobileradarlib.ReportHandler;
 
 public class RadarHttpSessionManager {
     
-    private static final String TAG = "RadarHttpSessionManager";
     private static final int MAX_RETRIES = 10;
     private static final int RETRY_DELAY = 1000;
     private static final List<String> PROBE_TYPES_TO_MEASURE = new ArrayList<String>(
@@ -120,7 +118,6 @@ public class RadarHttpSessionManager {
     }
     
     public void queueSession() {
-        Log.d(TAG, "Queueing a Radar HTTP session");
         this.getThreadPool().execute(new Runnable() {
             
             private String queryProbeServer(List<String> providerIds) {
@@ -143,15 +140,11 @@ public class RadarHttpSessionManager {
                 }
                 probeServerURL.append(String.format("&rnd=%s", UUID.randomUUID().toString()));
                 
-                Log.d(TAG, "Opening " + probeServerURL.toString());
                 URL url;
                 try {
                     url = new URL(probeServerURL.toString());
                     int tries = 0;
                     while (RadarHttpSessionManager.MAX_RETRIES > tries) {
-                        if (0 < tries) {
-                            Log.d(TAG, "Retrying request to Probe Server");
-                        }
                         tries++;
                         HttpURLConnection connection;
                         try {
@@ -170,7 +163,6 @@ public class RadarHttpSessionManager {
                                 return content.toString();
                             }
                             catch (FileNotFoundException e) {
-                                Log.w(TAG, "Oh noes!!! URLConnection response code: " + connection.getResponseCode());
                                 //e.printStackTrace();
                                 doRetry = true;
                             }
@@ -191,11 +183,6 @@ public class RadarHttpSessionManager {
                             e.printStackTrace();
                         }
                     }
-                    
-                    if (RadarHttpSessionManager.MAX_RETRIES <= tries) {
-                        Log.w(TAG, "Gave up on Probe Server");
-                    }
-                    
                 }
                 catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -206,7 +193,6 @@ public class RadarHttpSessionManager {
             @Override
             public void run() {
                 if (DeviceStateChecker.okToMeasure(RadarHttpSessionManager.this._app)) {
-                    Log.d(TAG, "Starting Radar HTTP session");
                     // Perform an init request
                     InitResult initResult = InitResult.doInit(
                             RadarHttpSessionManager.this._zoneId,
@@ -220,20 +206,16 @@ public class RadarHttpSessionManager {
                     while (keepGoing) {
                         // This is just to protect against something crazy happening
                         if (20 <= downloads) {
-                            Log.w(TAG, String.format("Cancelling Radar HTTP session after %d downloads", downloads));
                             break;
                         }
                         downloads++;
                         String probeServerResult;
                         if (null != (probeServerResult = this.queryProbeServer(providerIds))) {
-                            Log.d(TAG, probeServerResult);
                             try {
                                 JSONObject json = new JSONObject(probeServerResult);
                                 if (json.has("a")) {
                                     String providerType = json.getString("a");
-                                    Log.d(TAG, "Provider type: " + providerType);
                                     String providerId = json.getJSONObject("p").getString("i");
-                                    Log.d(TAG, "Provider id: " + providerId);
                                     providerIds.add(providerId);
                                     
                                     // We're already in a background thread so there's
@@ -270,15 +252,11 @@ public class RadarHttpSessionManager {
                                             initResult.getRequestSignature());
                                     }
                                     else {
-                                        Log.e(TAG, "Unexpected provider type: " + providerType);
                                         keepGoing = false;
                                     }
                                 }
                                 else {
                                     keepGoing = false;
-                                    if (json.has("comment")) {
-                                        Log.d(TAG, json.getString("comment"));
-                                    }
                                 }
                             }
                             catch (JSONException e) {
@@ -290,43 +268,26 @@ public class RadarHttpSessionManager {
                             keepGoing = false;
                         }
                     }
-                    Log.d(TAG, "Radar HTTP session complete");
                 }
             }
             
             private void measureRemoteProbe(JSONObject json, String requestSignature) {
                 try {
-                    JSONObject requestor = json.getJSONObject("r");
                     JSONObject provider = json.getJSONObject("p");
-                    boolean onWifi = DeviceStateChecker.isOnWifi(RadarHttpSessionManager.this._app);
-                    int requestorZoneId = Integer.parseInt(requestor.getString("z"));
-                    int requestorCustomerId = Integer.parseInt(requestor.getString("c"));
                     int providerOwnerZoneId = Integer.parseInt(provider.getString("z"));
                     int providerOwnerCustomerId = Integer.parseInt(provider.getString("c"));
                     int providerId = Integer.parseInt(provider.getString("i"));
                     boolean cacheBusting = Boolean.parseBoolean(provider.getString("b"));
-                    Log.d(TAG, "On WIFI: " + onWifi);
-                    Log.d(TAG, "Requestor zone id: " + requestorZoneId);
-                    Log.d(TAG, "Requestor customer id: " + requestorCustomerId);
-                    Log.d(TAG, "Provider owner zone id: " + providerOwnerZoneId);
-                    Log.d(TAG, "Provider owner customer id: " + providerOwnerCustomerId);
-                    Log.d(TAG, "Provider id: " + providerId);
-                    Log.d(TAG, "Cache busting: " + cacheBusting);
                     
                     JSONArray probes = provider.getJSONArray("p");
                     for (int i = 0; i < probes.length(); i++) {
                         JSONObject current = probes.getJSONObject(i);
                         String probeType = current.getString("a");
-                        Log.d(TAG, "Probe type: " + probeType);
                         if (!RadarHttpSessionManager.PROBE_TYPES_TO_MEASURE.contains(probeType)) {
-                            Log.d(TAG, String.format("Skipping probe type %s", probeType));
                             continue;
                         }
                         int probeTypeNum = current.getInt("t");
                         String rawUrl = current.getString("u");
-                        Log.d(TAG, "Probe type number: " + probeTypeNum);
-                        Log.d(TAG, "Raw URL: " + rawUrl);
-                        
                         StringBuilder url = new StringBuilder();
                         url.append(rawUrl);
                         if (cacheBusting) {
@@ -338,7 +299,6 @@ public class RadarHttpSessionManager {
                             }
                             url.append(String.format("rnd=%s", UUID.randomUUID().toString()));
                         }
-                        Log.d(TAG, "URL: " + url.toString());
                         
                         try {
                             long start = new Date().getTime();
@@ -349,17 +309,14 @@ public class RadarHttpSessionManager {
                             }
                             long elapsed = new Date().getTime() - start;
                             stream.close();
-                            Log.d(TAG, String.format("Time elapsed: %d ms", elapsed));
                             
                             long measurement = elapsed;
                             // Calculate KBPS if this is a throughput measurement
                             if ((23 == probeTypeNum) || (30 == probeTypeNum)) {
                                 if (!current.has("s")) {
-                                    Log.w(TAG, "Missing file size hint");
                                     return;
                                 }
                                 double kbps = 8 * 1000 * current.getInt("s") / (double)elapsed;
-                                Log.d(TAG, "KBPS: " + kbps);
                                 measurement = (int)kbps;
                             }
                             

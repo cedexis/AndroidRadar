@@ -5,13 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.util.Log;
-
 import com.cedexis.mobileradarlib.IPostReportHandler;
 
 public class RadarRUMSession {
     
-    private static String TAG = "RadarRUMSession";
     private int _lastReportId = 0;
     private Queueing _queueing;
     
@@ -67,10 +64,6 @@ public class RadarRUMSession {
     }
     
     protected void reportSlice(String sliceName, boolean start) {
-        Log.d(TAG, String.format(
-                "Received request to %s slice \"%s\"",
-                start ? "start" : "end",
-                sliceName));
         RUMData data = new RUMSlice(
                 sliceName,
                 new Date().getTime(),
@@ -101,11 +94,6 @@ public class RadarRUMSession {
     }
     
     public void reportSetProperty(String name, String value, int reportId) {
-        Log.d(TAG, String.format(
-                "Received request to set property \"%s\" to \"%s\" for report id %d",
-                name,
-                value,
-                reportId));
         RUMData data = new RUMMetadata(
                 reportId,
                 name,

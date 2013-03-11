@@ -18,11 +18,7 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import android.util.Log;
-
 public class InitResult {
-    
-    private static final String TAG = "InitResult";
     
     private String _requestSignaure;
     
@@ -51,29 +47,15 @@ public class InitResult {
         initURL.append(String.format("/%d", transactionId));
         initURL.append("/xml");
         initURL.append(String.format("?rnd=%s", UUID.randomUUID().toString()));
-        Log.d(TAG, "Init URL: " + initURL.toString());
         DocumentBuilder builder;
         try {
             builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.parse(new URL(initURL.toString())
                 .openStream());
-            //Log.d(TAG, "Init document: " + document);
-            
             XPath xpath = XPathFactory.newInstance().newXPath();
             XPathExpression expr = xpath
                     .compile("/initResponse/requestSignature/text()");
             String requestSignature = expr.evaluate(document);
-            Log.d(TAG, "Request signature: " + requestSignature);
-            expr = xpath.compile("/initResponse/countryIso/text()");
-            String country = expr.evaluate(document);
-            Log.d(TAG, "Country: " + country);
-            
-            expr = xpath.compile("/initResponse/networkType/text()");
-            String networkType = expr.evaluate(document);
-            Log.d(TAG, "Network type: " + networkType);
-            //Log.d(TAG, "Network type (class): " + networkType.getClass());
-            //Log.d(TAG, "Network type is ZLS: " + ("" == networkType));
-            
             InitResult result = new InitResult(requestSignature);
             return result;
         }
