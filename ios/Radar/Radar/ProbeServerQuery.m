@@ -63,7 +63,7 @@
     [result appendString:@"&m=1"];
     
     if (self.wifi) {
-        [result appendString:@"allowThroughput=1"];
+        [result appendString:@"&allowThroughput=1"];
     }
     
     return result;
