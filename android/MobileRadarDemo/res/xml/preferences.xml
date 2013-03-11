@@ -5,12 +5,12 @@
         <EditTextPreference
             android:key="zoneId"
             android:title="Zone Id"
-            android:defaultValue="1"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:defaultValue="1"/>
         <EditTextPreference
             android:key="customerId"
             android:title="Customer Id"
-            android:defaultValue="10660"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:defaultValue="10660"/>
     </PreferenceCategory>
 </PreferenceScreen>

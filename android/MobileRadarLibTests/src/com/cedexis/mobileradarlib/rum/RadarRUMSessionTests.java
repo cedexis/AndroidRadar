@@ -1,10 +1,9 @@
 package com.cedexis.mobileradarlib.rum;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
-import org.easymock.EasyMock;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.easymock.PowerMock;
@@ -13,88 +12,44 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.cedexis.mobileradarlib.rum.RadarRUMSession.RUMEvent;
 
-import android.app.Application;
-import android.util.Log;
-
-@PrepareForTest({
-    Log.class,
-    RadarRUMSession.Queueing.class
-})
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({
+    RadarRUMSession.class,
+    Queueing.class,
+    RUMEvent.class
+})
 public class RadarRUMSessionTests {
     
-    Application _mockApp;
+    private RadarRUMSession _sut;
+    private Queueing _mockQueueing; 
     
     @Before
     public void setUp() {
-        PowerMock.mockStatic(Log.class);
-        this._mockApp = EasyMock.createMock(Application.class);
+        this._mockQueueing = PowerMock.createMock(Queueing.class);
+        this._sut = new RadarRUMSession(this._mockQueueing);
     }
     
-    @Ignore
-    @Test
-    public void testRadarRUMSessionApplicationLongIntInt() {
-        fail("Not yet implemented");
+    @After
+    public void tearDown() {
+        this._mockQueueing = null;
+        this._sut = null;
     }
-
-    @Ignore
+    
     @Test
-    public void testRadarRUMSessionApplicationLongIntIntStringString() {
-        fail("Not yet implemented");
-    }
-
-    @Ignore
-    @Test
-    public void testReportSliceStart() {
-        fail("Not yet implemented");
-    }
-
-    @Ignore
-    @Test
-    public void testReportSliceEnd() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testReportEventString() {
-        EasyMock.expect(Log.d(
-                EasyMock.eq("RadarRUMSession"),
-                EasyMock.isA(String.class)))
-                    .andReturn(0);
-        RadarRUMSession.Queueing queueing =
-                PowerMock.createMock(RadarRUMSession.Queueing.class);
-        queueing.reportRUMObject(
-                new RUMEvent(
-                        2,
-                        "some event",
-                        0,
-                        EasyMock.anyLong()));
-        EasyMock.expectLastCall();
+    public void testReportEvent() throws Exception {
+        RUMEvent mockEvent = PowerMock.createMockAndExpectNew(
+                RUMEvent.class,
+                1,
+                "some event",
+                123L,
+                456L);
+        this._mockQueueing.reportRUMObject(mockEvent);
         PowerMock.replayAll();
         
         // Code under test
-        RadarRUMSession sut = new RadarRUMSession(queueing);
-        sut.reportEvent("some event");
+        assertEquals(1, this._sut.reportEvent("some event", 123, 456));
         
-        // Assertions
+        // Assert
         PowerMock.verifyAll();
-    }
-
-    @Ignore
-    @Test
-    public void testReportEventStringLong() {
-        fail("Not yet implemented");
-    }
-
-    @Ignore
-    @Test
-    public void testReportSetProperty() {
-        fail("Not yet implemented");
-    }
-
-    @Ignore
-    @Test
-    public void testToString() {
-        fail("Not yet implemented");
     }
 }

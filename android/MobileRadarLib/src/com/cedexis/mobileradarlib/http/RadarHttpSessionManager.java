@@ -56,32 +56,6 @@ public class RadarHttpSessionManager {
     private String _agentVersion;
     List<IPostReportHandler> _postReportHandlers;
     
-    public static RadarHttpSessionManager createManager(
-            Application context,
-            int zoneId,
-            int customerId) {
-        return RadarHttpSessionManager.createManager(
-                context,
-                zoneId,
-                customerId,
-                null,
-                null);
-    }
-    
-    public static RadarHttpSessionManager createManager(
-            Application context,
-            int zoneId,
-            int customerId,
-            String agentName,
-            String agentVersion) {
-        return new RadarHttpSessionManager(
-                context,
-                zoneId,
-                customerId,
-                agentName,
-                agentVersion);
-    }
-    
     public RadarHttpSessionManager(
             Application context,
             int zoneId,
@@ -124,7 +98,9 @@ public class RadarHttpSessionManager {
      * @param handler
      */
     public void addPostReportHandler(IPostReportHandler handler) {
-        this._postReportHandlers.add(handler);
+        if (!this._postReportHandlers.contains(handler)) {
+            this._postReportHandlers.add(handler);
+        }
     }
     
     /**

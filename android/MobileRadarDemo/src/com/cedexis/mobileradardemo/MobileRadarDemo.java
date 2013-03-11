@@ -21,31 +21,18 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cedexis.mobileradarlib.IPostReportHandler;
+import com.cedexis.mobileradarlib.Radar;
 import com.cedexis.mobileradarlib.ReportData;
-import com.cedexis.mobileradarlib.rum.RadarRUMSession;
 
 public class MobileRadarDemo extends Activity {
     
     private final static String TAG = "MobileRadarDemo";
     private final static String OUTER_SLICE_NAME = "Main Page Outer";
     private final static String INNER_SLICE_NAME = "Main Page Inner";
-    private final static String SAVE_FILE_NAME = "mobileradardemo.txt";
     
+    private IPostReportHandler _postReportHandler;
+    private Timer _radarTimer = new Timer();
     private boolean _resumed = false;
-    IPostReportHandler _postReportHandler;
-    
-    private boolean isResumed() {
-        return this._resumed;
-    }
-    
-    private Timer _radarTimer;
-    
-    private Timer getRadarTimer() {
-        if (null == this._radarTimer) {
-            this._radarTimer = new Timer();
-        }
-        return this._radarTimer;
-    }
     
     public MobileRadarDemo() {
         this._postReportHandler = new IPostReportHandler() {
@@ -72,107 +59,70 @@ public class MobileRadarDemo extends Activity {
         };
     }
     
-    @Override
-    protected void onStart() {
-        super.onStart();
-        
-        // Begin a new Radar RUM slice
-        RadarRUMSession rumSession = ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM();
-        rumSession.reportSliceStart(MobileRadarDemo.INNER_SLICE_NAME);
-        
-        // Report when the method fired
-        rumSession.reportEvent(
-            "onStart",
-            RadarRUMTags.MainPage.getValue() |
-            RadarRUMTags.Miscellaneous.getValue());
-    }
-    
-    @Override
-    protected void onStop() {
-        super.onStop();
-        
-        // End Radar RUM slice
-        RadarRUMSession rumSession = ((MobileRadarDemoApplication)this.getApplication()).getRadarRUM();
-        rumSession.reportSliceEnd(MobileRadarDemo.INNER_SLICE_NAME);
-        
-        // Report when the method fired
-        rumSession.reportEvent(
-            "onStop",
-            RadarRUMTags.MainPage.getValue() |
-            RadarRUMTags.Miscellaneous.getValue());
+    private Radar getRadar() {
+        MobileRadarDemoApplication app = (MobileRadarDemoApplication)this.getApplication();
+        return app.getRadar();
     }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate");
+        Log.i(TAG, "onCreate");
+        MobileRadarDemoApplication app = (MobileRadarDemoApplication)this.getApplication();
+        Radar radar = this.getRadar();
         
-        // Schedule periodic Radar HTTP sessions.  We do it here because
-        // onCreate is only called once for the life of the activity.
-        this.getRadarTimer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                // Only schedule a Radar HTTP session if the activity is in the
-                // Resumed state.
-                if (MobileRadarDemo.this.isResumed()) {
-                    ((MobileRadarDemoApplication)MobileRadarDemo
-                        .this.getApplication())
-                            .getRadarHttp()
-                                .queueSession();
-                }
-            }
+        // Register a handler to fire whenever a RUM report is sent
+        radar.addPostReportHandler(this._postReportHandler);
+        
+        // This is the onCreate method of application's main activity. If
+        // the last RUM report id is greater than zero, then the user is
+        // "returning" to the app and we need to grab the text that we
+        // (probably) saved when the left earlier.
+        if (1 > radar.getLastRUMReportId()) {
+            // Report when the app started
+            radar.reportEvent("App Start", 0, app.getOnCreateTimestamp());
             
-        },
-        2000, // start in 2 seconds
-        60000); // repeat every minute or so
-        
-        RadarRUMSession session =
-            ((MobileRadarDemoApplication)this.getApplication())
-            .getRadarRUM();
-        
-        if (1 < session.getCurrentReportId()) {
-            // This isn't a new session
+            // Attach metadata to the RUM session
+            // In this example, we attach a fictitious username
+            radar.reportSetProperty("device manufacturer", android.os.Build.MANUFACTURER);
+            radar.reportSetProperty("device model", android.os.Build.MODEL);
+        }
+        else {
             this.deserializeText();
         }
         
-        // Register a handler to fire whenever a RUM report is sent
-        session.addPostReportHandler(this._postReportHandler);
-        
         // Start Create/Destroy slice
-        session.reportSliceStart(MobileRadarDemo.OUTER_SLICE_NAME);
+        radar.reportSliceStart(MobileRadarDemo.OUTER_SLICE_NAME);
         
         // Report when the method fired
-        session.reportEvent(
-            "onCreate",
-            RadarRUMTags.MainPage.getValue() |
-            RadarRUMTags.Miscellaneous.getValue());
+        radar.reportEvent("onCreate",
+                RadarRUMTags.MainPage.getValue() |
+                RadarRUMTags.Miscellaneous.getValue());
         
-        // Attach metadata to the RUM session
-        // In this example, we attach a fictitious username 
-        session.reportSetProperty("user name", "some user name");
-        
-        // Register a handler to fire whenever a remote probing report is sent
-        ((MobileRadarDemoApplication)this.getApplication())
-            .getRadarHttp()
-            .addPostReportHandler(this._postReportHandler);
+        // Start the Radar timer
+        this._radarTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (MobileRadarDemo.this._resumed) {
+                    MobileRadarDemoApplication app =
+                            (MobileRadarDemoApplication)MobileRadarDemo
+                            .this.getApplication();
+                    app.getRadar().queueHttpSession();
+                }
+            }
+        },
+        2000, // start in a couple seconds
+        60000); // repeat every minute or so
     }
     
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "Inside onDestroy");
+        Log.i(TAG, "onDestroy");
+        Radar radar = this.getRadar();
         
         // End outer slice
-        ((MobileRadarDemoApplication)this.getApplication())
-            .getRadarRUM().reportSliceEnd(MobileRadarDemo.OUTER_SLICE_NAME);
-        
-        // Remove callbacks
-        ((MobileRadarDemoApplication)this.getApplication())
-            .getRadarRUM().removePostReportHandler(this._postReportHandler);
-        
-        ((MobileRadarDemoApplication)this.getApplication())
-            .getRadarHttp()
-            .removePostReportHandler(this._postReportHandler);
+        radar.reportSliceEnd(MobileRadarDemo.OUTER_SLICE_NAME);
         
         // Serialize the textview text to file
         this.serializeText();
@@ -180,12 +130,59 @@ public class MobileRadarDemo extends Activity {
         super.onDestroy();
     }
     
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+        
+        // Begin a new Radar RUM slice
+        Radar radar = this.getRadar();
+        
+        // Make sure the current Radar object has our post-report handler
+        // registered. Adding the same handler multiple times is okay.
+        radar.addPostReportHandler(this._postReportHandler);
+        
+        // Start inner slice
+        radar.reportSliceStart(MobileRadarDemo.INNER_SLICE_NAME);
+        
+        // Report when the method fired
+        int reportId = radar.reportEvent("onResume",
+                RadarRUMTags.MainPage.getValue() |
+                RadarRUMTags.Miscellaneous.getValue());
+        
+        // Attach metadata to the report
+        String[] colors = new String[] { "red", "blue", "green", "orange", "purple" };
+        int randomColorIndex = new Random().nextInt(colors.length);
+        radar.reportSetProperty("color", colors[randomColorIndex], reportId);
+        
+        // Restart Radar remote probing
+        this._resumed = true;
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
+        
+        // Stop Radar remote probing
+        this._resumed = false;
+        
+        // Report when the method fired
+        Radar radar = this.getRadar();
+        radar.reportEvent("onPause",
+                RadarRUMTags.MainPage.getValue() |
+                RadarRUMTags.Miscellaneous.getValue());
+        
+        // End Radar RUM slice
+        radar.reportSliceEnd(MobileRadarDemo.INNER_SLICE_NAME);
+    }
+    
     private void deserializeText() {
-        if (Arrays.asList(this.fileList()).contains(SAVE_FILE_NAME)) {
+        if (Arrays.asList(this.fileList()).contains(this.getString(R.string.save_file_name))) {
             TextView view = (TextView)this.findViewById(R.id.messages_view);
             if (null != view) {
                 try {
-                    FileInputStream f = this.openFileInput(SAVE_FILE_NAME);
+                    FileInputStream f = this.openFileInput(this.getString(R.string.save_file_name));
                     try {
                         ObjectInputStream s = new ObjectInputStream(f);
                         try {
@@ -206,7 +203,7 @@ public class MobileRadarDemo extends Activity {
                 }
                 
                 // Get rid of the file now.  We'll create it again if needed.
-                this.deleteFile(SAVE_FILE_NAME);
+                this.deleteFile(this.getString(R.string.save_file_name));
             }
         }
     }
@@ -215,7 +212,9 @@ public class MobileRadarDemo extends Activity {
         TextView view = (TextView)this.findViewById(R.id.messages_view);
         if (null != view) {
             try {
-                FileOutputStream f = this.openFileOutput(SAVE_FILE_NAME, MODE_PRIVATE);
+                FileOutputStream f = this.openFileOutput(
+                        this.getString(R.string.save_file_name),
+                        MODE_PRIVATE);
                 ObjectOutputStream o;
                 try {
                     o = new ObjectOutputStream(f);
@@ -254,41 +253,5 @@ public class MobileRadarDemo extends Activity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        
-        // Mark the activity as NOT resumed
-        this._resumed = false;
-        
-        // Report when the method fired
-        ((MobileRadarDemoApplication)this.getApplication())
-            .getRadarRUM().reportEvent(
-                "onPause",
-                RadarRUMTags.MainPage.getValue() |
-                RadarRUMTags.Miscellaneous.getValue());
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        // Mark the activity as resumed
-        this._resumed = true;
-        
-        // Report when the method fired
-        RadarRUMSession session = ((MobileRadarDemoApplication)this.getApplication())
-                .getRadarRUM(); 
-        int reportId = session.reportEvent(
-                "onResume",
-                RadarRUMTags.MainPage.getValue() |
-                RadarRUMTags.Miscellaneous.getValue());
-        
-        // Attach metadata to the report
-        String[] colors = new String[] { "red", "blue", "green", "orange", "purple" };
-        int randomColorIndex = new Random().nextInt(colors.length);
-        session.reportSetProperty(reportId, "color", colors[randomColorIndex]);
     }
 }

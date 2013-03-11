@@ -7,16 +7,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.BatteryManager;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.cedexis.mobileradarlib.IProvidesBatteryStatus;
-import com.cedexis.mobileradarlib.http.RadarHttpSessionManager;
-import com.cedexis.mobileradarlib.rum.RadarRUMSession;
+import com.cedexis.mobileradarlib.Radar;
 
-public class MobileRadarDemoApplication extends Application implements IProvidesBatteryStatus {
+public class MobileRadarDemoApplication
+    extends Application
+    implements IProvidesBatteryStatus {
     
-    private RadarRUMSession _radarRUM;
-    private RadarHttpSessionManager _radarHttp;
+    private static final String TAG = "MobileRadarDemoApplication";
+    
+    private Radar _radar;
+    private long _onCreateTimestamp;
+    private int _batteryStatus;
+    private boolean _isCharging;
+    private float _batteryLevel;
+    
     private BroadcastReceiver _batteryInfoReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -33,38 +43,72 @@ public class MobileRadarDemoApplication extends Application implements IProvides
         }
     };
     
-    public RadarRUMSession getRadarRUM() {
-        return this._radarRUM;
+    @Override
+    public void onCreate() {
+        // This is the earliest opportunity to run code, before any activity
+        // has been created.  Here we simply grab a timestamp, which we'll
+        // use to initiate the RUM session later.
+        this._onCreateTimestamp = new Date().getTime();
+        
+        // Register a broadcast receiver to detect changes in battery level
+        this.registerReceiver(this._batteryInfoReceiver,
+                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        
+        // Make sure to call the base class version
+        super.onCreate();
     }
     
-    public RadarHttpSessionManager getRadarHttp() {
-        if (null == this._radarHttp) {
-            this._radarHttp = RadarHttpSessionManager.createManager(
-                    // application-level context
-                    this,
-                    // zone id
-                    1,
-                    // customer id
-                    10660,
-                    // customer agent name
-                    this.getString(R.string.radar_client_name),
-                    // customer agent version
-                    this.getString(R.string.radar_client_version));
+    private void createRadar() {
+        synchronized(this) {
+            if (null == this._radar) {
+                SharedPreferences settings = PreferenceManager
+                        .getDefaultSharedPreferences(this);
+                
+                int zoneId = Integer.parseInt(settings.getString(
+                        "zoneId",
+                        this.getString(R.string.default_zone_id)));
+                
+                int customerId = Integer.parseInt(settings.getString(
+                        "customerId",
+                        this.getString(R.string.default_customer_id)));
+                
+                Log.d(TAG, String.format("Settings zone id: %d customer id: %d",
+                        zoneId,
+                        customerId));
+                
+                this._radar = Radar.createRadar(
+                        this,
+                        zoneId,
+                        customerId,
+                        this.getString(R.string.radar_client_name),
+                        this.getString(R.string.radar_client_version),
+                        this._onCreateTimestamp);
+            }
         }
-        return this._radarHttp;
     }
     
-    private int _batteryStatus;
+    public Radar getRadar() {
+        synchronized(this) {
+            if (null == this._radar) {
+                this.createRadar();
+            }
+        }
+        return this._radar;
+    }
+    
+    public long getOnCreateTimestamp() {
+        return this._onCreateTimestamp;
+    }
+    
     public int getBatteryStatus() {
         return this._batteryStatus;
     }
     
-    private boolean _isCharging;
+    
     public boolean isBatteryCharging() {
         return this._isCharging;
     }
     
-    private float _batteryLevel;
     public float getBatteryLevel() {
         return this._batteryLevel;
     }
@@ -77,33 +121,13 @@ public class MobileRadarDemoApplication extends Application implements IProvides
         return (float)0.2;
     }
     
-    @Override
-    public void onCreate() {
-        // This is the earliest opportunity to run code, before any activity
-        // has been created. All we need to do here is create the Radar RUM
-        // session object. Nothing is being reported here. The main reason to
-        // do this here is to get the timestamp, but you could just save the
-        // timestamp and create the object later if preferred.
-        this._radarRUM = RadarRUMSession.createSession(
-                // application-level context
-                this,
-                // app start timestamp
-                new Date().getTime(),
-                // zone id
-                1,
-                // customer id
-                10660,
-                // customer agent name
-                this.getString(R.string.radar_client_name),
-                // customer agent version
-                this.getString(R.string.radar_client_version));
-        
-        // Register a broadcast receiver to detect changes in battery level
-        this.registerReceiver(this._batteryInfoReceiver,
-                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        
-        // Make sure to call the base class version
-        super.onCreate();
+    public void restartRadar() {
+        Log.i(TAG, "restartRadar");
+        synchronized(this) {
+            this._onCreateTimestamp = new Date().getTime();
+            this._radar = null;
+            this.createRadar();
+        }
     }
     
 }
