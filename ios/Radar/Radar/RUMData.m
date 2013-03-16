@@ -64,4 +64,15 @@
     return @"";
 }
 
+- (NSDictionary *)toDictionary {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    [result setValue:@"rumevent" forKey:@"type"];
+    [result setValue:[NSNumber numberWithUnsignedInteger:self.reportId] forKey:@"reportId"];
+    [result setValue:self.eventName forKey:@"eventName"];
+    [result setValue:[NSNumber numberWithUnsignedInteger:self.tags] forKey:@"tags"];
+    [result setValue:[NSNumber numberWithUnsignedLongLong:self.timestamp] forKey:@"timestamp"];
+    [result setValue:self.requestSignature forKey:@"requestSignature"];
+    return result;
+}
+
 @end

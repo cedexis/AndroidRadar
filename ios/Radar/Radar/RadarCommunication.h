@@ -13,6 +13,7 @@ typedef void(^radar_comm_complete_block_t)(NSDictionary *);
 @interface RadarCommunication : NSObject
 
 - (NSString *)url;
+- (NSDictionary *)toDictionary;
 
 @property id<CommunicationData> data;
 @property dispatch_queue_t completionQueue;

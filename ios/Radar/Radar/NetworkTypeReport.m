@@ -50,4 +50,13 @@
     return @"";
 }
 
+- (NSDictionary *)toDictionary {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    [result setValue:@"networktype" forKey:@"type"];
+    [result setValue:[NSNumber numberWithInteger:self.type] forKey:@"networkType"];
+    [result setValue:[NSNumber numberWithInteger:self.subType] forKey:@"networkSubType"];
+    [result setValue:self.requestSignature forKey:@"requestSignature"];
+    return result;
+}
+
 @end

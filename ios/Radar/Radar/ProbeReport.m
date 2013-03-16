@@ -72,4 +72,17 @@
     return @"";
 }
 
+- (NSDictionary *)toDictionary {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    [result setValue:@"remoteprobe" forKey:@"type"];
+    [result setValue:[NSNumber numberWithUnsignedInteger:self.providerZoneId] forKey:@"providerZoneId"];
+    [result setValue:[NSNumber numberWithUnsignedInteger:self.providerCustomerId] forKey:@"providerCustomerId"];
+    [result setValue:[NSNumber numberWithUnsignedInteger:self.providerId] forKey:@"providerId"];
+    [result setValue:[NSNumber numberWithInteger:self.probeTypeNum] forKey:@"probeTypeNum"];
+    [result setValue:[NSNumber numberWithInteger:self.responseCode] forKey:@"responseCode"];
+    [result setValue:[NSNumber numberWithInteger:self.measurement] forKey:@"measurement"];
+    [result setValue:self.requestSignature forKey:@"requestSignature"];
+    return result;
+}
+
 @end

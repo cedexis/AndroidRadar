@@ -12,6 +12,7 @@
 - (NSString *)hostname;
 - (NSArray *)pathParts;
 - (NSDictionary *)dictionaryFrom:(NSData *)data;
+- (NSDictionary *)toDictionary;
 - (NSString *)queryString;
 
 @end

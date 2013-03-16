@@ -69,4 +69,9 @@
     return result;
 }
 
+- (NSDictionary *)toDictionary {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    return result;
+}
+
 @end

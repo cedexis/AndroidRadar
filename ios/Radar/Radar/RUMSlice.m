@@ -57,4 +57,14 @@
     return @"";
 }
 
+- (NSDictionary *)toDictionary {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    [result setValue:@"rumslice" forKey:@"type"];
+    [result setValue:self.name forKey:@"name"];
+    [result setValue:[NSNumber numberWithBool:self.start] forKey:@"start"];
+    [result setValue:[NSNumber numberWithUnsignedLongLong:self.timestamp] forKey:@"timestamp"];
+    [result setValue:self.requestSignature forKey:@"requestSignature"];
+    return result;
+}
+
 @end

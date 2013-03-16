@@ -88,4 +88,18 @@
     return @"";
 }
 
+- (NSDictionary *)toDictionary {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    [result setValue:@"init" forKey:@"type"];
+    [result setValue:[NSNumber numberWithUnsignedInt:self.requestorZoneId]
+              forKey:@"requestorZoneId"];
+    [result setValue:[NSNumber numberWithUnsignedInt:self.requestorCustomerId]
+              forKey:@"requestorCustomerId"];
+    [result setValue:[NSNumber numberWithUnsignedInt:self.transactionId]
+              forKey:@"transactionId"];
+    [result setValue:[NSNumber numberWithUnsignedInt:self.timestamp]
+              forKey:@"timestamp"];
+    return result;
+}
+
 @end

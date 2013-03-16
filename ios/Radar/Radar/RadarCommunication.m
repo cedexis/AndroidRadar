@@ -38,4 +38,8 @@
         NULL, (CFStringRef)result, NULL, NULL, kCFStringEncodingUTF8));
 }
 
+- (NSDictionary *)toDictionary {
+    return [self.data toDictionary];
+}
+
 @end

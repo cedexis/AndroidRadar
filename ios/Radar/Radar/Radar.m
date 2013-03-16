@@ -109,6 +109,16 @@
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:queue
                            completionHandler:onComplete];
+    
+    dispatch_block_t do_notify = ^(void) {
+        NSDictionary *notificationData = [communicationInfo toDictionary];
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter postNotificationName:@"Radar Communication Data"
+                                          object:self
+                                        userInfo:notificationData];
+    };
+    
+    dispatch_async(dispatch_get_main_queue(), do_notify);
 }
 
 - (void)sendAsync {
@@ -378,9 +388,15 @@
                                          returningResponse:&response
                                                      error:&error];
             
-            if ((nil != data) && (200 == [response statusCode])) {
-                NSLog(@"Report complete");
-            }
+            dispatch_block_t do_notify = ^(void) {
+                NSDictionary *notificationData = [radarServerComm.data toDictionary];
+                NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+                [notificationCenter postNotificationName:@"Radar Communication Data"
+                                                  object:self
+                                                userInfo:notificationData];
+            };
+            
+            dispatch_async(dispatch_get_main_queue(), do_notify);
         }
     }
 }
@@ -417,16 +433,19 @@
     
     NSHTTPURLResponse *response;
     NSError *error;
-    NSData *data = [NSURLConnection sendSynchronousRequest:request
-                                         returningResponse:&response
-                                                     error:&error];
+    [NSURLConnection sendSynchronousRequest:request
+                          returningResponse:&response
+                                      error:&error];
     
-    //NSLog(@"Response: %@", response);
-    //NSLog(@"Error: %@", error);
+    dispatch_block_t do_notify = ^(void) {
+        NSDictionary *notificationData = [comm.data toDictionary];
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter postNotificationName:@"Radar Communication Data"
+                                          object:self
+                                        userInfo:notificationData];
+    };
     
-    if ((nil != data) && (200 == [response statusCode])) {
-        NSLog(@"Network type report complete");
-    }
+    dispatch_async(dispatch_get_main_queue(), do_notify);
 }
 
 - (void)processProviderType:(NSString *)providerSpecType
@@ -463,8 +482,15 @@
                                              returningResponse:&response
                                                          error:&error];
         
-        //NSLog(@"Response: %@", response);
-        //NSLog(@"Error: %@", error);
+        dispatch_block_t do_notify = ^(void) {
+            NSDictionary *notificationData = [initCommunication.data toDictionary];
+            NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+            [notificationCenter postNotificationName:@"Radar Communication Data"
+                                              object:self
+                                            userInfo:notificationData];
+        };
+        
+        dispatch_async(dispatch_get_main_queue(), do_notify);
         
         if ((nil != data) && (200 == [response statusCode])) {
             NSString *requestSignature = [[initCommunication.data dictionaryFrom:data] valueForKey:@"requestSignature"];
