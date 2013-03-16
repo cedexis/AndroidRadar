@@ -108,13 +108,6 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    // Setup Radar HTTP measurements
-    [NSTimer scheduledTimerWithTimeInterval:5 // seconds
-                                     target:self
-                                   selector:@selector(scheduleRadarHTTP:)
-                                   userInfo:nil
-                                    repeats:NO];
-    
     // This event means the application is now in the foreground and active (the normal state for
     // most applications).  This is a good point to re-enable Radar reporting.
     [self.radar enableReporting:YES];
@@ -239,18 +232,6 @@
 
         [self saveContext];
     }
-}
-
-- (void)scheduleRadarHTTP:(NSTimer *)timer {
-    NSLog(@"Scheduling Radar HTTP session");
-    [self.radar scheduleRemoteProbing];
-    
-    // Now schedule a repeating timer to continue indefinitely, but at a longer interval
-    [NSTimer scheduledTimerWithTimeInterval:120 // seconds
-                                     target:self
-                                   selector:@selector(scheduleRadarHTTP:)
-                                   userInfo:nil
-                                    repeats:NO];
 }
 
 - (void)saveContext

@@ -12,4 +12,5 @@
 @interface DemoAppMoreViewController : UIViewController <MFMailComposeViewControllerDelegate>
 - (IBAction)sendEmail:(id)sender;
 - (IBAction)clearDatabase:(id)sender;
+- (IBAction)doRemoteProbing:(id)sender;
 @end

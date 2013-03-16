@@ -100,8 +100,20 @@
     }
     [del.managedObjectContext save:&error];
     
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                    message:@"Database cleared"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"Ok"
+                                          otherButtonTitles:nil];
+    [alert show];
+    
     [del.radar reportEvent:RadarEventsUserClearedDatabase
                   WithTags:RadarTagsLevelWarning];
+}
+
+- (IBAction)doRemoteProbing:(id)sender {
+    DemoAppAppDelegate *del = [[UIApplication sharedApplication] delegate];
+    [del.radar scheduleRemoteProbing];
 }
 
 @end
