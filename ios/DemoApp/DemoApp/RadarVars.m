@@ -26,4 +26,7 @@ NSString *const RadarSliceAboutView = @"about view";
 
 // RUM properties
 NSString *const RadarPropertiesDeviceId = @"device id";
+NSString *const RadarPropertiesDeviceName = @"device name";
+NSString *const RadarPropertiesDeviceSystemName = @"device system name";
+NSString *const RadarPropertiesDeviceSystemVersion = @"device system version";
 NSString *const RadarPropertiesUserEmailResult = @"user email result";

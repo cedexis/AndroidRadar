@@ -58,10 +58,14 @@
     [self.radar reportEvent:RadarEventsAppDidFinishLaunching
                    WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
     
-    // Attach any useful properties to the RUM session
+    // Attach any useful properties to the RUM session.  For example, information about
+    // the device...
+    UIDevice *device = [UIDevice currentDevice];
+    [self.radar reportProperty:RadarPropertiesDeviceName Value:[device name]];
+    [self.radar reportProperty:RadarPropertiesDeviceSystemName Value:[device systemName]];
+    [self.radar reportProperty:RadarPropertiesDeviceSystemVersion Value:[device systemVersion]];
     NSUUID *uniqueId = [[UIDevice currentDevice] identifierForVendor];
     [self.radar reportProperty:RadarPropertiesDeviceId Value:[uniqueId UUIDString]];
-    
     return YES;
 }
 							

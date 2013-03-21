@@ -40,6 +40,9 @@ FOUNDATION_EXPORT NSString *const RadarSliceAboutView;
 
 // RUM properties
 FOUNDATION_EXPORT NSString *const RadarPropertiesDeviceId;
+FOUNDATION_EXPORT NSString *const RadarPropertiesDeviceName;
+FOUNDATION_EXPORT NSString *const RadarPropertiesDeviceSystemName;
+FOUNDATION_EXPORT NSString *const RadarPropertiesDeviceSystemVersion;
 FOUNDATION_EXPORT NSString *const RadarPropertiesUserEmailResult;
 
 #endif
