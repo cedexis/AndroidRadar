@@ -36,20 +36,4 @@
     return @"Unknown";
 }
 
-- (UIImage *)image {
-    if ([self.type isEqualToString:@"remoteprobe"]) {
-        return [UIImage imageNamed:@"ios-radar.png"];
-    }
-    else if ([self.type hasPrefix:@"rum"]) {
-        return [UIImage imageNamed:@"ios-rum.png"];
-    }
-    else if ([self.type isEqualToString:@"networktype"]) {
-        return [UIImage imageNamed:@"ios-network.png"];
-    }
-    else if ([self.type isEqualToString:@"init"]) {
-        return [UIImage imageNamed:@"ios-init.png"];
-    }
-    return nil;
-}
-
 @end

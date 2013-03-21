@@ -32,18 +32,14 @@
 		16DD290F16F37C55008F5B3A /* icon-57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 16DD290E16F37C55008F5B3A /* icon-57x57.png */; };
 		16DD291216F37E1E008F5B3A /* DemoAppModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 16DD291016F37E1E008F5B3A /* DemoAppModel.xcdatamodeld */; };
 		16DD291516F3811A008F5B3A /* Report.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD291416F3811A008F5B3A /* Report.m */; };
-		16DD291816F3AC89008F5B3A /* ios-radar.png in Resources */ = {isa = PBXBuildFile; fileRef = 16DD291716F3AC89008F5B3A /* ios-radar.png */; };
-		16DD291A16F3B339008F5B3A /* ios-rum.png in Resources */ = {isa = PBXBuildFile; fileRef = 16DD291916F3B339008F5B3A /* ios-rum.png */; };
-		16DD291C16F3B5CA008F5B3A /* ios-network.png in Resources */ = {isa = PBXBuildFile; fileRef = 16DD291B16F3B5CA008F5B3A /* ios-network.png */; };
-		16DD291E16F3B718008F5B3A /* ios-init.png in Resources */ = {isa = PBXBuildFile; fileRef = 16DD291D16F3B718008F5B3A /* ios-init.png */; };
 		16DD292616F3CC9C008F5B3A /* Init.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD292516F3CC9C008F5B3A /* Init.m */; };
 		16DD292916F3E842008F5B3A /* ReportData.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD292816F3E842008F5B3A /* ReportData.m */; };
 		16DD292C16F3F14C008F5B3A /* RUMEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD292B16F3F14C008F5B3A /* RUMEvent.m */; };
 		16DD292F16F3F9D2008F5B3A /* NetworkType.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD292E16F3F9D2008F5B3A /* NetworkType.m */; };
 		16DD293216F3FE34008F5B3A /* RemoteProbe.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD293116F3FE34008F5B3A /* RemoteProbe.m */; };
 		16DD293516F4055B008F5B3A /* DemoAppRUMProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD293416F4055A008F5B3A /* DemoAppRUMProperty.m */; };
-		16DD293816F40AC9008F5B3A /* MeasurementTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD293716F40AC9008F5B3A /* MeasurementTableCell.m */; };
 		16DD293B16F40E11008F5B3A /* DemoAppRUMSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD293A16F40E11008F5B3A /* DemoAppRUMSlice.m */; };
+		16EC139B16F4ACBD00B67601 /* DemoAppSpeedTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC139A16F4ACBD00B67601 /* DemoAppSpeedTestViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,10 +78,6 @@
 		16DD291116F37E1E008F5B3A /* DemoAppModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DemoAppModel.xcdatamodel; sourceTree = "<group>"; };
 		16DD291316F3811A008F5B3A /* Report.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Report.h; sourceTree = "<group>"; };
 		16DD291416F3811A008F5B3A /* Report.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Report.m; sourceTree = "<group>"; };
-		16DD291716F3AC89008F5B3A /* ios-radar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios-radar.png"; sourceTree = "<group>"; };
-		16DD291916F3B339008F5B3A /* ios-rum.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios-rum.png"; sourceTree = "<group>"; };
-		16DD291B16F3B5CA008F5B3A /* ios-network.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios-network.png"; sourceTree = "<group>"; };
-		16DD291D16F3B718008F5B3A /* ios-init.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios-init.png"; sourceTree = "<group>"; };
 		16DD292416F3CC9C008F5B3A /* Init.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Init.h; sourceTree = "<group>"; };
 		16DD292516F3CC9C008F5B3A /* Init.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Init.m; sourceTree = "<group>"; };
 		16DD292716F3E842008F5B3A /* ReportData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportData.h; sourceTree = "<group>"; };
@@ -98,10 +90,10 @@
 		16DD293116F3FE34008F5B3A /* RemoteProbe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteProbe.m; sourceTree = "<group>"; };
 		16DD293316F4055A008F5B3A /* DemoAppRUMProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoAppRUMProperty.h; sourceTree = "<group>"; };
 		16DD293416F4055A008F5B3A /* DemoAppRUMProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoAppRUMProperty.m; sourceTree = "<group>"; };
-		16DD293616F40AC9008F5B3A /* MeasurementTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeasurementTableCell.h; sourceTree = "<group>"; };
-		16DD293716F40AC9008F5B3A /* MeasurementTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeasurementTableCell.m; sourceTree = "<group>"; };
 		16DD293916F40E11008F5B3A /* DemoAppRUMSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoAppRUMSlice.h; sourceTree = "<group>"; };
 		16DD293A16F40E11008F5B3A /* DemoAppRUMSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoAppRUMSlice.m; sourceTree = "<group>"; };
+		16EC139916F4ACBD00B67601 /* DemoAppSpeedTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoAppSpeedTestViewController.h; sourceTree = "<group>"; };
+		16EC139A16F4ACBD00B67601 /* DemoAppSpeedTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoAppSpeedTestViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,8 +148,6 @@
 		16DD288816F24D1A008F5B3A /* DemoApp */ = {
 			isa = PBXGroup;
 			children = (
-				16DD293616F40AC9008F5B3A /* MeasurementTableCell.h */,
-				16DD293716F40AC9008F5B3A /* MeasurementTableCell.m */,
 				16DD28C616F28A1D008F5B3A /* Radar */,
 				16DD28B516F27A66008F5B3A /* DemoAppMoreViewController.h */,
 				16DD28B616F27A66008F5B3A /* DemoAppMoreViewController.m */,
@@ -174,6 +164,8 @@
 				16DD291616F3906E008F5B3A /* Model */,
 				16DD292716F3E842008F5B3A /* ReportData.h */,
 				16DD292816F3E842008F5B3A /* ReportData.m */,
+				16EC139916F4ACBD00B67601 /* DemoAppSpeedTestViewController.h */,
+				16EC139A16F4ACBD00B67601 /* DemoAppSpeedTestViewController.m */,
 			);
 			path = DemoApp;
 			sourceTree = "<group>";
@@ -181,10 +173,6 @@
 		16DD288916F24D1A008F5B3A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				16DD291D16F3B718008F5B3A /* ios-init.png */,
-				16DD291B16F3B5CA008F5B3A /* ios-network.png */,
-				16DD291916F3B339008F5B3A /* ios-rum.png */,
-				16DD291716F3AC89008F5B3A /* ios-radar.png */,
 				16DD290E16F37C55008F5B3A /* icon-57x57.png */,
 				16DD290C16F37C06008F5B3A /* icon-114x114.png */,
 				16DD28B316F277CB008F5B3A /* cedexis_logo.png */,
@@ -292,10 +280,6 @@
 				16DD28B416F277CB008F5B3A /* cedexis_logo.png in Resources */,
 				16DD290D16F37C06008F5B3A /* icon-114x114.png in Resources */,
 				16DD290F16F37C55008F5B3A /* icon-57x57.png in Resources */,
-				16DD291816F3AC89008F5B3A /* ios-radar.png in Resources */,
-				16DD291A16F3B339008F5B3A /* ios-rum.png in Resources */,
-				16DD291C16F3B5CA008F5B3A /* ios-network.png in Resources */,
-				16DD291E16F3B718008F5B3A /* ios-init.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,8 +305,8 @@
 				16DD292F16F3F9D2008F5B3A /* NetworkType.m in Sources */,
 				16DD293216F3FE34008F5B3A /* RemoteProbe.m in Sources */,
 				16DD293516F4055B008F5B3A /* DemoAppRUMProperty.m in Sources */,
-				16DD293816F40AC9008F5B3A /* MeasurementTableCell.m in Sources */,
 				16DD293B16F40E11008F5B3A /* DemoAppRUMSlice.m in Sources */,
+				16EC139B16F4ACBD00B67601 /* DemoAppSpeedTestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

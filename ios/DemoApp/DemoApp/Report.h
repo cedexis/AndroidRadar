@@ -16,6 +16,5 @@
 @property (nonatomic, retain) NSString *type;
 
 - (NSString *)reportTypeString;
-- (UIImage *)image;
 
 @end

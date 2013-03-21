@@ -51,7 +51,6 @@
         request.predicate = pred;
         Init *temp = [[context executeFetchRequest:request
                                              error:&error] objectAtIndex:0];
-        NSLog(@"Init: %@", temp);
         [self.data addObject:[[ReportData alloc] initWithName:@"Requestor Zone Id"
                                                     Value:temp.requestorZoneId]];
         [self.data addObject:[[ReportData alloc] initWithName:@"Requestor Customer Id"

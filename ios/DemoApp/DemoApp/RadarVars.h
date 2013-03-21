@@ -31,6 +31,8 @@ FOUNDATION_EXPORT NSString *const RadarEventsUserClearedDatabase;
 FOUNDATION_EXPORT NSString *const RadarEventsUserEmail;
 FOUNDATION_EXPORT NSString *const RadarEventsShowAboutViewLoadStart;
 FOUNDATION_EXPORT NSString *const RadarEventsShowAboutViewLoadEnd;
+FOUNDATION_EXPORT NSString *const RadarEventsSpeedTest;
+FOUNDATION_EXPORT NSString *const RadarEventsUserRemoteProbing;
 
 // RUM slices
 FOUNDATION_EXPORT NSString *const RadarSliceAppActive;

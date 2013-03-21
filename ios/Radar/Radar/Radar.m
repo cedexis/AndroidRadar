@@ -89,7 +89,7 @@
     NSLog(@"URL: %@", url);
     NSURLRequest *request = [NSURLRequest requestWithURL:url
                                              cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                         timeoutInterval:60.0];
+                                         timeoutInterval:20.0];
 
     void (^onComplete)(NSURLResponse *response, NSData *data, NSError *error) =
         ^(NSURLResponse *response, NSData *data, NSError *error) {
@@ -348,7 +348,7 @@
         
         NSURLRequest *request = [NSURLRequest requestWithURL:url
                                                  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                             timeoutInterval:60.0];
+                                             timeoutInterval:20.0];
         NSHTTPURLResponse *response;
         NSError *error;
         NSDate *start = [NSDate date];
@@ -356,12 +356,12 @@
                                              returningResponse:&response
                                                          error:&error];
         
+        NSInteger probeTypeNum = [[probe valueForKey:@"t"] unsignedIntegerValue];
         if ((nil != data) && (200 == [response statusCode])) {
             NSDate *end = [NSDate date];
             NSInteger elapsed = 1000 * [end timeIntervalSinceDate:start];
             //NSLog(@"Elapsed: %ld", (long)elapsed);
             NSInteger measurement = elapsed;
-            NSInteger probeTypeNum = [[probe valueForKey:@"t"] unsignedIntegerValue];
             if ((14 == probeTypeNum) || (15 == probeTypeNum)
                 || (23 == probeTypeNum) || (30 == probeTypeNum)) {
                 NSInteger fileSizeHint = [[probe valueForKey:@"s"] integerValue];
@@ -387,6 +387,46 @@
             data = [NSURLConnection sendSynchronousRequest:request
                                          returningResponse:&response
                                                      error:&error];
+            
+            if ((nil == data) || (200 != [response statusCode])) {
+                NSLog(@"Radar communication error (remote probing report)");
+            }
+            
+            dispatch_block_t do_notify = ^(void) {
+                NSDictionary *notificationData = [radarServerComm.data toDictionary];
+                NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+                [notificationCenter postNotificationName:@"Radar Communication Data"
+                                                  object:self
+                                                userInfo:notificationData];
+            };
+            
+            dispatch_async(dispatch_get_main_queue(), do_notify);
+        }
+        else {
+            NSLog(@"Probe download error");
+            
+            // Send report
+            RadarCommunication *radarServerComm = [[RadarCommunication alloc] init];
+            radarServerComm.data = [[ProbeReport alloc] initWithProviderZoneId:providerZoneId
+                                                            ProviderCustomerId:providerCustomerId
+                                                                    ProviderId:providerId
+                                                                  ProbeTypeNum:probeTypeNum
+                                                                  ResponseCode:1
+                                                                   Measurement:0
+                                                           AndRequestSignature:requestSignature];
+            
+            url = [NSURL URLWithString:[radarServerComm url]];
+            request = [NSURLRequest requestWithURL:url
+                                       cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                   timeoutInterval:60.0];
+            
+            data = [NSURLConnection sendSynchronousRequest:request
+                                         returningResponse:&response
+                                                     error:&error];
+            
+            if ((nil == data) || (200 != [response statusCode])) {
+                NSLog(@"Radar communication error (remote probing error report)");
+            }
             
             dispatch_block_t do_notify = ^(void) {
                 NSDictionary *notificationData = [radarServerComm.data toDictionary];
@@ -433,9 +473,14 @@
     
     NSHTTPURLResponse *response;
     NSError *error;
-    [NSURLConnection sendSynchronousRequest:request
-                          returningResponse:&response
-                                      error:&error];
+    NSData *data;
+    data = [NSURLConnection sendSynchronousRequest:request
+                                 returningResponse:&response
+                                             error:&error];
+    
+    if ((nil == data) || (200 != [response statusCode])) {
+        NSLog(@"Radar communication error (network type report)");
+    }
     
     dispatch_block_t do_notify = ^(void) {
         NSDictionary *notificationData = [comm.data toDictionary];
@@ -474,13 +519,18 @@
         
         NSURLRequest *request = [NSURLRequest requestWithURL:url
                                                  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                             timeoutInterval:60.0];
+                                             timeoutInterval:20.0];
         
         NSHTTPURLResponse *response;
         NSError *error;
-        NSData *data = [NSURLConnection sendSynchronousRequest:request
-                                             returningResponse:&response
-                                                         error:&error];
+        NSData *data;
+        data = [NSURLConnection sendSynchronousRequest:request
+                                     returningResponse:&response
+                                                 error:&error];
+        
+        if ((nil == data) || (200 != [response statusCode])) {
+            NSLog(@"Radar communication error (init)");
+        }
         
         dispatch_block_t do_notify = ^(void) {
             NSDictionary *notificationData = [initCommunication.data toDictionary];
@@ -494,8 +544,7 @@
         
         if ((nil != data) && (200 == [response statusCode])) {
             NSString *requestSignature = [[initCommunication.data dictionaryFrom:data] valueForKey:@"requestSignature"];
-            NSLog(@"Init complete...request signature: %@", requestSignature);
-            
+            //NSLog(@"Init complete...request signature: %@", requestSignature);
             NSMutableArray *providerIds = [[NSMutableArray alloc] init];
             BOOL keepGoing = YES;
             while (keepGoing) {
@@ -508,15 +557,21 @@
                                                                              ProviderIds:providerIds
                                                                                   OnWifi:onWifi];
                 
+                NSError *error;
                 NSURL *url = [NSURL URLWithString:[probeServerComm url]];
-                NSLog(@"Probe server URL: %@", url);
+                //NSLog(@"Probe server URL: %@", url);
                 request = [NSURLRequest requestWithURL:url
                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                        timeoutInterval:60.0];
                 
+                NSData *data;
                 data = [NSURLConnection sendSynchronousRequest:request
-                                      returningResponse:&response
-                                                  error:&error];
+                                             returningResponse:&response
+                                                         error:&error];
+                
+                if ((nil == data) || (200 != [response statusCode])) {
+                    NSLog(@"Radar communication error (Probe Server)");
+                }
                 
                 if ((nil != data) && (200 == [response statusCode])) {
                     //NSLog(@"Got probe server response!");

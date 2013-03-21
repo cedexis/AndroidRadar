@@ -114,6 +114,15 @@
 - (IBAction)doRemoteProbing:(id)sender {
     DemoAppAppDelegate *del = [[UIApplication sharedApplication] delegate];
     [del.radar scheduleRemoteProbing];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                    message:@"Remote probing scheduled"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"Ok"
+                                          otherButtonTitles:nil];
+    [alert show];
+    
+    [del.radar reportEvent:RadarEventsUserRemoteProbing];
 }
 
 @end

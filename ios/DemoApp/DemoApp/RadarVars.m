@@ -17,6 +17,8 @@ NSString *const RadarEventsUserClearedDatabase = @"user cleared database";
 NSString *const RadarEventsUserEmail = @"user email";
 NSString *const RadarEventsShowAboutViewLoadStart = @"about view load start";
 NSString *const RadarEventsShowAboutViewLoadEnd = @"about view load end";
+NSString *const RadarEventsSpeedTest = @"speed test";
+NSString *const RadarEventsUserRemoteProbing = @"remote probing scheduled";
 
 // RUM slices
 NSString *const RadarSliceAppActive = @"app active";

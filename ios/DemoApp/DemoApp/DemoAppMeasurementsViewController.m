@@ -110,7 +110,6 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Report *report = [_fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [report reportTypeString];
-    cell.imageView.image = [report image];
 }
 
 /*
