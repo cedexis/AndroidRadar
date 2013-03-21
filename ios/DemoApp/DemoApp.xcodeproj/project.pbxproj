@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		16B1DBAF16FB9E2200A06646 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 16B1DBAE16FB9E2200A06646 /* iTunesArtwork */; };
 		16DD288316F24D1A008F5B3A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DD288216F24D1A008F5B3A /* UIKit.framework */; };
 		16DD288516F24D1A008F5B3A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DD288416F24D1A008F5B3A /* Foundation.framework */; };
 		16DD288716F24D1A008F5B3A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DD288616F24D1A008F5B3A /* CoreGraphics.framework */; };
@@ -43,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		16B1DBAE16FB9E2200A06646 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		16DD287F16F24D1A008F5B3A /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16DD288216F24D1A008F5B3A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		16DD288416F24D1A008F5B3A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -173,6 +175,7 @@
 		16DD288916F24D1A008F5B3A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				16B1DBAE16FB9E2200A06646 /* iTunesArtwork */,
 				16DD290E16F37C55008F5B3A /* icon-57x57.png */,
 				16DD290C16F37C06008F5B3A /* icon-114x114.png */,
 				16DD28B316F277CB008F5B3A /* cedexis_logo.png */,
@@ -280,6 +283,7 @@
 				16DD28B416F277CB008F5B3A /* cedexis_logo.png in Resources */,
 				16DD290D16F37C06008F5B3A /* icon-114x114.png in Resources */,
 				16DD290F16F37C55008F5B3A /* icon-57x57.png in Resources */,
+				16B1DBAF16FB9E2200A06646 /* iTunesArtwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,8 +415,8 @@
 		16DD28A416F24D1A008F5B3A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jacob Wan (8YEQGL9Q4X)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jacob Wan (8YEQGL9Q4X)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DemoApp/DemoApp-Prefix.pch";
 				INFOPLIST_FILE = "DemoApp/DemoApp-Info.plist";
@@ -421,8 +425,8 @@
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/ios-demo-bsjdzrxpnwwfkiaskrkbsxdflpel/Build/Products/Debug-iphoneos\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "DE9DB3B3-C959-46DC-8D50-DD9BB978C5B7";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DE9DB3B3-C959-46DC-8D50-DD9BB978C5B7";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				USER_HEADER_SEARCH_PATHS = "../Radar/**";
 				WRAPPER_EXTENSION = app;
 			};
