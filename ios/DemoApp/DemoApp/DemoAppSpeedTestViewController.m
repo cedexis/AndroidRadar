@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *currentValue;
 @property (nonatomic, strong) NSString *requestSignature;
 @property (nonatomic, strong) NSString *countryCode;
+@property (nonatomic) NSUInteger reloadId;
 @end
 
 @implementation DemoAppSpeedTestViewController
@@ -26,6 +27,7 @@
 @synthesize tableProviders = _tableProviders;
 @synthesize currentValue = _currentValue;
 @synthesize countryCode = _countryCode;
+@synthesize reloadId = _reloadId;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -277,7 +279,8 @@
     return 0;
 }
 
-- (void)doMeasurement:(NSMutableDictionary *)provider IndexPath:(NSIndexPath *)indexPath {
+- (void)doMeasurement:(NSMutableDictionary *)provider IndexPath:(NSIndexPath *)indexPath
+             ReloadId:(NSUInteger)reloadId {
     NSString *url = [provider objectForKey:@"coldURL"];
     int elapsed;
     if (url) {
@@ -309,29 +312,27 @@
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
+        if (reloadId == self.reloadId) {
+            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     });
 }
 
-- (void)doMeasurements {
+- (void)doMeasurements:(NSUInteger)reloadId {
     NSArray *tableProviders = self.tableProviders;
     int section = 0;
     for (NSDictionary *categoryProviders in tableProviders) {
         int row = 0;
         for (NSMutableDictionary *provider in [categoryProviders objectForKey:@"providers"]) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [self doMeasurement:provider IndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
-            });
-            // Pause for effect
-            [NSThread sleepForTimeInterval:0.5];
+            [self doMeasurement:provider IndexPath:[NSIndexPath indexPathForItem:row inSection:section] ReloadId:reloadId];
             row++;
         }
         section++;
     }
 }
 
-- (void)doSpeedTest {
+- (void)doSpeedTestReloadId:(NSUInteger)reloadId {
     NSLog(@"doSpeedTest");
     NSURL *url = [NSURL URLWithString:@"http://probes.cedexis.com/publicproviders"];
     
@@ -364,7 +365,7 @@
                 [self.tableView reloadData];
             });
             
-            [self doMeasurements];
+            [self doMeasurements:reloadId];
         }
     }
 }
@@ -377,8 +378,10 @@
     _providerData = nil;
     _tableProviders = nil;
     
+    NSUInteger reloadId = self.reloadId = arc4random();
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doSpeedTest];
+        [self doSpeedTestReloadId:reloadId];
     });
     
     // Report RUM event

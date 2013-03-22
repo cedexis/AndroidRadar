@@ -4,10 +4,4 @@
    <FileRef
       location = "group:DemoApp/DemoApp.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:Radar/Radar.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:ScaryBugs/ScaryBugs.xcodeproj">
-   </FileRef>
 </Workspace>

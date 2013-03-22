@@ -195,13 +195,24 @@
                                     <action selector="doRemoteProbing:" destination="LUh-ez-GW9" eventType="touchUpInside" id="JyY-6T-lPr"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Version 1.1" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DkK-4l-BLI">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="wPb-wQ-7BG"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.95294117647058818" green="0.95686274509803915" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="DkK-4l-BLI" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="9Sn-A0-Fdp"/>
                             <constraint firstItem="dIs-1B-r72" firstAttribute="top" secondItem="6zE-NS-SbH" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Cse-Xy-UNq"/>
                             <constraint firstAttribute="trailing" secondItem="dIs-1B-r72" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Gyg-GF-vhG"/>
+                            <constraint firstItem="DkK-4l-BLI" firstAttribute="leading" secondItem="6zE-NS-SbH" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="X6j-sy-BaY"/>
                             <constraint firstAttribute="trailing" secondItem="GdA-D7-PFV" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="YJS-Ae-qX9"/>
                             <constraint firstItem="dIs-1B-r72" firstAttribute="leading" secondItem="6zE-NS-SbH" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="c84-4s-DNb"/>
+                            <constraint firstAttribute="bottom" secondItem="DkK-4l-BLI" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="g6X-eP-VlX"/>
                             <constraint firstItem="3Qz-cb-FHw" firstAttribute="leading" secondItem="6zE-NS-SbH" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="i5V-cc-DFH"/>
                             <constraint firstItem="GdA-D7-PFV" firstAttribute="top" secondItem="dIs-1B-r72" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="iBZ-FF-Xbb"/>
                             <constraint firstAttribute="trailing" secondItem="3Qz-cb-FHw" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="j84-5u-GH6"/>
