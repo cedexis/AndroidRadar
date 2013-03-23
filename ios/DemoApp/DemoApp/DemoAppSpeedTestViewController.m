@@ -102,7 +102,10 @@
     });
 }
 
-- (void)loadPublicProviders:(NSData *)providerData {
+- (void)loadPublicProviders:(NSData *)providerData ReloadId:(NSUInteger)reloadId {
+    if (self.reloadId != reloadId) {
+        return;
+    }
     NSError *parseError;
     id providers = [NSJSONSerialization JSONObjectWithData:providerData
                                                    options:0
@@ -192,7 +195,10 @@
     return NO;
 }
 
-- (void)setupProviders {
+- (void)setupProviders:(NSUInteger)reloadId {
+    if (self.reloadId != reloadId) {
+        return;
+    }
     //self.countryCode = @"RU";
     NSMutableArray *tableProviders = [self tableProviders];
     
@@ -281,6 +287,9 @@
 
 - (void)doMeasurement:(NSMutableDictionary *)provider IndexPath:(NSIndexPath *)indexPath
              ReloadId:(NSUInteger)reloadId {
+    if (self.reloadId != reloadId) {
+        return;
+    }
     NSString *url = [provider objectForKey:@"coldURL"];
     int elapsed;
     if (url) {
@@ -291,6 +300,9 @@
         [provider setObject:@"Not Measured" forKey:@"connectResult"];
     }
     
+    if (self.reloadId != reloadId) {
+        return;
+    }
     url = [provider objectForKey:@"rttURL"];
     if (url) {
         elapsed = [self getElapsed:url];
@@ -300,6 +312,9 @@
         [provider setObject:@"Not Measured" forKey:@"rttResult"];
     }
     
+    if (self.reloadId != reloadId) {
+        return;
+    }
     url = [provider objectForKey:@"throughputURL"];
     if (url) {
         elapsed = [self getElapsed:url];
@@ -312,14 +327,18 @@
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (reloadId == self.reloadId) {
-            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        if (self.reloadId != reloadId) {
+            return;
         }
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
     });
 }
 
 - (void)doMeasurements:(NSUInteger)reloadId {
+    if (self.reloadId != reloadId) {
+        return;
+    }
     NSArray *tableProviders = self.tableProviders;
     int section = 0;
     for (NSDictionary *categoryProviders in tableProviders) {
@@ -333,7 +352,9 @@
 }
 
 - (void)doSpeedTestReloadId:(NSUInteger)reloadId {
-    NSLog(@"doSpeedTest");
+    if (self.reloadId != reloadId) {
+        return;
+    }
     NSURL *url = [NSURL URLWithString:@"http://probes.cedexis.com/publicproviders"];
     
     // Obtain the public providers list
@@ -357,9 +378,9 @@
                 (long)[response statusCode]]];
     }
     else {
-        [self loadPublicProviders:data];
+        [self loadPublicProviders:data ReloadId:reloadId];
         if ([self speedTestInit]) {
-            [self setupProviders];
+            [self setupProviders:reloadId];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
