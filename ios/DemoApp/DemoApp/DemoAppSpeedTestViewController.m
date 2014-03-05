@@ -294,7 +294,12 @@
     int elapsed;
     if (url) {
         elapsed = [self getElapsed:url];
-        [provider setObject:[NSString stringWithFormat:@"%d ms", elapsed] forKey:@"connectResult"];
+        if (0 < elapsed) {
+            [provider setObject:[NSString stringWithFormat:@"%d ms", elapsed] forKey:@"connectResult"];
+        }
+        else {
+            [provider setObject:@"Unknown" forKey:@"connectResult"];
+        }
     }
     else {
         [provider setObject:@"Not Measured" forKey:@"connectResult"];
@@ -306,7 +311,12 @@
     url = [provider objectForKey:@"rttURL"];
     if (url) {
         elapsed = [self getElapsed:url];
-        [provider setObject:[NSString stringWithFormat:@"%d ms", elapsed] forKey:@"rttResult"];
+        if (0 < elapsed) {
+            [provider setObject:[NSString stringWithFormat:@"%d ms", elapsed] forKey:@"rttResult"];
+        }
+        else {
+            [provider setObject:@"Unknown" forKey:@"rttResult"];
+        }
     }
     else {
         [provider setObject:@"Not Measured" forKey:@"rttResult"];
@@ -318,9 +328,15 @@
     url = [provider objectForKey:@"throughputURL"];
     if (url) {
         elapsed = [self getElapsed:url];
-        NSInteger fileSizeHint = [[provider valueForKey:@"throughputFileSizeHint"] integerValue];
-        int throughput = 8 * 1000 * fileSizeHint / elapsed;
-        [provider setObject:[NSString stringWithFormat:@"%d Kb/s", throughput] forKey:@"throughputResult"];
+        if (0 < elapsed) {
+            NSInteger fileSizeHint = [[provider valueForKey:@"throughputFileSizeHint"] integerValue];
+            int throughput = 8 * 1000 * fileSizeHint / elapsed;
+            [provider setObject:[NSString stringWithFormat:@"%d Kb/s", throughput] forKey:@"throughputResult"];
+        }
+        else {
+            NSLog(@"Elapsed time is zero");
+            [provider setObject:@"Unknown" forKey:@"throughputResult"];
+        }
     }
     else {
         [provider setObject:@"Not Measured" forKey:@"throughputResult"];
