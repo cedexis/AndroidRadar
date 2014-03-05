@@ -544,6 +544,10 @@
         
         if ((nil != data) && (200 == [response statusCode])) {
             NSString *requestSignature = [[initCommunication.data dictionaryFrom:data] valueForKey:@"requestSignature"];
+            if (![requestSignature isKindOfClass:[NSString class]]) {
+                // Something is wrong with the init response
+                return;
+            }
             //NSLog(@"Init complete...request signature: %@", requestSignature);
             NSMutableArray *providerIds = [[NSMutableArray alloc] init];
             BOOL keepGoing = YES;
