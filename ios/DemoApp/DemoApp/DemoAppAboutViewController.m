@@ -49,23 +49,19 @@
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
-    DemoAppAppDelegate *del = [self appDelegate];
-    
     // Start a RUM slice
-    [del.radar reportSlice:RadarSliceAboutView Start:YES];
+    [[Radar instance] reportSlice:RadarSliceAboutView Start:YES];
     
     // RUM event to indicate we're about to start loading the web view
-    [del.radar reportEvent:RadarEventsShowAboutViewLoadStart];
+    [[Radar instance] reportEvent:RadarEventsShowAboutViewLoadStart];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-    DemoAppAppDelegate *del = [self appDelegate];
-    
     // RUM event to indicate that the web view finished loading
-    [del.radar reportEvent:RadarEventsShowAboutViewLoadEnd];
+    [[Radar instance] reportEvent:RadarEventsShowAboutViewLoadEnd];
     
     // Terminate the RUM slice
-    [del.radar reportSlice:RadarSliceAboutView Start:NO];
+    [[Radar instance] reportSlice:RadarSliceAboutView Start:NO];
 }
 
 - (BOOL)webView:(UIWebView *)inWeb

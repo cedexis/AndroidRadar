@@ -52,32 +52,29 @@
           didFinishWithResult:(MFMailComposeResult)result
                         error:(NSError *)error {
     
-    DemoAppAppDelegate *del = [[UIApplication sharedApplication] delegate];
-    
-    NSUInteger reportId = [del.radar reportEvent:RadarEventsUserEmail];
+    NSUInteger reportId = [[Radar instance] reportEvent:RadarEventsUserEmail];
     
     switch (result)
     {
         case MFMailComposeResultCancelled:
-            [del.radar reportProperty:RadarPropertiesUserEmailResult
-                                Value:@"cancelled"
-                            ForReport:reportId];
+            [[Radar instance] reportProperty:RadarPropertiesUserEmailResult
+                                       Value:@"cancelled"
+                                   ForReport:reportId];
             break;
         case MFMailComposeResultSaved:
-            [del.radar reportProperty:RadarPropertiesUserEmailResult
-                                Value:@"saved"
-                            ForReport:reportId];
+            [[Radar instance] reportProperty:RadarPropertiesUserEmailResult
+                                       Value:@"saved"
+                                   ForReport:reportId];
             break;
         case MFMailComposeResultSent:
-            [del.radar reportProperty:RadarPropertiesUserEmailResult
-                                Value:@"sent"
-                            ForReport:reportId];
+            [[Radar instance] reportProperty:RadarPropertiesUserEmailResult
+                                       Value:@"sent"
+                                   ForReport:reportId];
             break;
         case MFMailComposeResultFailed:
-            [del.radar reportProperty:RadarPropertiesUserEmailResult
-                                Value:[NSString stringWithFormat:@"failure: %@",
-                                       [error description]]
-                            ForReport:reportId];
+            [[Radar instance] reportProperty:RadarPropertiesUserEmailResult
+                                       Value:[NSString stringWithFormat:@"failure: %@", [error description]]
+                                   ForReport:reportId];
             break;
         default:
             break;
@@ -107,13 +104,13 @@
                                           otherButtonTitles:nil];
     [alert show];
     
-    [del.radar reportEvent:RadarEventsUserClearedDatabase
-                  WithTags:RadarTagsLevelWarning];
+    [[Radar instance] reportEvent:RadarEventsUserClearedDatabase
+                         WithTags:RadarTagsLevelWarning];
 }
 
 - (IBAction)doRemoteProbing:(id)sender {
-    DemoAppAppDelegate *del = [[UIApplication sharedApplication] delegate];
-    [del.radar scheduleRemoteProbing];
+    [[Radar instance] scheduleRemoteProbingWithZoneId:1
+                                        AndCustomerId:10660];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
                                                     message:@"Remote probing scheduled"
@@ -122,7 +119,7 @@
                                           otherButtonTitles:nil];
     [alert show];
     
-    [del.radar reportEvent:RadarEventsUserRemoteProbing];
+    [[Radar instance] reportEvent:RadarEventsUserRemoteProbing];
 }
 
 @end

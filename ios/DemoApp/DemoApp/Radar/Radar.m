@@ -19,8 +19,6 @@
 #import "Reachability.h"
 
 @interface Radar()
-@property NSUInteger requestorZoneId;
-@property NSUInteger requestorCustomerId;
 @property (copy) NSString *rumRequestSignature;
 @property id reportIdLock;
 @property NSUInteger lastReportId;
@@ -32,8 +30,6 @@
 
 @implementation Radar
 
-@synthesize requestorZoneId = _requestorZoneId;
-@synthesize requestorCustomerId = _requestorCustomerId;
 @synthesize rumRequestSignature = _rumRequestSignature;
 @synthesize reportIdLock = _reportIdLock;
 @synthesize lastReportId = _lastReportId;
@@ -41,18 +37,29 @@
 @synthesize asyncQueue = _asyncQueue;
 @synthesize tempReportData = _tempReportData;
 
-- (id)initWithRequestorZoneId:(NSUInteger)requestorZoneId
-          RequestorCustomerId:(NSUInteger)requestorCustomerId {
+# pragma mark Singleton methods
++ (instancetype)instance {
+    static Radar *result = nil;
+    static dispatch_once_t token;
+    dispatch_once(&token, ^{
+        result = [[Radar alloc] init];
+    });
+    return result;
+}
+
+# pragma mark Initialization methods
+
+- (id)init {
     if (self = [super init]) {
         self.reportIdLock = [[NSObject alloc] init];
-        self.requestorZoneId = requestorZoneId;
-        self.requestorCustomerId = requestorCustomerId;
         self.communicationQueue = [[NSMutableArray alloc] init];
         self.asyncQueue = dispatch_queue_create("com.cedexis.radar", NULL);
         self.tempReportData = [[NSMutableArray alloc] init];
     }
     return self;
 }
+
+# pragma mark Instance methods
 
 - (void)enableReporting:(BOOL)enabled {
     [self enableReporting:enabled WithPollingInterval:2];
@@ -139,14 +146,16 @@
     }
 }
 
-- (void)startRUMInitCompletionQueue:(dispatch_queue_t)initCompletionQueue
-                     InitCompletion:(radar_comm_complete_block_t)initCompletion {
+- (void)startRUMInitWithZoneid:(NSUInteger)zoneId
+                    CustomerId:(NSUInteger)customerId
+               CompletionQueue:(dispatch_queue_t)initCompletionQueue
+                InitCompletion:(radar_comm_complete_block_t)initCompletion {
     NSUInteger timestamp = [[NSDate date] timeIntervalSince1970];
-    NSLog(@"initializeRUMSession, called at %lu", (unsigned long)timestamp);
+    NSLog(@"initializeRUMSession, for Zone Id %lu, Customer Id %lu, called at %lu", (unsigned long)zoneId, (unsigned long)customerId, (unsigned long)timestamp);
     
     RadarCommunication *communication = [[RadarCommunication alloc] init];
-    communication.data = [[InitData alloc] initWithRequestorZoneId:self.requestorZoneId
-                                               RequestorCustomerId:self.requestorCustomerId
+    communication.data = [[InitData alloc] initWithRequestorZoneId:zoneId
+                                               RequestorCustomerId:customerId
                                                       AndTimestamp:timestamp];
     communication.completionQueue = initCompletionQueue;
     communication.completion = ^(NSDictionary *result) {
@@ -504,14 +513,15 @@
     }
 }
 
-- (void)scheduleRemoteProbing {
-    NSLog(@"Scheduling remote probing");
+- (void)scheduleRemoteProbingWithZoneId:(NSUInteger)zoneId
+                          AndCustomerId:(NSUInteger)customerId {
+    NSLog(@"Scheduling remote probing for Zone Id %lu Customer Id %lu", (unsigned long)zoneId, (unsigned long)customerId);
     
     dispatch_block_t remoteProbing = ^(void) {
         NSUInteger timestamp = [[NSDate date] timeIntervalSince1970];
         RadarCommunication *initCommunication = [[RadarCommunication alloc] init];
-        initCommunication.data = [[InitData alloc] initWithRequestorZoneId:self.requestorZoneId
-                                                       RequestorCustomerId:self.requestorCustomerId
+        initCommunication.data = [[InitData alloc] initWithRequestorZoneId:zoneId
+                                                       RequestorCustomerId:customerId
                                                               AndTimestamp:timestamp];
         
         NSURL *url = [NSURL URLWithString:[initCommunication url]];
@@ -556,8 +566,8 @@
                 BOOL onWifi = [self reachability] == ReachableViaWiFi;
                 
                 RadarCommunication *probeServerComm = [[RadarCommunication alloc] init];
-                probeServerComm.data = [[ProbeServerQuery alloc] initWithRequestorZoneId:self.requestorZoneId
-                                                                     RequestorCustomerId:self.requestorCustomerId
+                probeServerComm.data = [[ProbeServerQuery alloc] initWithRequestorZoneId:zoneId
+                                                                     RequestorCustomerId:customerId
                                                                              ProviderIds:providerIds
                                                                                   OnWifi:onWifi];
                 

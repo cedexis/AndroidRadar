@@ -409,7 +409,6 @@
 
 - (IBAction)doSpeedTest:(id)sender {
     NSLog(@"Running speed test");
-    DemoAppAppDelegate *del = [[UIApplication sharedApplication] delegate];
     
     // Reinitialize providers
     _providerData = nil;
@@ -422,7 +421,7 @@
     });
     
     // Report RUM event
-    [del.radar reportEvent:RadarEventsSpeedTest];
+    [[Radar instance] reportEvent:RadarEventsSpeedTest];
 }
 
 #pragma mark - Table view data source

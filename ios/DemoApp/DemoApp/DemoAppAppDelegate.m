@@ -19,7 +19,6 @@
 
 @implementation DemoAppAppDelegate
 
-@synthesize radar = _radar;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -34,10 +33,11 @@
         NSLog(@"Network type: %@", [result valueForKey:@"networkType"]);
         NSLog(@"RUM request signature: %@", [result valueForKey:@"requestSignature"]);
     };
-    self.radar = [[Radar alloc] initWithRequestorZoneId:1
-                                    RequestorCustomerId:10660];
-    [self.radar startRUMInitCompletionQueue:dispatch_get_main_queue()
-                             InitCompletion:initComplete];
+
+    [[Radar instance] startRUMInitWithZoneid:1
+                                  CustomerId:10660
+                             CompletionQueue:dispatch_get_main_queue()
+                              InitCompletion:initComplete];
     
     return YES;
 }
@@ -49,23 +49,23 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(notify:)
                                                  name:nil
-                                               object:self.radar];
+                                               object:[Radar instance]];
     
     // Allow Radar measurements
-    [self.radar enableReporting:YES WithPollingInterval:5];
+    [[Radar instance] enableReporting:YES WithPollingInterval:5];
     
     // Report the RUM event
-    [self.radar reportEvent:RadarEventsAppDidFinishLaunching
-                   WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    [[Radar instance] reportEvent:RadarEventsAppDidFinishLaunching
+                         WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
     
     // Attach any useful properties to the RUM session.  For example, information about
     // the device...
     UIDevice *device = [UIDevice currentDevice];
-    [self.radar reportProperty:RadarPropertiesDeviceName Value:[device name]];
-    [self.radar reportProperty:RadarPropertiesDeviceSystemName Value:[device systemName]];
-    [self.radar reportProperty:RadarPropertiesDeviceSystemVersion Value:[device systemVersion]];
+    [[Radar instance] reportProperty:RadarPropertiesDeviceName Value:[device name]];
+    [[Radar instance] reportProperty:RadarPropertiesDeviceSystemName Value:[device systemName]];
+    [[Radar instance] reportProperty:RadarPropertiesDeviceSystemVersion Value:[device systemVersion]];
     NSUUID *uniqueId = [[UIDevice currentDevice] identifierForVendor];
-    [self.radar reportProperty:RadarPropertiesDeviceId Value:[uniqueId UUIDString]];
+    [[Radar instance] reportProperty:RadarPropertiesDeviceId Value:[uniqueId UUIDString]];
     return YES;
 }
 							
@@ -76,14 +76,14 @@
     
     // Disable Radar measurements.  We do this here (before reporting the RUM event below) to
     // ensure there's minimal impact from Radar on the device as the app is becoming inactive.
-    [self.radar enableReporting:NO];
+    [[Radar instance] enableReporting:NO];
     
     // Report the RUM event.  This report will be sent once the app becomes active again.
-    [self.radar reportEvent:RadarEventsAppWillResignActive
-                   WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    [[Radar instance] reportEvent:RadarEventsAppWillResignActive
+                         WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
     
     // End RUM slice
-    [self.radar reportSlice:RadarSliceAppActive Start:NO];
+    [[Radar instance] reportSlice:RadarSliceAppActive Start:NO];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -92,11 +92,11 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
     // Report the RUM event
-    [self.radar reportEvent:RadarEventsAppDidEnterBackground
-                   WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    [[Radar instance] reportEvent:RadarEventsAppDidEnterBackground
+                         WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
     
     // Flush any remaining reports
-    [self.radar flush];
+    [[Radar instance] flush];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -104,8 +104,8 @@
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     
     // Report the RUM event
-    [self.radar reportEvent:RadarEventsAppWillEnterForeground
-                   WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    [[Radar instance] reportEvent:RadarEventsAppWillEnterForeground
+                         WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -114,14 +114,14 @@
     
     // This event means the application is now in the foreground and active (the normal state for
     // most applications).  This is a good point to re-enable Radar reporting.
-    [self.radar enableReporting:YES];
+    [[Radar instance] enableReporting:YES];
     
     // Start RUM slice
-    [self.radar reportSlice:RadarSliceAppActive Start:YES];
+    [[Radar instance] reportSlice:RadarSliceAppActive Start:YES];
     
     // Report the RUM event
-    [self.radar reportEvent:RadarEventsAppDidBecomeActive
-                   WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
+    [[Radar instance] reportEvent:RadarEventsAppDidBecomeActive
+                         WithTags:RadarTagsAppDelegate | RadarTagsLevelDebug];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -144,7 +144,7 @@
 }
 
 - (void)notify:(NSNotification *)notification {
-    if (self.radar == [notification object]) {
+    if ([Radar instance] == [notification object]) {
         NSDictionary *userInfo = notification.userInfo;
         NSLog(@"Info: %@", userInfo);
         
