@@ -34,7 +34,7 @@
         NSLog(@"RUM request signature: %@", [result valueForKey:@"requestSignature"]);
     };
 
-    [[Radar instance] startRUMInitWithZoneid:1
+    [[Radar instance] startRUMInitWithZoneId:1
                                   CustomerId:10660
                              CompletionQueue:dispatch_get_main_queue()
                               InitCompletion:initComplete];

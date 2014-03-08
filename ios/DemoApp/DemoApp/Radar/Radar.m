@@ -146,7 +146,7 @@
     }
 }
 
-- (void)startRUMInitWithZoneid:(NSUInteger)zoneId
+- (void)startRUMInitWithZoneId:(NSUInteger)zoneId
                     CustomerId:(NSUInteger)customerId
                CompletionQueue:(dispatch_queue_t)initCompletionQueue
                 InitCompletion:(radar_comm_complete_block_t)initCompletion {
