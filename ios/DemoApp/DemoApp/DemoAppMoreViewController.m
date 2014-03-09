@@ -109,17 +109,24 @@
 }
 
 - (IBAction)doRemoteProbing:(id)sender {
-    [[Radar instance] scheduleRemoteProbingWithZoneId:1
-                                        AndCustomerId:10660];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                    message:@"Remote probing scheduled"
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Ok"
-                                          otherButtonTitles:nil];
+    UIAlertView *alert;
+    if ([[Radar instance] scheduleRemoteProbingWithZoneId:1 AndCustomerId:10660]) {
+        alert = [[UIAlertView alloc] initWithTitle:nil
+                                           message:@"Remote probing scheduled"
+                                          delegate:nil
+                                 cancelButtonTitle:@"Ok"
+                                 otherButtonTitles:nil];
+        
+        [[Radar instance] reportEvent:RadarEventsUserRemoteProbing];
+    }
+    else {
+        alert = [[UIAlertView alloc] initWithTitle:nil
+                                           message:@"Remote probing not scheduled"
+                                          delegate:nil
+                                 cancelButtonTitle:@"Ok"
+                                 otherButtonTitles:nil];
+    }
     [alert show];
-    
-    [[Radar instance] reportEvent:RadarEventsUserRemoteProbing];
 }
 
 @end

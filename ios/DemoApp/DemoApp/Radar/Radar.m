@@ -25,6 +25,7 @@
 @property NSMutableArray *communicationQueue;
 @property dispatch_queue_t asyncQueue;
 @property NSMutableArray *tempReportData;
+@property BOOL isRadarRunning;
 
 @end
 
@@ -36,6 +37,7 @@
 @synthesize communicationQueue = _communicationQueue;
 @synthesize asyncQueue = _asyncQueue;
 @synthesize tempReportData = _tempReportData;
+@synthesize isRadarRunning = _isRadarRunning;
 
 # pragma mark Singleton methods
 + (instancetype)instance {
@@ -55,6 +57,7 @@
         self.communicationQueue = [[NSMutableArray alloc] init];
         self.asyncQueue = dispatch_queue_create("com.cedexis.radar", NULL);
         self.tempReportData = [[NSMutableArray alloc] init];
+        self.isRadarRunning = NO;
     }
     return self;
 }
@@ -513,116 +516,130 @@
     }
 }
 
-- (void)scheduleRemoteProbingWithZoneId:(NSUInteger)zoneId
+- (BOOL)scheduleRemoteProbingWithZoneId:(NSUInteger)zoneId
                           AndCustomerId:(NSUInteger)customerId {
-    NSLog(@"Scheduling remote probing for Zone Id %lu Customer Id %lu", (unsigned long)zoneId, (unsigned long)customerId);
-    
+
     dispatch_block_t remoteProbing = ^(void) {
-        NSUInteger timestamp = [[NSDate date] timeIntervalSince1970];
-        RadarCommunication *initCommunication = [[RadarCommunication alloc] init];
-        initCommunication.data = [[InitData alloc] initWithRequestorZoneId:zoneId
-                                                       RequestorCustomerId:customerId
-                                                              AndTimestamp:timestamp];
-        
-        NSURL *url = [NSURL URLWithString:[initCommunication url]];
-        NSLog(@"Init URL: %@", url);
-        
-        NSURLRequest *request = [NSURLRequest requestWithURL:url
-                                                 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                             timeoutInterval:20.0];
-        
-        NSHTTPURLResponse *response;
-        NSError *error;
-        NSData *data;
-        data = [NSURLConnection sendSynchronousRequest:request
-                                     returningResponse:&response
-                                                 error:&error];
-        
-        if ((nil == data) || (200 != [response statusCode])) {
-            NSLog(@"Radar communication error (init)");
-        }
-        
-        dispatch_block_t do_notify = ^(void) {
-            NSDictionary *notificationData = [initCommunication.data toDictionary];
-            NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-            [notificationCenter postNotificationName:@"Radar Communication Data"
-                                              object:self
-                                            userInfo:notificationData];
-        };
-        
-        dispatch_async(dispatch_get_main_queue(), do_notify);
-        
-        if ((nil != data) && (200 == [response statusCode])) {
-            NSString *requestSignature = [[initCommunication.data dictionaryFrom:data] valueForKey:@"requestSignature"];
-            if (![requestSignature isKindOfClass:[NSString class]]) {
-                // Something is wrong with the init response
-                return;
+        @try {
+            NSUInteger timestamp = [[NSDate date] timeIntervalSince1970];
+            RadarCommunication *initCommunication = [[RadarCommunication alloc] init];
+            initCommunication.data = [[InitData alloc] initWithRequestorZoneId:zoneId
+                                                           RequestorCustomerId:customerId
+                                                                  AndTimestamp:timestamp];
+            
+            NSURL *url = [NSURL URLWithString:[initCommunication url]];
+            NSLog(@"Init URL: %@", url);
+            
+            NSURLRequest *request = [NSURLRequest requestWithURL:url
+                                                     cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                 timeoutInterval:20.0];
+            
+            NSHTTPURLResponse *response;
+            NSError *error;
+            NSData *data;
+            data = [NSURLConnection sendSynchronousRequest:request
+                                         returningResponse:&response
+                                                     error:&error];
+            
+            if ((nil == data) || (200 != [response statusCode])) {
+                NSLog(@"Radar communication error (init)");
             }
-            //NSLog(@"Init complete...request signature: %@", requestSignature);
-            NSMutableArray *providerIds = [[NSMutableArray alloc] init];
-            BOOL keepGoing = YES;
-            while (keepGoing) {
-                
-                BOOL onWifi = [self reachability] == ReachableViaWiFi;
-                
-                RadarCommunication *probeServerComm = [[RadarCommunication alloc] init];
-                probeServerComm.data = [[ProbeServerQuery alloc] initWithRequestorZoneId:zoneId
-                                                                     RequestorCustomerId:customerId
-                                                                             ProviderIds:providerIds
-                                                                                  OnWifi:onWifi];
-                
-                NSError *error;
-                NSURL *url = [NSURL URLWithString:[probeServerComm url]];
-                //NSLog(@"Probe server URL: %@", url);
-                request = [NSURLRequest requestWithURL:url
-                                           cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                       timeoutInterval:60.0];
-                
-                NSData *data;
-                data = [NSURLConnection sendSynchronousRequest:request
-                                             returningResponse:&response
-                                                         error:&error];
-                
-                if ((nil == data) || (200 != [response statusCode])) {
-                    NSLog(@"Radar communication error (Probe Server)");
+            
+            dispatch_block_t do_notify = ^(void) {
+                NSDictionary *notificationData = [initCommunication.data toDictionary];
+                NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+                [notificationCenter postNotificationName:@"Radar Communication Data"
+                                                  object:self
+                                                userInfo:notificationData];
+            };
+            
+            dispatch_async(dispatch_get_main_queue(), do_notify);
+            
+            if ((nil != data) && (200 == [response statusCode])) {
+                NSString *requestSignature = [[initCommunication.data dictionaryFrom:data] valueForKey:@"requestSignature"];
+                if (![requestSignature isKindOfClass:[NSString class]]) {
+                    // Something is wrong with the init response
+                    return;
                 }
-                
-                if ((nil != data) && (200 == [response statusCode])) {
-                    //NSLog(@"Got probe server response!");
-                    NSError *parseError;
-                    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
-                                                                         options:0
-                                                                           error:&parseError];
-                    //NSLog(@"Provider data: %@", json);
+                //NSLog(@"Init complete...request signature: %@", requestSignature);
+                NSMutableArray *providerIds = [[NSMutableArray alloc] init];
+                BOOL keepGoing = YES;
+                while (keepGoing) {
                     
-                    NSString *providerSpecType = [json valueForKey:@"a"];
-                    if (nil != providerSpecType) {
-                        NSDictionary *provider = [json valueForKey:@"p"];
-                        if (nil != provider) {
-                            id providerId = [provider valueForKey:@"i"];
-                            if (nil != providerId) {
-                                NSLog(@"Provider id: %@", providerId);
-                                [providerIds addObject:providerId];
-                                [self processProviderType:providerSpecType
-                                                     Json:json
-                                      AndRequestSignature:requestSignature];
+                    BOOL onWifi = [self reachability] == ReachableViaWiFi;
+                    
+                    RadarCommunication *probeServerComm = [[RadarCommunication alloc] init];
+                    probeServerComm.data = [[ProbeServerQuery alloc] initWithRequestorZoneId:zoneId
+                                                                         RequestorCustomerId:customerId
+                                                                                 ProviderIds:providerIds
+                                                                                      OnWifi:onWifi];
+                    
+                    NSError *error;
+                    NSURL *url = [NSURL URLWithString:[probeServerComm url]];
+                    //NSLog(@"Probe server URL: %@", url);
+                    request = [NSURLRequest requestWithURL:url
+                                               cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                           timeoutInterval:60.0];
+                    
+                    NSData *data;
+                    data = [NSURLConnection sendSynchronousRequest:request
+                                                 returningResponse:&response
+                                                             error:&error];
+                    
+                    if ((nil == data) || (200 != [response statusCode])) {
+                        NSLog(@"Radar communication error (Probe Server)");
+                    }
+                    
+                    if ((nil != data) && (200 == [response statusCode])) {
+                        //NSLog(@"Got probe server response!");
+                        NSError *parseError;
+                        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
+                                                                             options:0
+                                                                               error:&parseError];
+                        //NSLog(@"Provider data: %@", json);
+                        
+                        NSString *providerSpecType = [json valueForKey:@"a"];
+                        if (nil != providerSpecType) {
+                            NSDictionary *provider = [json valueForKey:@"p"];
+                            if (nil != provider) {
+                                id providerId = [provider valueForKey:@"i"];
+                                if (nil != providerId) {
+                                    NSLog(@"Provider id: %@", providerId);
+                                    [providerIds addObject:providerId];
+                                    [self processProviderType:providerSpecType
+                                                         Json:json
+                                          AndRequestSignature:requestSignature];
+                                }
                             }
+                        }
+                        else {
+                            // This is most likely normal termination
+                            keepGoing = NO;
                         }
                     }
                     else {
-                        // This is most likely normal termination
                         keepGoing = NO;
                     }
                 }
-                else {
-                    keepGoing = NO;
-                }
             }
         }
+        @finally {
+            self.isRadarRunning = NO;
+        }
     };
+
+    if ([self isRadarRunning]) {
+        NSLog(@"Skipping remote probing. Radar session still active");
+        return NO;
+    }
+    
+    self.isRadarRunning = YES;
+    NSLog(@"Scheduling remote probing for Zone Id %lu Customer Id %lu", (unsigned long)zoneId, (unsigned long)customerId);
     
     // We're on the main thread here, so shovel this off to Grand Central Dispatch
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), remoteProbing);
+    
+    return YES;
 }
 
 @end

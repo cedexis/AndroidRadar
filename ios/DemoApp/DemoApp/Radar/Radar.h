@@ -19,7 +19,7 @@
 - (void)enableReporting:(BOOL)enabled WithPollingInterval:(NSInteger)interval;
 - (void)flush;
 
-- (void)scheduleRemoteProbingWithZoneId:(NSUInteger)zoneId
+- (BOOL)scheduleRemoteProbingWithZoneId:(NSUInteger)zoneId
                           AndCustomerId:(NSUInteger)customerId;
 - (NSUInteger)reportEvent:(NSString *)eventName;
 - (NSUInteger)reportEvent:(NSString *)eventName WithTags:(NSUInteger)tags;
