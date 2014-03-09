@@ -206,6 +206,7 @@
     NSArray *orderedCategories = [NSArray arrayWithObjects:
                                   @"Delivery Networks",
                                   @"Cloud Computing",
+                                  @"Dynamic Content",
                                   @"Web Benchmarks",
                                   @"Other Cloud Services", nil];
     for (NSString *category in orderedCategories) {
@@ -253,15 +254,22 @@
         }
     }
     
+    NSMutableArray *toDiscard = [NSMutableArray array];
     for (NSDictionary *categoryProviders in tableProviders) {
         NSMutableArray *providers = [categoryProviders objectForKey:@"providers"];
-        [providers sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            NSString *left = [obj1 objectForKey:@"providerName"];
-            NSString *right = [obj2 objectForKey:@"providerName"];
-            return [left compare:right options:NSCaseInsensitiveSearch];
-        }];
+        if (0 < [providers count]) {
+            [providers sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                NSString *left = [obj1 objectForKey:@"providerName"];
+                NSString *right = [obj2 objectForKey:@"providerName"];
+                return [left compare:right options:NSCaseInsensitiveSearch];
+            }];
+        }
+        else {
+            [toDiscard addObject:categoryProviders];
+        }
     }
-    
+    NSLog(@"To discard: %@", toDiscard);
+    [self.tableProviders removeObjectsInArray:toDiscard];
     NSLog(@"Table Providers: %@", self.tableProviders);
 }
 
