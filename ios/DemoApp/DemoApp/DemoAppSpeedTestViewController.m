@@ -140,6 +140,9 @@
                     case 14:
                         key = @"throughputURL";
                         break;
+                    case 2:
+                        key = @"customURL";
+                        break;
                 }
                 if (key) {
                     [newProvider setObject:[probe objectForKey:@"url"] forKey:key];
@@ -290,7 +293,7 @@
         return 1000 * [end timeIntervalSinceDate:start];
     }
     
-    return 0;
+    return -1;
 }
 
 - (void)doMeasurement:(NSMutableDictionary *)provider IndexPath:(NSIndexPath *)indexPath
@@ -306,11 +309,8 @@
             [provider setObject:[NSString stringWithFormat:@"%d ms", elapsed] forKey:@"connectResult"];
         }
         else {
-            [provider setObject:@"Unknown" forKey:@"connectResult"];
+            [provider setObject:@"Error" forKey:@"connectResult"];
         }
-    }
-    else {
-        [provider setObject:@"Not Measured" forKey:@"connectResult"];
     }
     
     if (self.reloadId != reloadId) {
@@ -323,11 +323,8 @@
             [provider setObject:[NSString stringWithFormat:@"%d ms", elapsed] forKey:@"rttResult"];
         }
         else {
-            [provider setObject:@"Unknown" forKey:@"rttResult"];
+            [provider setObject:@"Error" forKey:@"rttResult"];
         }
-    }
-    else {
-        [provider setObject:@"Not Measured" forKey:@"rttResult"];
     }
     
     if (self.reloadId != reloadId) {
@@ -342,12 +339,23 @@
             [provider setObject:[NSString stringWithFormat:@"%d Kb/s", throughput] forKey:@"throughputResult"];
         }
         else {
-            NSLog(@"Elapsed time is zero");
-            [provider setObject:@"Unknown" forKey:@"throughputResult"];
+            NSLog(@"Elapsed time less than 1");
+            [provider setObject:@"Error" forKey:@"throughputResult"];
         }
     }
-    else {
-        [provider setObject:@"Not Measured" forKey:@"throughputResult"];
+    
+    if (self.reloadId != reloadId) {
+        return;
+    }
+    url = [provider objectForKey:@"customURL"];
+    if (url) {
+        elapsed = [self getElapsed:url];
+        if (0 < elapsed) {
+            [provider setObject:[NSString stringWithFormat:@"%d ms", elapsed] forKey:@"customResult"];
+        }
+        else {
+            [provider setObject:@"Error" forKey:@"customResult"];
+        }
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -482,8 +490,6 @@
 }
 
 - (void)configureCell:(UITableViewCell *)cell ForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *notMeasuredYetText = @"queued";
-    cell.detailTextLabel.numberOfLines = 3;
     int i = 0;
     NSArray *tableProviders = self.tableProviders;
     for (NSDictionary *categoryProviders in tableProviders) {
@@ -494,23 +500,31 @@
             id connectResult = [provider objectForKey:@"connectResult"];
             id rttResult = [provider objectForKey:@"rttResult"];
             id throughputResult = [provider objectForKey:@"throughputResult"];
-            
-            if (nil == connectResult) {
-                connectResult = notMeasuredYetText;
+            id customResult = [provider objectForKey:@"customResult"];
+            NSMutableArray *cellTextParts = [NSMutableArray array];
+            if (nil != connectResult) {
+                [cellTextParts addObject:[NSString stringWithFormat:@"Connect: %@", connectResult]];
             }
             
-            if (nil == rttResult) {
-                rttResult = notMeasuredYetText;
+            if (nil != rttResult) {
+                [cellTextParts addObject:[NSString stringWithFormat:@"RTT: %@", rttResult]];
             }
             
-            if (nil == throughputResult) {
-                throughputResult = notMeasuredYetText;
+            if (nil != throughputResult) {
+                [cellTextParts addObject:[NSString stringWithFormat:@"Throughput: %@", throughputResult]];
             }
             
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Connect: %@\nRTT: %@\nThroughput: %@",
-                                         connectResult,
-                                         rttResult,
-                                         throughputResult];
+            if (nil != customResult) {
+                [cellTextParts addObject:[NSString stringWithFormat:@"Custom: %@", customResult]];
+            }
+            
+            cell.detailTextLabel.numberOfLines = [cellTextParts count];
+            if (0 < [cellTextParts count]) {
+                cell.detailTextLabel.text = [cellTextParts componentsJoinedByString:@"\n"];
+            }
+            else {
+                cell.detailTextLabel.text = @"Queued";
+            }
         }
         i++;
     }

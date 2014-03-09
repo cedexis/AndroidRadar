@@ -41,9 +41,9 @@
 - (IBAction)sendEmail:(id)sender {
     MFMailComposeViewController *controller = [[MFMailComposeViewController alloc] init];
     controller.mailComposeDelegate = self;
-    [controller setSubject:@"Hello Cedexis"];
-    [controller setMessageBody:@"This is a test" isHTML:NO];
-    [controller setToRecipients:[NSArray arrayWithObject:@"test@cedexis.com"]];
+    [controller setSubject:@"Support Request"];
+    [controller setMessageBody:@"Hello,\n\n" isHTML:NO];
+    [controller setToRecipients:[NSArray arrayWithObject:@"support@cedexis.com"]];
     
     [self presentViewController:controller animated:YES completion:NULL];
 }
@@ -110,7 +110,7 @@
 
 - (IBAction)doRemoteProbing:(id)sender {
     UIAlertView *alert;
-    if ([[Radar instance] scheduleRemoteProbingWithZoneId:1 AndCustomerId:10660]) {
+    if ([[Radar instance] scheduleRemoteProbingWithZoneId:1 AndCustomerId:13363]) {
         alert = [[UIAlertView alloc] initWithTitle:nil
                                            message:@"Remote probing scheduled"
                                           delegate:nil

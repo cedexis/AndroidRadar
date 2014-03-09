@@ -35,7 +35,7 @@
     };
 
     [[Radar instance] startRUMInitWithZoneId:1
-                                  CustomerId:10660
+                                  CustomerId:13363
                              CompletionQueue:dispatch_get_main_queue()
                               InitCompletion:initComplete];
     
