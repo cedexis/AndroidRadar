@@ -8,7 +8,6 @@
 
 #import "DemoAppAboutViewController.h"
 #import "DemoAppAppDelegate.h"
-#import "RadarVars.h"
 #import "Radar.h"
 
 @interface DemoAppAboutViewController ()
@@ -46,22 +45,6 @@
 
 - (DemoAppAppDelegate *)appDelegate {
     return [[UIApplication sharedApplication] delegate];
-}
-
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-    // Start a RUM slice
-    [[Radar instance] reportSlice:RadarSliceAboutView Start:YES];
-    
-    // RUM event to indicate we're about to start loading the web view
-    [[Radar instance] reportEvent:RadarEventsShowAboutViewLoadStart];
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    // RUM event to indicate that the web view finished loading
-    [[Radar instance] reportEvent:RadarEventsShowAboutViewLoadEnd];
-    
-    // Terminate the RUM slice
-    [[Radar instance] reportSlice:RadarSliceAboutView Start:NO];
 }
 
 - (BOOL)webView:(UIWebView *)inWeb

@@ -21,9 +21,6 @@
 		16191DF418CBF02000BD534C /* Radar.m in Sources */ = {isa = PBXBuildFile; fileRef = 16191DE518CBF02000BD534C /* Radar.m */; };
 		16191DF518CBF02000BD534C /* RadarCommunication.m in Sources */ = {isa = PBXBuildFile; fileRef = 16191DE718CBF02000BD534C /* RadarCommunication.m */; };
 		16191DF618CBF02000BD534C /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 16191DE918CBF02000BD534C /* Reachability.m */; };
-		16191DF718CBF02000BD534C /* RUMData.m in Sources */ = {isa = PBXBuildFile; fileRef = 16191DEB18CBF02000BD534C /* RUMData.m */; };
-		16191DF818CBF02000BD534C /* RUMProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 16191DED18CBF02000BD534C /* RUMProperty.m */; };
-		16191DF918CBF02000BD534C /* RUMSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 16191DEF18CBF02000BD534C /* RUMSlice.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,12 +70,6 @@
 		16191DE718CBF02000BD534C /* RadarCommunication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadarCommunication.m; sourceTree = "<group>"; };
 		16191DE818CBF02000BD534C /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		16191DE918CBF02000BD534C /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		16191DEA18CBF02000BD534C /* RUMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUMData.h; sourceTree = "<group>"; };
-		16191DEB18CBF02000BD534C /* RUMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUMData.m; sourceTree = "<group>"; };
-		16191DEC18CBF02000BD534C /* RUMProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUMProperty.h; sourceTree = "<group>"; };
-		16191DED18CBF02000BD534C /* RUMProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUMProperty.m; sourceTree = "<group>"; };
-		16191DEE18CBF02000BD534C /* RUMSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUMSlice.h; sourceTree = "<group>"; };
-		16191DEF18CBF02000BD534C /* RUMSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUMSlice.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,12 +142,6 @@
 				16191DE718CBF02000BD534C /* RadarCommunication.m */,
 				16191DE818CBF02000BD534C /* Reachability.h */,
 				16191DE918CBF02000BD534C /* Reachability.m */,
-				16191DEA18CBF02000BD534C /* RUMData.h */,
-				16191DEB18CBF02000BD534C /* RUMData.m */,
-				16191DEC18CBF02000BD534C /* RUMProperty.h */,
-				16191DED18CBF02000BD534C /* RUMProperty.m */,
-				16191DEE18CBF02000BD534C /* RUMSlice.h */,
-				16191DEF18CBF02000BD534C /* RUMSlice.m */,
 				16191DB818CBEF5400BD534C /* Supporting Files */,
 			);
 			path = Radar;
@@ -270,13 +255,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				16191DF418CBF02000BD534C /* Radar.m in Sources */,
-				16191DF918CBF02000BD534C /* RUMSlice.m in Sources */,
 				16191DF118CBF02000BD534C /* NetworkTypeReport.m in Sources */,
-				16191DF718CBF02000BD534C /* RUMData.m in Sources */,
 				16191DF018CBF02000BD534C /* InitData.m in Sources */,
 				16191DF618CBF02000BD534C /* Reachability.m in Sources */,
 				16191DF318CBF02000BD534C /* ProbeServerQuery.m in Sources */,
-				16191DF818CBF02000BD534C /* RUMProperty.m in Sources */,
 				16191DF218CBF02000BD534C /* ProbeReport.m in Sources */,
 				16191DF518CBF02000BD534C /* RadarCommunication.m in Sources */,
 			);

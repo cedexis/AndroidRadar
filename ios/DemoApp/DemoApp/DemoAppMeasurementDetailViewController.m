@@ -11,9 +11,6 @@
 #import "ReportData.h"
 #import "Report.h"
 #import "Init.h"
-#import "RUMEvent.h"
-#import "DemoAppRUMProperty.h"
-#import "DemoAppRUMSlice.h"
 #import "NetworkType.h"
 #import "RemoteProbe.h"
 
@@ -59,52 +56,6 @@
                                                         Value:temp.transactionId]];
         [self.data addObject:[[ReportData alloc] initWithName:@"Timestamp"
                                                         Value:temp.timestamp]];
-    }
-    else if ([self.report.type isEqualToString:@"rumevent"]) {
-        request = [NSFetchRequest fetchRequestWithEntityName:@"RUMEvent"];
-        request.predicate = pred;
-        RUMEvent *temp = [[context executeFetchRequest:request
-                                                  error:&error] objectAtIndex:0];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Report Id"
-                                                        Value:temp.reportId]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Event Name"
-                                                        Value:temp.eventName]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Tags"
-                                                        Value:temp.tags]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Timestamp"
-                                                        Value:temp.timestamp]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Request Signature"
-                                                        Value:temp.requestSignature]];
-    }
-    else if ([self.report.type isEqualToString:@"rumproperty"]) {
-        request = [NSFetchRequest fetchRequestWithEntityName:@"RUMProperty"];
-        request.predicate = pred;
-        DemoAppRUMProperty *temp = [[context executeFetchRequest:request
-                                                    error:&error] objectAtIndex:0];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Report Id"
-                                                        Value:temp.reportId]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Property"
-                                                        Value:temp.property]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Value"
-                                                        Value:temp.value]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Timestamp"
-                                                        Value:temp.timestamp]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Request Signature"
-                                                        Value:temp.requestSignature]];
-    }
-    else if ([self.report.type isEqualToString:@"rumslice"]) {
-        request = [NSFetchRequest fetchRequestWithEntityName:@"RUMSlice"];
-        request.predicate = pred;
-        DemoAppRUMSlice *temp = [[context executeFetchRequest:request
-                                                        error:&error] objectAtIndex:0];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Slice Name"
-                                                        Value:temp.name]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Start"
-                                                        Value:temp.start]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Timestamp"
-                                                        Value:temp.timestamp]];
-        [self.data addObject:[[ReportData alloc] initWithName:@"Request Signature"
-                                                        Value:temp.requestSignature]];
     }
     else if ([self.report.type isEqualToString:@"networktype"]) {
         request = [NSFetchRequest fetchRequestWithEntityName:@"NetworkType"];

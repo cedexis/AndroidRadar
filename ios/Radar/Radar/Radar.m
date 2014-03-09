@@ -5,41 +5,26 @@
 //  Copyright (c) 2013 Cedexis. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
-#import <dispatch/dispatch.h>
 #import "Radar.h"
 #import "RadarCommunication.h"
 #import "InitData.h"
-#import "RUMData.h"
-#import "RUMProperty.h"
-#import "RUMSlice.h"
 #import "ProbeServerQuery.h"
 #import "ProbeReport.h"
 #import "NetworkTypeReport.h"
 #import "Reachability.h"
 
 @interface Radar()
-@property (copy) NSString *rumRequestSignature;
-@property id reportIdLock;
-@property NSUInteger lastReportId;
-@property NSMutableArray *communicationQueue;
-@property dispatch_queue_t asyncQueue;
-@property NSMutableArray *tempReportData;
+
 @property BOOL isRadarRunning;
 
 @end
 
 @implementation Radar
 
-@synthesize rumRequestSignature = _rumRequestSignature;
-@synthesize reportIdLock = _reportIdLock;
-@synthesize lastReportId = _lastReportId;
-@synthesize communicationQueue = _communicationQueue;
-@synthesize asyncQueue = _asyncQueue;
-@synthesize tempReportData = _tempReportData;
 @synthesize isRadarRunning = _isRadarRunning;
 
 # pragma mark Singleton methods
+
 + (instancetype)instance {
     static Radar *result = nil;
     static dispatch_once_t token;
@@ -53,268 +38,12 @@
 
 - (id)init {
     if (self = [super init]) {
-        self.reportIdLock = [[NSObject alloc] init];
-        self.communicationQueue = [[NSMutableArray alloc] init];
-        self.asyncQueue = dispatch_queue_create("com.cedexis.radar", NULL);
-        self.tempReportData = [[NSMutableArray alloc] init];
         self.isRadarRunning = NO;
     }
     return self;
 }
 
 # pragma mark Instance methods
-
-- (void)enableReporting:(BOOL)enabled {
-    [self enableReporting:enabled WithPollingInterval:2];
-}
-
-- (void)enableReporting:(BOOL)enabled WithPollingInterval:(NSInteger)interval {
-    NSLog(@"Radar reporting %@", enabled == YES ? @"enabled" : @"disabled");
-    static NSTimer * timer = nil;
-    if (enabled) {
-        if (nil == timer) {
-            timer = [NSTimer scheduledTimerWithTimeInterval:interval
-                                                     target:self
-                                                   selector:@selector(sendAsync)
-                                                   userInfo:nil
-                                                    repeats:YES];
-        }
-    }
-    else {
-        if (nil != timer) {
-            [timer invalidate];
-            timer = nil;
-        }
-    }
-}
-
-- (void)flush {
-    NSLog(@"Warning! Radar.flush not implemented");
-}
-
-- (void)communicate:(RadarCommunication *)communicationInfo {
-    //NSLog(@"Radar.communicate; communication info: %@", communicationInfo);
-    
-    NSURL *url = [NSURL URLWithString:[communicationInfo url]];
-    NSLog(@"URL: %@", url);
-    NSURLRequest *request = [NSURLRequest requestWithURL:url
-                                             cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                         timeoutInterval:20.0];
-
-    void (^onComplete)(NSURLResponse *response, NSData *data, NSError *error) =
-        ^(NSURLResponse *response, NSData *data, NSError *error) {
-            if (nil != data) {
-                if ((nil != communicationInfo.completionQueue) && (nil != communicationInfo.completion)) {
-                    dispatch_async(communicationInfo.completionQueue, ^{
-                        communicationInfo.completion([communicationInfo.data dictionaryFrom:data]);
-                    });
-                }
-            }
-            else if (nil != error) {
-                NSLog(@"Error: %@", error);
-            }
-        };
-    
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:queue
-                           completionHandler:onComplete];
-    
-    dispatch_block_t do_notify = ^(void) {
-        NSDictionary *notificationData = [communicationInfo toDictionary];
-        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter postNotificationName:@"Radar Communication Data"
-                                          object:self
-                                        userInfo:notificationData];
-    };
-    
-    dispatch_async(dispatch_get_main_queue(), do_notify);
-}
-
-- (void)sendAsync {
-    //NSLog(@"Inside sendAsynchronously");
-    // If there's anything in the communication data queue, then shovel it off to
-    // Grand Central Dispatch
-    @synchronized(self.communicationQueue) {
-        while ([self.communicationQueue lastObject]) {
-            id radarCommunication = [self.communicationQueue objectAtIndex:0];
-            [self.communicationQueue removeObjectAtIndex:0];
-            dispatch_queue_t queue = [self asyncQueue];
-            dispatch_async(
-                queue,
-                ^(void) {
-                    [self communicate:radarCommunication];
-                });
-        }
-    }
-}
-
-- (void)startRUMInitWithZoneId:(NSUInteger)zoneId
-                    CustomerId:(NSUInteger)customerId
-               CompletionQueue:(dispatch_queue_t)initCompletionQueue
-                InitCompletion:(radar_comm_complete_block_t)initCompletion {
-    NSUInteger timestamp = [[NSDate date] timeIntervalSince1970];
-    NSLog(@"initializeRUMSession, for Zone Id %lu, Customer Id %lu, called at %lu", (unsigned long)zoneId, (unsigned long)customerId, (unsigned long)timestamp);
-    
-    RadarCommunication *communication = [[RadarCommunication alloc] init];
-    communication.data = [[InitData alloc] initWithRequestorZoneId:zoneId
-                                               RequestorCustomerId:customerId
-                                                      AndTimestamp:timestamp];
-    communication.completionQueue = initCompletionQueue;
-    communication.completion = ^(NSDictionary *result) {
-        @synchronized(self.tempReportData) {
-            self.rumRequestSignature = [result valueForKey:@"requestSignature"];
-            initCompletion(result);
-            //NSLog(@"RUM request signature: %@", self.rumRequestSignature);
-            
-            while ([self.tempReportData lastObject]) {
-                NSMutableDictionary *reportData = [self.tempReportData objectAtIndex:0];
-                [self.tempReportData removeObjectAtIndex:0];
-                RadarCommunication *communication = [[RadarCommunication alloc] init];
-                NSString *reportType = [reportData valueForKey:@"reportType"];
-                if ([reportType isEqualToString:@"event"]) {
-                    communication.data = [[RUMData alloc]
-                                          initWithReportId:[[reportData valueForKey:@"reportId"] unsignedIntegerValue]
-                                                 EventName:[reportData valueForKey:@"eventName"]
-                                                      Tags:[[reportData valueForKey:@"tags"] unsignedIntegerValue]
-                                                 Timestamp:[[reportData valueForKey:@"timestamp"] unsignedLongLongValue]
-                                          RequestSignature:self.rumRequestSignature];
-                    
-                }
-                else if ([reportType isEqualToString:@"property"]) {
-                    communication.data = [[RUMProperty alloc] initWithReportId:[[reportData valueForKey:@"reportId"] unsignedIntegerValue]
-                                                                      Property:[reportData valueForKey:@"property"]
-                                                                         Value:[reportData valueForKey:@"value"]
-                                                                     Timestamp:[[reportData valueForKey:@"timestamp"] unsignedLongLongValue]
-                                                              RequestSignature:self.rumRequestSignature];
-                }
-                else if ([reportType isEqualToString:@"slice"]) {
-                    communication.data = [[RUMSlice alloc] initWithName:[reportData valueForKey:@"name"]
-                                                                  Start:[[reportData valueForKey:@"start"] boolValue]
-                                                              Timestamp:[[reportData valueForKey:@"timestamp"] unsignedLongLongValue]
-                                                       RequestSignature:self.rumRequestSignature];
-                }
-                else {
-                    NSLog(@"Warning! Unexpected report type: %@", reportType);
-                    continue;
-                }
-                
-                @synchronized(self.communicationQueue) {
-                    [self.communicationQueue addObject:communication];
-                }
-            }
-        }
-    };
-    
-    @synchronized(self.communicationQueue) {
-        [self.communicationQueue addObject:communication];
-    }
-}
-
-- (NSUInteger)reportEvent:(NSString *)eventName {
-    return [self reportEvent:eventName WithTags:0];
-}
-
-- (NSUInteger)reportEvent:(NSString *)eventName WithTags:(NSUInteger)tags {
-    UInt64 timestamp = (UInt64)([[NSDate date] timeIntervalSince1970] * 1000);
-    NSLog(@"reportEvent, eventName: \"%@\", tags: %lu, timestamp: %llu", eventName, (unsigned long)tags, timestamp);
-    
-    NSUInteger reportId;
-    @synchronized(self.reportIdLock) {
-        self.lastReportId++;
-        reportId = self.lastReportId;
-    }
-    
-    @synchronized(self.tempReportData) {
-        if (nil == self.rumRequestSignature) {
-            // The init request hasn't completed yet
-            NSLog(@"Storing report data until init request completes");
-            NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
-            [temp setValue:@"event" forKey:@"reportType"];
-            [temp setValue:[NSNumber numberWithUnsignedInteger:reportId] forKey:@"reportId"];
-            [temp setValue:eventName forKey:@"eventName"];
-            [temp setValue:[NSNumber numberWithUnsignedInteger:tags] forKey:@"tags"];
-            [temp setValue:[NSNumber numberWithUnsignedLongLong:timestamp] forKey:@"timestamp"];
-            [self.tempReportData addObject:temp];
-        }
-        else {
-            RadarCommunication *communication = [[RadarCommunication alloc] init];
-            communication.data = [[RUMData alloc] initWithReportId:reportId
-                                                         EventName:eventName
-                                                              Tags:tags
-                                                         Timestamp:timestamp
-                                                  RequestSignature:self.rumRequestSignature];
-            @synchronized(self.communicationQueue) {
-                [self.communicationQueue addObject:communication];
-            }
-        }
-    }
-    
-    return reportId;
-}
-
-- (void)reportSlice:(NSString *)name Start:(BOOL)start {
-    UInt64 timestamp = (UInt64)([[NSDate date] timeIntervalSince1970] * 1000);
-    NSLog(@"reportSlice, sliceName: \"%@\" %@, timestamp: %llu", name, start == YES ? @"start" : @"end", timestamp);
-    
-    @synchronized(self.tempReportData) {
-        if (nil == self.rumRequestSignature) {
-            // The init request hasn't completed yet
-            NSLog(@"Storing report data until init request completes");
-            NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
-            [temp setValue:@"slice" forKey:@"reportType"];
-            [temp setValue:name forKey:@"name"];
-            [temp setValue:[NSNumber numberWithBool:start] forKey:@"start"];
-            [temp setValue:[NSNumber numberWithUnsignedLongLong:timestamp] forKey:@"timestamp"];
-            [self.tempReportData addObject:temp];
-        }
-        else {
-            RadarCommunication *communication = [[RadarCommunication alloc] init];
-            communication.data = [[RUMSlice alloc] initWithName:name
-                                                          Start:start
-                                                      Timestamp:timestamp
-                                               RequestSignature:self.rumRequestSignature];
-            @synchronized(self.communicationQueue) {
-                [self.communicationQueue addObject:communication];
-            }
-        }
-    }
-}
-
-- (void)reportProperty:(NSString *)property Value:(NSString *)value ForReport:(NSUInteger)reportId {
-    UInt64 timestamp = (UInt64)([[NSDate date] timeIntervalSince1970] * 1000);
-    NSLog(@"reportProperty, property: \"%@\", value: \"%@\", reportId: %lu, timestamp: %llu",
-          property, value, (unsigned long)reportId, timestamp);
-    
-    @synchronized(self.tempReportData) {
-        if (nil == self.rumRequestSignature) {
-            // The init request hasn't completed yet
-            NSLog(@"Storing report data until init request completes");
-            NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
-            [temp setValue:@"property" forKey:@"reportType"];
-            [temp setValue:property forKey:@"property"];
-            [temp setValue:value forKey:@"value"];
-            [temp setValue:[NSNumber numberWithUnsignedInteger:reportId] forKey:@"reportId"];
-            [temp setValue:[NSNumber numberWithUnsignedLongLong:timestamp] forKey:@"timestamp"];
-            [self.tempReportData addObject:temp];
-        }
-        else {
-            RadarCommunication *communication = [[RadarCommunication alloc] init];
-            communication.data = [[RUMProperty alloc] initWithReportId:reportId
-                                                              Property:property
-                                                                 Value:value
-                                                         Timestamp:timestamp
-                                                  RequestSignature:self.rumRequestSignature];
-            @synchronized(self.communicationQueue) {
-                [self.communicationQueue addObject:communication];
-            }
-        }
-    }
-}
-
-- (void)reportProperty:(NSString *)property Value:(NSString *)value {
-    [self reportProperty:property Value:value ForReport:0];
-}
 
 - (void)probeWithJson:(NSDictionary *)json AndRequestSignature:(NSString *)requestSignature {
     NSDictionary *providerInfo = [json valueForKey:@"p"];

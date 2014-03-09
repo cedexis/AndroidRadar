@@ -25,7 +25,6 @@
 		16DD28B716F27A66008F5B3A /* DemoAppMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD28B616F27A66008F5B3A /* DemoAppMoreViewController.m */; };
 		16DD28B916F27FD1008F5B3A /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DD28B816F27FD1008F5B3A /* MessageUI.framework */; };
 		16DD28BD16F28418008F5B3A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DD28BC16F28418008F5B3A /* SystemConfiguration.framework */; };
-		16DD28C516F28A10008F5B3A /* RadarVars.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD28C416F28A10008F5B3A /* RadarVars.m */; };
 		16DD28CC16F2A0FE008F5B3A /* DemoAppMeasurementsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD28CB16F2A0FE008F5B3A /* DemoAppMeasurementsViewController.m */; };
 		16DD28CF16F2A8B5008F5B3A /* DemoAppMeasurementDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD28CE16F2A8B5008F5B3A /* DemoAppMeasurementDetailViewController.m */; };
 		16DD290B16F377DF008F5B3A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DD290A16F377DF008F5B3A /* CoreData.framework */; };
@@ -35,11 +34,8 @@
 		16DD291516F3811A008F5B3A /* Report.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD291416F3811A008F5B3A /* Report.m */; };
 		16DD292616F3CC9C008F5B3A /* Init.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD292516F3CC9C008F5B3A /* Init.m */; };
 		16DD292916F3E842008F5B3A /* ReportData.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD292816F3E842008F5B3A /* ReportData.m */; };
-		16DD292C16F3F14C008F5B3A /* RUMEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD292B16F3F14C008F5B3A /* RUMEvent.m */; };
 		16DD292F16F3F9D2008F5B3A /* NetworkType.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD292E16F3F9D2008F5B3A /* NetworkType.m */; };
 		16DD293216F3FE34008F5B3A /* RemoteProbe.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD293116F3FE34008F5B3A /* RemoteProbe.m */; };
-		16DD293516F4055B008F5B3A /* DemoAppRUMProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD293416F4055A008F5B3A /* DemoAppRUMProperty.m */; };
-		16DD293B16F40E11008F5B3A /* DemoAppRUMSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DD293A16F40E11008F5B3A /* DemoAppRUMSlice.m */; };
 		16EC139B16F4ACBD00B67601 /* DemoAppSpeedTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC139A16F4ACBD00B67601 /* DemoAppSpeedTestViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -68,8 +64,6 @@
 		16DD28B616F27A66008F5B3A /* DemoAppMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoAppMoreViewController.m; sourceTree = "<group>"; };
 		16DD28B816F27FD1008F5B3A /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		16DD28BC16F28418008F5B3A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		16DD28C316F28A10008F5B3A /* RadarVars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadarVars.h; sourceTree = "<group>"; };
-		16DD28C416F28A10008F5B3A /* RadarVars.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadarVars.m; sourceTree = "<group>"; };
 		16DD28CA16F2A0FE008F5B3A /* DemoAppMeasurementsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoAppMeasurementsViewController.h; sourceTree = "<group>"; };
 		16DD28CB16F2A0FE008F5B3A /* DemoAppMeasurementsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoAppMeasurementsViewController.m; sourceTree = "<group>"; };
 		16DD28CD16F2A8B5008F5B3A /* DemoAppMeasurementDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoAppMeasurementDetailViewController.h; sourceTree = "<group>"; };
@@ -84,16 +78,10 @@
 		16DD292516F3CC9C008F5B3A /* Init.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Init.m; sourceTree = "<group>"; };
 		16DD292716F3E842008F5B3A /* ReportData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportData.h; sourceTree = "<group>"; };
 		16DD292816F3E842008F5B3A /* ReportData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportData.m; sourceTree = "<group>"; };
-		16DD292A16F3F14C008F5B3A /* RUMEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUMEvent.h; sourceTree = "<group>"; };
-		16DD292B16F3F14C008F5B3A /* RUMEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RUMEvent.m; sourceTree = "<group>"; };
 		16DD292D16F3F9D2008F5B3A /* NetworkType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkType.h; sourceTree = "<group>"; };
 		16DD292E16F3F9D2008F5B3A /* NetworkType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkType.m; sourceTree = "<group>"; };
 		16DD293016F3FE34008F5B3A /* RemoteProbe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteProbe.h; sourceTree = "<group>"; };
 		16DD293116F3FE34008F5B3A /* RemoteProbe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteProbe.m; sourceTree = "<group>"; };
-		16DD293316F4055A008F5B3A /* DemoAppRUMProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoAppRUMProperty.h; sourceTree = "<group>"; };
-		16DD293416F4055A008F5B3A /* DemoAppRUMProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoAppRUMProperty.m; sourceTree = "<group>"; };
-		16DD293916F40E11008F5B3A /* DemoAppRUMSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoAppRUMSlice.h; sourceTree = "<group>"; };
-		16DD293A16F40E11008F5B3A /* DemoAppRUMSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoAppRUMSlice.m; sourceTree = "<group>"; };
 		16EC139916F4ACBD00B67601 /* DemoAppSpeedTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoAppSpeedTestViewController.h; sourceTree = "<group>"; };
 		16EC139A16F4ACBD00B67601 /* DemoAppSpeedTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoAppSpeedTestViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -150,8 +138,6 @@
 		16DD288816F24D1A008F5B3A /* DemoApp */ = {
 			isa = PBXGroup;
 			children = (
-				16DD28C316F28A10008F5B3A /* RadarVars.h */,
-				16DD28C416F28A10008F5B3A /* RadarVars.m */,
 				16DD28B516F27A66008F5B3A /* DemoAppMoreViewController.h */,
 				16DD28B616F27A66008F5B3A /* DemoAppMoreViewController.m */,
 				16DD28AE16F26D32008F5B3A /* DemoAppAboutViewController.h */,
@@ -200,16 +186,10 @@
 				16DD291416F3811A008F5B3A /* Report.m */,
 				16DD292416F3CC9C008F5B3A /* Init.h */,
 				16DD292516F3CC9C008F5B3A /* Init.m */,
-				16DD292A16F3F14C008F5B3A /* RUMEvent.h */,
-				16DD292B16F3F14C008F5B3A /* RUMEvent.m */,
 				16DD292D16F3F9D2008F5B3A /* NetworkType.h */,
 				16DD292E16F3F9D2008F5B3A /* NetworkType.m */,
 				16DD293016F3FE34008F5B3A /* RemoteProbe.h */,
 				16DD293116F3FE34008F5B3A /* RemoteProbe.m */,
-				16DD293316F4055A008F5B3A /* DemoAppRUMProperty.h */,
-				16DD293416F4055A008F5B3A /* DemoAppRUMProperty.m */,
-				16DD293916F40E11008F5B3A /* DemoAppRUMSlice.h */,
-				16DD293A16F40E11008F5B3A /* DemoAppRUMSlice.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -290,18 +270,14 @@
 				16DD289316F24D1A008F5B3A /* DemoAppAppDelegate.m in Sources */,
 				16DD28B016F26D32008F5B3A /* DemoAppAboutViewController.m in Sources */,
 				16DD28B716F27A66008F5B3A /* DemoAppMoreViewController.m in Sources */,
-				16DD28C516F28A10008F5B3A /* RadarVars.m in Sources */,
 				16DD28CC16F2A0FE008F5B3A /* DemoAppMeasurementsViewController.m in Sources */,
 				16DD28CF16F2A8B5008F5B3A /* DemoAppMeasurementDetailViewController.m in Sources */,
 				16DD291216F37E1E008F5B3A /* DemoAppModel.xcdatamodeld in Sources */,
 				16DD291516F3811A008F5B3A /* Report.m in Sources */,
 				16DD292616F3CC9C008F5B3A /* Init.m in Sources */,
 				16DD292916F3E842008F5B3A /* ReportData.m in Sources */,
-				16DD292C16F3F14C008F5B3A /* RUMEvent.m in Sources */,
 				16DD292F16F3F9D2008F5B3A /* NetworkType.m in Sources */,
 				16DD293216F3FE34008F5B3A /* RemoteProbe.m in Sources */,
-				16DD293516F4055B008F5B3A /* DemoAppRUMProperty.m in Sources */,
-				16DD293B16F40E11008F5B3A /* DemoAppRUMSlice.m in Sources */,
 				16EC139B16F4ACBD00B67601 /* DemoAppSpeedTestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
