@@ -24,9 +24,9 @@
 @synthesize currentValue = _currentValue;
 @synthesize requestSignature = _requestSignature;
 
-- (id)initWithRequestorZoneId:(NSUInteger)requestorZoneId
-          RequestorCustomerId:(NSUInteger)requestorCustomerId
-                 AndTimestamp:(NSUInteger)timestamp {
+- (id)initWithRequestorZoneId:(NSInteger)requestorZoneId
+          RequestorCustomerId:(NSInteger)requestorCustomerId
+                 AndTimestamp:(NSInteger)timestamp {
     if (self = [super init]) {
         self.requestorZoneId = requestorZoneId;
         self.requestorCustomerId = requestorCustomerId;
@@ -38,10 +38,10 @@
 }
 
 - (NSString *)hostname {
-    return [NSString stringWithFormat:@"i1-io-0-1-%d-%d-%u-i.%@",
-            self.requestorZoneId,
-            self.requestorCustomerId,
-            self.transactionId,
+    return [NSString stringWithFormat:@"i1-io-0-1-%lu-%lu-%lu-i.%@",
+            (unsigned long)self.requestorZoneId,
+            (unsigned long)self.requestorCustomerId,
+            (unsigned long)self.transactionId,
             self.myHostname];
 }
 
@@ -91,13 +91,13 @@
 - (NSDictionary *)toDictionary {
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     [result setValue:@"init" forKey:@"type"];
-    [result setValue:[NSNumber numberWithUnsignedInt:self.requestorZoneId]
+    [result setValue:[NSNumber numberWithInteger:self.requestorZoneId]
               forKey:@"requestorZoneId"];
-    [result setValue:[NSNumber numberWithUnsignedInt:self.requestorCustomerId]
+    [result setValue:[NSNumber numberWithInteger:self.requestorCustomerId]
               forKey:@"requestorCustomerId"];
-    [result setValue:[NSNumber numberWithUnsignedInt:self.transactionId]
+    [result setValue:[NSNumber numberWithInteger:self.transactionId]
               forKey:@"transactionId"];
-    [result setValue:[NSNumber numberWithUnsignedInt:self.timestamp]
+    [result setValue:[NSNumber numberWithInteger:self.timestamp]
               forKey:@"timestamp"];
     return result;
 }

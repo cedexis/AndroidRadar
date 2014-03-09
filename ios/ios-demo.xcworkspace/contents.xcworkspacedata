@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Radar/Radar.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:DemoApp/DemoApp.xcodeproj">
    </FileRef>
 </Workspace>
