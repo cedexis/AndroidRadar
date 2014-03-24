@@ -13,8 +13,8 @@ public class DownloadersProvider implements IDownloadersProvider {
 	}
 
 	@Override
-	public IHttpTimingDownloader createTimingDownloader() {
-		return new HttpTimingDownloader();
+	public IHttpTimingDownloader createTimingDownloader(int readTimeout) {
+		return new HttpTimingDownloader(readTimeout);
 	}
 
 }

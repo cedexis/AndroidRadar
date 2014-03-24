@@ -27,7 +27,7 @@ public class RadarServiceProvider implements IRadarServiceProvider {
 				impact,
 				headers,
 				downloadersProvider.createSimpleDownloader(),
-				downloadersProvider.createTimingDownloader());
+				downloadersProvider.createTimingDownloader(6000));
 	}
 
 }

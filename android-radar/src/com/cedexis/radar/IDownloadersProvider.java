@@ -5,5 +5,5 @@ import com.cedexis.radar.service.IHttpTimingDownloader;
 
 public interface IDownloadersProvider {
 	IHttpDownloader createSimpleDownloader();
-	IHttpTimingDownloader createTimingDownloader();
+	IHttpTimingDownloader createTimingDownloader(int readTimeout);
 }
