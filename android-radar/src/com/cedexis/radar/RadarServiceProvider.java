@@ -15,7 +15,7 @@ public class RadarServiceProvider implements IRadarServiceProvider {
 	@Override
 	public void doRadarSession(CustomerData customer,
 			VersionedSampler versionedSampler, DeviceType deviceType,
-			String impact, Map<String, String> headers) {
+			String impact, Map<String, String> initHeaders) {
 		RadarService
 			.performRadarSession(
 				customer,
@@ -25,7 +25,7 @@ public class RadarServiceProvider implements IRadarServiceProvider {
 					0),
 				deviceType,
 				impact,
-				headers,
+				initHeaders,
 				downloadersProvider.createSimpleDownloader(),
 				downloadersProvider.createTimingDownloader(6000));
 	}

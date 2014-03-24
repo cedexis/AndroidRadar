@@ -9,5 +9,5 @@ import com.cedexis.radar.service.data.VersionedSampler;
 public interface IRadarServiceProvider {
 	void doRadarSession(CustomerData customer,
 			VersionedSampler versionedSampler, DeviceType deviceType,
-			String impact, Map<String, String> headers);
+			String impact, Map<String, String> initHeaders);
 }
