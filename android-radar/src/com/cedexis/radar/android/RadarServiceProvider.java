@@ -1,12 +1,12 @@
-package com.cedexis.radar;
+package com.cedexis.radar.android;
 
 import java.util.Map;
 
-import com.cedexis.radar.service.CustomerData;
-import com.cedexis.radar.service.RadarService;
-import com.cedexis.radar.service.data.DeviceType;
-import com.cedexis.radar.service.data.Sampler;
-import com.cedexis.radar.service.data.VersionedSampler;
+import com.cedexis.radar.java.CustomerData;
+import com.cedexis.radar.java.RadarService;
+import com.cedexis.radar.java.DeviceType;
+import com.cedexis.radar.java.Sampler;
+import com.cedexis.radar.java.VersionedSampler;
 
 public class RadarServiceProvider implements IRadarServiceProvider {
 

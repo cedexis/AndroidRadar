@@ -1,10 +1,10 @@
-package com.cedexis.radar;
+package com.cedexis.radar.android;
 
 import java.util.Map;
 
-import com.cedexis.radar.service.CustomerData;
-import com.cedexis.radar.service.data.DeviceType;
-import com.cedexis.radar.service.data.VersionedSampler;
+import com.cedexis.radar.java.CustomerData;
+import com.cedexis.radar.java.DeviceType;
+import com.cedexis.radar.java.VersionedSampler;
 
 public interface IRadarServiceProvider {
 	void doRadarSession(CustomerData customer,

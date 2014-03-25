@@ -1,4 +1,4 @@
-package com.cedexis.radar;
+package com.cedexis.radar.android;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

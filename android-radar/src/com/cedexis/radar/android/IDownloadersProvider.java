@@ -1,7 +1,7 @@
-package com.cedexis.radar;
+package com.cedexis.radar.android;
 
-import com.cedexis.radar.service.IHttpDownloader;
-import com.cedexis.radar.service.IHttpTimingDownloader;
+import com.cedexis.radar.java.IHttpDownloader;
+import com.cedexis.radar.java.IHttpTimingDownloader;
 
 public interface IDownloadersProvider {
 	IHttpDownloader createSimpleDownloader();

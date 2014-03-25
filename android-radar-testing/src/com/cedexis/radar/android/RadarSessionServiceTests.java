@@ -1,4 +1,4 @@
-package com.cedexis.radar;
+package com.cedexis.radar.android;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyMapOf;
@@ -18,10 +18,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
-import com.cedexis.radar.service.CustomerData;
-import com.cedexis.radar.service.data.DeviceType;
-import com.cedexis.radar.service.data.Sampler;
-import com.cedexis.radar.service.data.VersionedSampler;
+import com.cedexis.radar.java.CustomerData;
+import com.cedexis.radar.java.DeviceType;
+import com.cedexis.radar.java.Sampler;
+import com.cedexis.radar.java.VersionedSampler;
 
 @RunWith(RobolectricTestRunner.class)
 public class RadarSessionServiceTests {

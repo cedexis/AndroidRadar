@@ -1,4 +1,4 @@
-package com.cedexis.radar;
+package com.cedexis.radar.android;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +11,10 @@ import android.os.IBinder;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.cedexis.radar.service.CustomerData;
-import com.cedexis.radar.service.data.DeviceType;
-import com.cedexis.radar.service.data.Sampler;
-import com.cedexis.radar.service.data.VersionedSampler;
+import com.cedexis.radar.java.CustomerData;
+import com.cedexis.radar.java.DeviceType;
+import com.cedexis.radar.java.Sampler;
+import com.cedexis.radar.java.VersionedSampler;
 
 public class RadarSessionService extends Service implements Runnable {
 
