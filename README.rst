@@ -15,4 +15,3 @@ Useful reading:
 - http://local-droid.blogspot.ca/2014/03/a-quick-look-at-setting-up-roboguice.html
 
   Describes the same type of setup, but a little easier to read.
-
