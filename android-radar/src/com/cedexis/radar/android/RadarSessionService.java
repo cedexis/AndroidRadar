@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.cedexis.radar.java.CustomerData;
 import com.cedexis.radar.java.DeviceType;
+import com.cedexis.radar.java.Logger;
 import com.cedexis.radar.java.Sampler;
 import com.cedexis.radar.java.VersionedSampler;
 
@@ -24,6 +25,7 @@ public class RadarSessionService extends Service implements Runnable {
 	private String impact = null;
 	private ISystemServiceProvider systemServiceProvider = new SystemServiceProvider(this);
 	private IRadarServiceProvider radarServiceProvider = new RadarServiceProvider();
+	private Logger radarLogger = Logger.NONE;
 	
 	public void setCustomer(CustomerData value) {
 		this.customer = value;
@@ -82,6 +84,9 @@ public class RadarSessionService extends Service implements Runnable {
 		Log.d(TAG, String.format("Customer Id: %d", customerId));
 		Log.d(TAG, "Customer name: " + customerName);
 		Log.d(TAG, String.format("Impact: %s", impact));
+		if (intent.hasExtra("loggingLevel")) {
+			radarLogger = Logger.fromLevelString(intent.getStringExtra("loggingLevel"));
+		}
 		customer = new CustomerData(zoneId, customerId, customerName);
 	}
 
@@ -119,7 +124,8 @@ public class RadarSessionService extends Service implements Runnable {
 			new VersionedSampler(Sampler.ANDROID, 2, 0),
 			deviceType,
 			impact,
-			headers);
+			headers,
+			radarLogger);
 	}
 
 }

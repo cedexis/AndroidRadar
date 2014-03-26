@@ -3,6 +3,7 @@ package com.cedexis.radar.android;
 import java.util.Map;
 
 import com.cedexis.radar.java.CustomerData;
+import com.cedexis.radar.java.Logger;
 import com.cedexis.radar.java.RadarService;
 import com.cedexis.radar.java.DeviceType;
 import com.cedexis.radar.java.Sampler;
@@ -15,7 +16,9 @@ public class RadarServiceProvider implements IRadarServiceProvider {
 	@Override
 	public void doRadarSession(CustomerData customer,
 			VersionedSampler versionedSampler, DeviceType deviceType,
-			String impact, Map<String, String> initHeaders) {
+			String impact, Map<String, String> initHeaders,
+			Logger logger) {
+		
 		RadarService
 			.performRadarSession(
 				customer,
@@ -27,7 +30,7 @@ public class RadarServiceProvider implements IRadarServiceProvider {
 				impact,
 				initHeaders,
 				downloadersProvider.createSimpleDownloader(),
-				downloadersProvider.createTimingDownloader(6000));
+				downloadersProvider.createTimingDownloader(6000),
+				logger);
 	}
-
 }

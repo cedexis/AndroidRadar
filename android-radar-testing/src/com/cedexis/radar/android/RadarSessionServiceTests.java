@@ -8,6 +8,7 @@ import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import android.telephony.TelephonyManager;
 
 import com.cedexis.radar.java.CustomerData;
 import com.cedexis.radar.java.DeviceType;
+import com.cedexis.radar.java.Logger;
 import com.cedexis.radar.java.Sampler;
 import com.cedexis.radar.java.VersionedSampler;
 
@@ -76,7 +78,8 @@ public class RadarSessionServiceTests {
 				eq(new VersionedSampler(Sampler.ANDROID, 2, 0)),
 				same(DeviceType.MOBILE),
 				isNull(String.class),
-				anyMapOf(String.class, String.class));
+				anyMapOf(String.class, String.class),
+				any(Logger.class));
 	}
 
 }
