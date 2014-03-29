@@ -53,7 +53,7 @@ def build_jar():
 
         cmd_args = [
             'curl',
-            'https://github.com/cedexis/java-radar/releases/download/v0.0.2/java-radar.jar',
+            'https://github.com/cedexis/java-radar/releases/download/v0.0.3/java-radar.jar',
             '-O',
             '-L',
         ]
