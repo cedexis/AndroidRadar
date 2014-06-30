@@ -11,6 +11,8 @@ import subprocess
 import tempfile
 import shutil
 
+java_radar_tag = 'v0.0.5'
+
 def get_build_dir(root_dir):
     return os.path.join(root_dir, 'build')
 
@@ -53,7 +55,7 @@ def build_jar():
 
         cmd_args = [
             'curl',
-            'https://github.com/cedexis/java-radar/releases/download/v0.0.4/java-radar.jar',
+            'https://github.com/cedexis/java-radar/releases/download/{}/java-radar.jar'.format(java_radar_tag),
             '-O',
             '-L',
         ]
