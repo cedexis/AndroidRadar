@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+0.0.3
+-----
+
+- Use updated java-radar library, which adds a trailing slash to the the
+  ProbeServer URL.
+
 0.0.2
 -----
 
