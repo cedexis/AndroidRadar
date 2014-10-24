@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-0.0.3
+0.0.8
 -----
 
 - Use updated java-radar library, which adds a trailing slash to the the
