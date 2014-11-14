@@ -11,7 +11,7 @@ import subprocess
 import tempfile
 import shutil
 
-java_radar_tag = 'v0.0.7'
+java_radar_tag = 'v0.0.8'
 
 def get_build_dir(root_dir):
     return os.path.join(root_dir, 'build')
