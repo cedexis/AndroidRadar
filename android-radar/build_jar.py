@@ -11,15 +11,16 @@ import subprocess
 import tempfile
 import shutil
 
-java_radar_tag = 'v0.0.6'
+java_radar_tag = 'v0.0.7'
 
 def get_build_dir(root_dir):
     return os.path.join(root_dir, 'build')
 
 def prep_directory(root_dir):
     build_dir = get_build_dir(root_dir)
-    if not os.path.isdir(build_dir):
-        os.makedirs(build_dir)
+    if os.path.isdir(build_dir):
+        shutil.rmtree(build_dir)
+    os.makedirs(build_dir)
 
 def execute_command(name, args):
     print(name + '...')
