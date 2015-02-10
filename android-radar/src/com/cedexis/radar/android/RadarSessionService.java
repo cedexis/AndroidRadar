@@ -66,7 +66,7 @@ public class RadarSessionService extends Service implements Runnable {
 		
 		// Do the Radar session on worker thread
 		new Thread(this).start();
-		return START_NOT_STICKY;
+		return START_REDELIVER_INTENT;
 	}
 
 	public void setupForStartCommand(Intent intent) {
