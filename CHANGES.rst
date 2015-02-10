@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.0.11
+------
+
+- Handle null intent.
+
 0.0.8
 -----
 
