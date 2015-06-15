@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Simple Radar Demo</string>
+    <string name="action_settings">Settings</string>
+    <string name="button">Radar</string>
+</resources>

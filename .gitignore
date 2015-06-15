@@ -1,36 +1,36 @@
-# Mac files
-.DS_Store
+#built application files
+*.apk
+*.ap_
 
+# files for the dex VM
+*.dex
+
+# Java class files
 *.class
 
-*.pydevproject
-.metadata
-.gradle
+# generated files
 bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
+gen/
+
+# Local configuration file (sdk path, etc)
 local.properties
-.settings/
-.loadpath
 
-# External tool builders
-.externalToolBuilders/
+# Windows thumbnail db
+Thumbs.db
 
-# Locally stored "Eclipse launch configurations"
-*.launch
+# OSX files
+.DS_Store
 
-# CDT-specific
-.cproject
+# Eclipse project files
+.classpath
+.project
 
-# PDT-specific
-.buildpath
+# Android Studio
+*.iml
+.idea/workspace.xml
+.idea/libraries/
+.gradle
+build/
 
-# sbteclipse plugin 
-.target
-
-# TeXlipse plugin
-.texlipse
-
+# More files
+*.swp
