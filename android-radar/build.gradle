@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'android-radar'
+
+    publishedGroupId = 'com.cedexis'
+    libraryName = 'AndroidRadar'
+    artifact = 'android-radar'
+
+    libraryDescription = 'An open source Radar client for Android'
+
+    siteUrl = 'https://github.com/cedexis/AndroidRadar'
+    gitUrl = 'https://github.com/cedexis/AndroidRadar.git'
+
+    libraryVersion = '0.1.0'
+
+    developerId = 'jacob'
+    developerName = 'Jacob Wan'
+    developerEmail = 'jacob@wildlemur.com'
+
+    licenseName = 'The MIT License (MIT)'
+    licenseUrl = 'http://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.0 rc2"
@@ -22,3 +46,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
 }
+
+apply from: 'https://raw.githubusercontent.com/cedexis/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/cedexis/JCenter/master/bintrayv1.gradle'
