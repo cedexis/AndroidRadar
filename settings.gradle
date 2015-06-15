@@ -1,1 +1,1 @@
-include ':app', ':androidradar'
+include ':app', ':android-radar'
