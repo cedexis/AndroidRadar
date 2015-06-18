@@ -92,3 +92,7 @@ embedded.
 
 The two numbers in the URL (enclosed by the red box in the screenshot above) are
 your zone id and customer id, respectively.
+
+## Impact
+
+Impact is not currently supported from the Radar Android SDK. Support will be included in future releases and documentation for using Impact will be added when it is available from the SDK. 
