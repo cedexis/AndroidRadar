@@ -76,7 +76,7 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
                     e.printStackTrace();
                 }
                 JSONArray providers = gatherRadarProviders(params[i]);
-                //Log.d(TAG, providers.toString());
+                Log.d(TAG, providers.toString());
                 int countOfProviders = providers.length();
                 List<Pair<String, String>> progressData = new ArrayList<>();
                 progressData.add(Pair.create("providerCount", String.format("%d", countOfProviders)));
@@ -477,7 +477,7 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
             e.printStackTrace();
             return false;
         }
-        //Log.v(TAG, String.format("Report URL: %s", reportUrl));
+        Log.d(TAG, String.format("Report URL: %s", reportUrl));
         List<Pair<String, String>> headers = new ArrayList<>();
         headers.add(Pair.create("cedexis-android-network-type", session.get_networkType()));
         headers.add(Pair.create("cedexis-android-network-subtype", session.get_networkSubtype()));
