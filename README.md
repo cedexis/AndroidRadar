@@ -35,13 +35,13 @@ allprojects {
 ### Add dependency on android-radar module
 
 In your application grade.build file, add a line to the `dependencies` section
-indicating the android-radar library.  At the time of this writing, the latest
-version is 0.1.1.
+indicating the android-radar library.  The latest version available: [ ![Download](https://api.bintray.com/packages/jacob/maven/android-radar/images/download.svg) ](https://bintray.com/jacob/maven/android-radar/_latestVersion)
 
 ```groovy
+// replace x, y and z with the latest version of the AndroidRadar library.
 dependencies {
     ...
-    compile 'com.cedexis:android-radar:0.1.1'
+    compile 'com.cedexis:android-radar:x.y.z'
 }
 ```
 
