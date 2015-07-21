@@ -285,10 +285,11 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
         ConnectivityManager connMgr = (ConnectivityManager) this._context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        // Both mobile and wifi may be null
         android.net.NetworkInfo networkInUse;
-        if (wifi.isConnectedOrConnecting()) {
+        if ((null != wifi) && wifi.isConnectedOrConnecting()) {
             networkInUse = wifi;
-        } else if (mobile.isConnectedOrConnecting()) {
+        } else if ((null != mobile) && mobile.isConnectedOrConnecting()) {
             networkInUse = mobile;
         } else {
             return null;
