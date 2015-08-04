@@ -27,7 +27,9 @@ Thumbs.db
 
 # Android Studio
 #*.iml
-android-radar/android-radar.iml
+/android-radar/android-radar.iml
+/AndroidRadar.iml
+/app/app.iml
 .idea/
 .gradle
 build/

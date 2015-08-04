@@ -244,6 +244,7 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
         result.append("/");
         result.append(UUID.randomUUID().toString());
         result.append("/providers.json?imagesok=1");
+        result.append("&t=1");
         return result.toString();
     }
 
@@ -394,6 +395,7 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
     private boolean testThroughputSampleRate(RadarSession session) {
         RadarSessionProperties sessionProperties = session.get_sessionProperties();
         double pct;
+        Log.d(TAG, String.format("Network type: %s %s", session.get_networkType(), session.get_networkSubtype()));
         if (session.get_networkType().equalsIgnoreCase("mobile")) {
             pct = sessionProperties.get_throughputSampleRateMobile();
         } else {
