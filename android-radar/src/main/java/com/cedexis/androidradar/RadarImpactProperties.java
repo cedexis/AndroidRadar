@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by jacob on 10/06/15.
+ * TODO
  */
 public class RadarImpactProperties {
     private String _sessionId;

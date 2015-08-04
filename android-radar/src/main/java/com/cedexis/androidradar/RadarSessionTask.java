@@ -47,8 +47,14 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
     private Context _context;
     private RadarSessionTaskCaller _caller = null;
 
-    public RadarSessionTask(Context _context) {
-        this._context = _context;
+    /**
+     * The constructor for the RadarSessionTask class.
+     *
+     * @param context The Context in which the task runs.  Generally the Activity where the task
+     *                 is created.
+     */
+    public RadarSessionTask(Context context) {
+        this._context = context;
     }
 
     public interface RadarSessionTaskCaller {
