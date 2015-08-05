@@ -53,7 +53,7 @@ get_impactProperties
 .. java:method:: public RadarImpactProperties get_impactProperties()
    :outertype: RadarSessionProperties
 
-   TODO
+   :return: TODO
 
 get_requestorCustomerId
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -61,7 +61,7 @@ get_requestorCustomerId
 .. java:method:: public int get_requestorCustomerId()
    :outertype: RadarSessionProperties
 
-   TODO
+   :return: TODO
 
 get_requestorZoneId
 ^^^^^^^^^^^^^^^^^^^
@@ -69,7 +69,7 @@ get_requestorZoneId
 .. java:method:: public int get_requestorZoneId()
    :outertype: RadarSessionProperties
 
-   TODO
+   :return: TODO
 
 get_throughputSampleRate
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -77,7 +77,7 @@ get_throughputSampleRate
 .. java:method:: public double get_throughputSampleRate()
    :outertype: RadarSessionProperties
 
-   TODO
+   :return: TODO
 
 get_throughputSampleRateMobile
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -85,5 +85,5 @@ get_throughputSampleRateMobile
 .. java:method:: public double get_throughputSampleRateMobile()
    :outertype: RadarSessionProperties
 
-   TODO
+   :return: TODO
 

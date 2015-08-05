@@ -52,45 +52,35 @@ public class RadarSessionProperties {
     }
 
     /**
-     * TODO
-     *
-     * @return
+     * @return TODO
      */
     public int get_requestorZoneId() {
         return _requestorZoneId;
     }
 
     /**
-     * TODO
-     *
-     * @return
+     * @return TODO
      */
     public int get_requestorCustomerId() {
         return _requestorCustomerId;
     }
 
     /**
-     * TODO
-     *
-     * @return
+     * @return TODO
      */
     public double get_throughputSampleRate() {
         return _throughputSampleRate;
     }
 
     /**
-     * TODO
-     *
-     * @return
+     * @return TODO
      */
     public double get_throughputSampleRateMobile() {
         return _throughputSampleRateMobile;
     }
 
     /**
-     * TODO
-     *
-     * @return
+     * @return TODO
      */
     public RadarImpactProperties get_impactProperties() {
         return _impactProperties;
