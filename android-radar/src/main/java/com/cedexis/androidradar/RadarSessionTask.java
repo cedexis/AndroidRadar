@@ -34,13 +34,11 @@ import java.util.regex.Pattern;
 
 public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSessionProgress, Void> {
 
-    public static final String TAG = "RadarSessionTask";
+    public static final String TAG = RadarSessionTask.class.getSimpleName();
     private static final String TAG_IMPACT = "RadarSessionTask.impact";
     private static final int MAJOR_VERSION = 3;
     private static final int MINOR_VERSION = 0;
-    private static SecureRandom _random = new SecureRandom();
     private String _initDomain = "init.cedexis-radar.net";
-    private String _providersDomain = "radar.cedexis.com";
     //private String _providersDomain = "radar.test.wildlemur.com";
     public static final String REPORT_DOMAIN = "rpt.cedexis.com";
     private Context _context;
@@ -72,27 +70,17 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
             if (null != session) {
                 //Log.d(TAG, session.toString());
                 try {
-//                    int j = 100;
-//                    while (0 < j--) {
-//                        sendImpactReport(session);
-//                    }
                     sendImpactReport(session);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                JSONArray providers = gatherRadarProviders(params[i]);
+                RadarProvider[] providers = RadarProvider.gatherRadarProviders(session, params[i]);
                 Log.d(TAG, providers.toString());
-                int countOfProviders = providers.length();
                 List<Pair<String, String>> progressData = new ArrayList<>();
-                progressData.add(Pair.create("providerCount", String.format("%d", countOfProviders)));
+                progressData.add(Pair.create("providerCount", String.format("%d", providers.length)));
                 publishProgress(new RadarSessionProgress("gotProviders", progressData));
-                for (int providerIndex = 0; providerIndex < countOfProviders; providerIndex++) {
-                    try {
-                        processProvider(session, providers.getJSONObject(providerIndex));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
+                for (int providerIndex = 0; providerIndex < providers.length; providerIndex++) {
+                    processProvider(session, providers[providerIndex]);
                 }
             }
             publishProgress(new RadarSessionProgress("sessionComplete"));
@@ -215,44 +203,6 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
         }
     }
 
-    private JSONArray gatherRadarProviders(RadarSessionProperties sessionProperties) {
-        JSONArray result = new JSONArray();
-        String[] protocols = {"http", "https"};
-        for (int i = 0; i < protocols.length; i++) {
-            try {
-                URL url = new URL(makeProvidersRequestUrl(protocols[i], sessionProperties));
-                //Log.v(TAG, String.format("Providers URL: %s", url));
-                String source = makeHttpRequest(url);
-                JSONArray temp = new JSONArray(source);
-                for (int j = 0; j < temp.length(); j++) {
-                    result.put(temp.get(j));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-
-    private String makeProvidersRequestUrl(String protocol, RadarSessionProperties sessionProperties) {
-        StringBuilder result = new StringBuilder(protocol);
-        result.append("://");
-        result.append(_providersDomain);
-        result.append("/");
-        result.append(sessionProperties.get_requestorZoneId());
-        result.append("/");
-        result.append(sessionProperties.get_requestorCustomerId());
-        result.append("/radar/");
-        result.append(1 + _random.nextInt(Integer.MAX_VALUE));
-        result.append("/");
-        result.append(UUID.randomUUID().toString());
-        result.append("/providers.json?imagesok=1");
-        result.append("&t=1");
-        return result.toString();
-    }
-
     public static String makeHttpRequest(URL url, List<Pair<String, String>> headers, int connectTimeout, int readTimeout) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         if (0 < connectTimeout) {
@@ -304,7 +254,7 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
         //Log.d(TAG, String.format("Network subtype name: %s", networkInUse.getSubtypeName()));
 
         RadarSession result = new RadarSession(
-                1 + _random.nextInt(Integer.MAX_VALUE),
+                1 + new SecureRandom().nextInt(Integer.MAX_VALUE),
                 System.currentTimeMillis() / 1000L,
                 sessionProperties,
                 networkInUse.getTypeName(),
@@ -365,61 +315,18 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
     /**
      * Builds the probes from the provider object, perform the measurements and publishes progress
      * @param session
-     * @param providerObject
+     * @param provider
      */
-    private void processProvider(RadarSession session, JSONObject providerObject) {
-        //Log.d(TAG, providerObject.toString());
-        try {
-            JSONObject providerData = providerObject.getJSONObject("p");
-            JSONObject temp = providerData.getJSONObject("p");
-            JSONObject probesData;
-            if (temp.has("a")) {
-                probesData = temp.getJSONObject("a");
-            } else if (temp.has("b")) {
-                probesData = temp.getJSONObject("b");
-            } else {
-                return;
-            }
-
-            //Log.d(TAG, probes.toString());
-            boolean keepGoing = true;
+    private void processProvider(RadarSession session, RadarProvider provider) {
             List<Pair<String, String>> progressData = new ArrayList<>();
-            progressData.add(Pair.create("providerOwnerZoneId", providerData.getString("z")));
-            progressData.add(Pair.create("providerOwnerCustomerId", providerData.getString("c")));
-            progressData.add(Pair.create("providerId", providerData.getString("i")));
-            if (probesData.has("a")) {
-                RadarProbe probe = new RadarProbe(session, probesData.getJSONObject("a"), ProbeType.COLD, providerData);
-                keepGoing = probe.measure(progressData);
-            }
-            if (keepGoing && probesData.has("b")) {
-                RadarProbe probe = new RadarProbe(session, probesData.getJSONObject("b"), ProbeType.RTT, providerData);
-                keepGoing = probe.measure(progressData);
-            }
-            if (keepGoing && probesData.has("c") && testThroughputSampleRate(session)) {
-                RadarProbe probe = new RadarProbe(session, probesData.getJSONObject("c"), ProbeType.THROUGHPUT, providerData);
-                probe.measure(progressData);
-            }
+            progressData.add(Pair.create("providerOwnerZoneId", Integer.toString(provider.getOwnerZoneId())));
+            progressData.add(Pair.create("providerOwnerCustomerId", Integer.toString(provider.getOwnerCustomerId())));
+            progressData.add(Pair.create("providerId", Integer.toString(provider.getProviderId())));
+        try {
+            provider.process(progressData);
             publishProgress(new RadarSessionProgress("finishedProvider", progressData));
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-    private boolean testThroughputSampleRate(RadarSession session) {
-        RadarSessionProperties sessionProperties = session.get_sessionProperties();
-        double pct;
-        Log.d(TAG, String.format("Network type: %s %s", session.get_networkType(), session.get_networkSubtype()));
-        if (session.get_networkType().equalsIgnoreCase("mobile")) {
-            pct = sessionProperties.get_throughputSampleRateMobile();
-        } else {
-            pct = sessionProperties.get_throughputSampleRate();
-        }
-        return testPercentage(pct);
-    }
-
-    private boolean testPercentage(double pct) {
-        double temp = new Random().nextDouble();
-        return temp < pct;
-    }
-
 }

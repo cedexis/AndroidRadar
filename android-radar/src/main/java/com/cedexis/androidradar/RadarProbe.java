@@ -28,6 +28,10 @@ public class RadarProbe {
     private String _baseUrl;
     private int _objectType;
 
+    public int getProbeType() {
+        return _probeType;
+    }
+
     public RadarProbe(RadarSession session, JSONObject probeData, int probeType, JSONObject providerData) throws JSONException {
         _session = session;
         _probeType = probeType;
@@ -133,20 +137,8 @@ public class RadarProbe {
             }
         }
 
-        // Reports
-        URL reportUrl = null;
         try {
-            reportUrl = new URL(makeReportUrl(_session, _probeType, _providerData, measurement, resultCode));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        Log.d(RadarSessionTask.TAG, String.format("Report URL: %s", reportUrl));
-        List<Pair<String, String>> headers = new ArrayList<>();
-        headers.add(Pair.create("cedexis-android-network-type", _session.get_networkType()));
-        headers.add(Pair.create("cedexis-android-network-subtype", _session.get_networkSubtype()));
-        try {
-            RadarSessionTask.makeHttpRequest(reportUrl, headers);
+            reportResult(measurement, resultCode);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -173,6 +165,17 @@ public class RadarProbe {
         }
         progressData.add(Pair.create(measurementKey, String.format("%d %s", measurement, units)));
         return true;
+    }
+
+    public void reportResult(long measurement, int resultCode) throws JSONException, IOException {
+        URL reportUrl = null;
+        reportUrl = new URL(makeReportUrl(_session, _probeType, _providerData, measurement, resultCode));
+
+        Log.d(RadarSessionTask.TAG, String.format("Report URL: %s", reportUrl));
+        List<Pair<String, String>> headers = new ArrayList<>();
+        headers.add(Pair.create("cedexis-android-network-type", _session.get_networkType()));
+        headers.add(Pair.create("cedexis-android-network-subtype", _session.get_networkSubtype()));
+        RadarSessionTask.makeHttpRequest(reportUrl, headers);
     }
 
     public String makeReportUrl(RadarSession session, int probeTypeId, JSONObject providerData, long measurement, int resultCode) throws JSONException {
