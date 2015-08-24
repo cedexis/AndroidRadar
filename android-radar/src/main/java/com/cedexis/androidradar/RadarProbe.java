@@ -24,12 +24,17 @@ public class RadarProbe {
     private int _probeType;
     private String _url;
     private RadarSession _session;
+
     private RadarProvider _provider;
     private String _baseUrl;
     private int _objectType;
 
     public int getProbeType() {
         return _probeType;
+    }
+
+    public RadarProvider getProvider() {
+        return _provider;
     }
 
     public RadarProbe(RadarSession session, JSONObject probeData, int probeType, RadarProvider provider) throws JSONException {
