@@ -24,7 +24,7 @@ public class RadarProbe {
     private int _probeType;
     private String _url;
     private RadarSession _session;
-    private JSONObject _providerData;
+    private RadarProvider _provider;
     private String _baseUrl;
     private int _objectType;
 
@@ -32,15 +32,15 @@ public class RadarProbe {
         return _probeType;
     }
 
-    public RadarProbe(RadarSession session, JSONObject probeData, int probeType, JSONObject providerData) throws JSONException {
+    public RadarProbe(RadarSession session, JSONObject probeData, int probeType, RadarProvider provider) throws JSONException {
         _session = session;
         _probeType = probeType;
-        _providerData = providerData;
+        _provider = provider;
         _baseUrl = probeData.getString("u");
         _objectType = probeData.getInt("t");
     }
 
-    public String makeUrl() throws RadarClientException, JSONException {
+    public String makeUrl() throws RadarClientException {
         if (9 == _objectType) {
             throw new RadarClientException("DNS measurement type not implemented");
         }
@@ -51,11 +51,11 @@ public class RadarProbe {
         queryString.append("-");
         queryString.append(_session.get_requestorCustomerId());
         queryString.append("-");
-        queryString.append(_providerData.getInt("z"));
+        queryString.append(_provider.getOwnerZoneId());
         queryString.append("-");
-        queryString.append(_providerData.getInt("c"));
+        queryString.append(_provider.getOwnerCustomerId());
         queryString.append("-");
-        queryString.append(_providerData.getInt("i"));
+        queryString.append(_provider.getProviderId());
         queryString.append("-");
         queryString.append(_session.get_transactionId());
         queryString.append("-");
@@ -167,9 +167,9 @@ public class RadarProbe {
         return true;
     }
 
-    public void reportResult(long measurement, int resultCode) throws JSONException, IOException {
+    public void reportResult(long measurement, int resultCode) throws IOException {
         URL reportUrl = null;
-        reportUrl = new URL(makeReportUrl(_session, _probeType, _providerData, measurement, resultCode));
+        reportUrl = new URL(makeReportUrl(measurement, resultCode));
 
         Log.d(RadarSessionTask.TAG, String.format("Report URL: %s", reportUrl));
         List<Pair<String, String>> headers = new ArrayList<>();
@@ -178,19 +178,19 @@ public class RadarProbe {
         RadarSessionTask.makeHttpRequest(reportUrl, headers);
     }
 
-    public String makeReportUrl(RadarSession session, int probeTypeId, JSONObject providerData, long measurement, int resultCode) throws JSONException {
+    public String makeReportUrl(long measurement, int resultCode) {
         StringBuilder result = new StringBuilder("http://");
         result.append(RadarSessionTask.REPORT_DOMAIN);
         result.append("/f1/");
-        result.append(session.get_requestSignature());
+        result.append(_session.get_requestSignature());
         result.append("/");
-        result.append(providerData.getInt("z"));
+        result.append(_provider.getOwnerZoneId());
         result.append("/");
-        result.append(providerData.getInt("c"));
+        result.append(_provider.getOwnerCustomerId());
         result.append("/");
-        result.append(providerData.getInt("i"));
+        result.append(_provider.getProviderId());
         result.append("/");
-        result.append(probeTypeId);
+        result.append(_probeType);
         result.append("/");
         result.append(resultCode);
         result.append("/");
