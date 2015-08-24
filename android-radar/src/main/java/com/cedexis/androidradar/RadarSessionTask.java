@@ -303,9 +303,11 @@ public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSes
             publishProgress(new RadarSessionProgress("init", progressData));
 
             return result;
-        } catch (IOException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
