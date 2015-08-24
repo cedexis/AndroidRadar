@@ -26,7 +26,7 @@ public class RadarProvider {
     private int _ownerZoneId;
     private int _ownerCustomerId;
     private int _providerId;
-    private RadarProbe[] _probes;
+    public RadarProbe[] _probes;
     private RadarSession _session;
 
     public int getOwnerZoneId() {
@@ -61,15 +61,15 @@ public class RadarProvider {
 
         List<RadarProbe> probeList = new ArrayList<>();
         if (probesData.has("a")) {
-            RadarProbe probe = new RadarProbe(session, probesData.getJSONObject("a"), ProbeType.COLD, providerData);
+            RadarProbe probe = new RadarProbe(session, probesData.getJSONObject("a"), ProbeType.COLD, this);
             probeList.add(probe);
         }
         if (probesData.has("b")) {
-            RadarProbe probe = new RadarProbe(session, probesData.getJSONObject("b"), ProbeType.RTT, providerData);
+            RadarProbe probe = new RadarProbe(session, probesData.getJSONObject("b"), ProbeType.RTT, this);
             probeList.add(probe);
         }
         if (probesData.has("c")) {
-            RadarProbe probe = new RadarProbe(session, probesData.getJSONObject("c"), ProbeType.THROUGHPUT, providerData);
+            RadarProbe probe = new RadarProbe(session, probesData.getJSONObject("c"), ProbeType.THROUGHPUT, this);
             probeList.add(probe);
         }
         _probes = probeList.toArray(new RadarProbe[probeList.size()]);
@@ -109,7 +109,7 @@ public class RadarProvider {
         return providers.toArray(new RadarProvider[providers.size()]);
     }
 
-    private static String makeProvidersRequestUrl(String protocol, RadarSessionProperties sessionProperties) {
+    public static String makeProvidersRequestUrl(String protocol, RadarSessionProperties sessionProperties) {
         StringBuilder result = new StringBuilder(protocol);
         result.append("://");
         result.append(PROVIDER_DOMAIN);
