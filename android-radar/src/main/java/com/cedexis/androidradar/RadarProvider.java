@@ -27,6 +27,11 @@ public class RadarProvider {
     private int _ownerCustomerId;
     private int _providerId;
     public RadarProbe[] _probes;
+
+    public RadarProbe[] getProbes() {
+        return _probes;
+    }
+
     private RadarSession _session;
 
     public int getOwnerZoneId() {

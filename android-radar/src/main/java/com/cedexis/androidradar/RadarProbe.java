@@ -22,7 +22,6 @@ public class RadarProbe {
     private static final int STANDARD_TIMEOUT = 4000;
 
     private int _probeType;
-    private String _url;
     private RadarSession _session;
 
     private RadarProvider _provider;
@@ -35,6 +34,18 @@ public class RadarProbe {
 
     public RadarProvider getProvider() {
         return _provider;
+    }
+
+    public RadarSession getSession() {
+        return _session;
+    }
+
+    public String getBaseUrl() {
+        return _baseUrl;
+    }
+
+    public int getObjectType() {
+        return _objectType;
     }
 
     public RadarProbe(RadarSession session, JSONObject probeData, int probeType, RadarProvider provider) throws JSONException {
