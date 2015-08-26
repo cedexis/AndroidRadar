@@ -1,19 +1,17 @@
 package com.cedexis.androidradar;
 
-import android.util.Pair;
-
-import java.util.AbstractMap;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * TODO
  */
-public class RadarImpactProperties {
+public class RadarImpactProperties implements Serializable {
     private String _sessionId;
     private String _category;
-    private List<Pair<String, Object>> _kpiTuples = new ArrayList<>();
+    private HashMap<String, Object> _kpiTuples = new HashMap<>();
     private String _performanceTestUrl;
 
     public RadarImpactProperties(String sessionId) {
@@ -32,7 +30,7 @@ public class RadarImpactProperties {
         return _category;
     }
 
-    public List<Pair<String, Object>> get_kpiTuples() {
+    public HashMap<String, Object> get_kpiTuples() {
         return _kpiTuples;
     }
 
@@ -53,7 +51,7 @@ public class RadarImpactProperties {
     }
 
     private void addKpi(String name, Object value) {
-        _kpiTuples.add(Pair.create(name, value));
+        _kpiTuples.put(name, value);
     }
 
     public void set_performanceTestUrl(String _performanceTestUrl) {

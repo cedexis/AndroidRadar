@@ -25,7 +25,9 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jacob on 10/06/15.
@@ -216,13 +218,13 @@ public class RadarSession {
             if (null != temp) {
                 blob.put("category", temp);
             }
-            List<Pair<String, Object>> tuples = impact.get_kpiTuples();
+            HashMap<String, Object> tuples = impact.get_kpiTuples();
             if (0 < tuples.size()) {
                 JSONArray kpi = new JSONArray();
-                for (Pair<String, Object> pair : tuples) {
+                for (Map.Entry<String, Object> pair : tuples.entrySet()) {
                     JSONArray tuple = new JSONArray();
-                    tuple.put(pair.first);
-                    tuple.put(pair.second);
+                    tuple.put(pair.getKey());
+                    tuple.put(pair.getValue());
                     kpi.put(tuple);
                 }
                 blob.put("kpi", kpi);
