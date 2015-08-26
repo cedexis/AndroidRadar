@@ -73,7 +73,12 @@ placed in an activity's overridden onResume method.
 ```java
 @Override
 protected void onResume() {
-    new RadarSessionTask(this).execute(new RadarSessionProperties(1, <your customer id>));
+    Intent radarService = new Intent(this, RadarService.class);
+    radarService.putExtra(
+        RadarService.EXTRA_SESSION_PROPERTIES,
+        new RadarSessionProperties(1, <your customer id>));
+    startService(radarService);
+
     super.onResume();
 }
 ```
