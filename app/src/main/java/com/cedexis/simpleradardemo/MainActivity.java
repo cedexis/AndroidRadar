@@ -1,5 +1,6 @@
 package com.cedexis.simpleradardemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.cedexis.androidradar.RadarImpactProperties;
+import com.cedexis.androidradar.RadarService;
 import com.cedexis.androidradar.RadarSessionProgress;
 import com.cedexis.androidradar.RadarSessionProperties;
 import com.cedexis.androidradar.RadarSessionTask;
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements
     String _impactSessionId;
     JSONObject _providerNames = null;
     private int _requestorZoneId = 1;
-    private int _requestorCustomerId = 10660;
+    private int _requestorCustomerId = 18980;
     private String _impactPerformanceTestUrl = "http://www.cedexis.com/images/homepage/portal-bg-1.jpg";
 
     @Override
@@ -91,10 +93,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onClick(View v) {
         Log.d(TAG, "Button pressed");
-        radarButton.setEnabled(false);
-        AppProviderProgressAdapter adapter = (AppProviderProgressAdapter) radarSessionProgressListView.getAdapter();
-        adapter.clear();
-        _radarSessionProgressBar.setProgress(0);
+        //radarButton.setEnabled(false);
+        //AppProviderProgressAdapter adapter = (AppProviderProgressAdapter) radarSessionProgressListView.getAdapter();
+        //adapter.clear();
+        //_radarSessionProgressBar.setProgress(0);
 
         RadarImpactProperties impactProperties = new RadarImpactProperties(_impactSessionId);
         impactProperties.set_performanceTestUrl(_impactPerformanceTestUrl);
@@ -112,9 +114,13 @@ public class MainActivity extends AppCompatActivity implements
                 , 0.5
         );
 
-        RadarSessionTask task = new RadarSessionTask(this);
-        task.set_caller(this);
-        task.execute(radarSessionProperties);
+        Intent radarService = new Intent(this, RadarService.class);
+        radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
+        startService(radarService);
+
+//        RadarSessionTask task = new RadarSessionTask(this);
+//        task.set_caller(this);
+//        task.execute(radarSessionProperties);
     }
 
     @Override

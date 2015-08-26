@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RadarProbe {
+    private static final String TAG = RadarProbe.class.getSimpleName();
     private static final int STANDARD_TIMEOUT = 4000;
 
     private int _probeType;
@@ -91,7 +92,7 @@ public class RadarProbe {
         return Math.round(Math.floor(8 * 1000 * fileSize / elapsed));
     }
 
-    public boolean measure(List<Pair<String, String>> progressData) throws JSONException {
+    public boolean measure() throws JSONException {
         //Log.d(TAG, probe.toString());
         URL url = null;
         try {
@@ -176,10 +177,10 @@ public class RadarProbe {
         }
         String measurementKey = String.format("measurement.%s", probeType);
         if (0 != resultCode) {
-            progressData.add(Pair.create(measurementKey, "error"));
+            Log.w(TAG, "Error measuring");
             return false;
         }
-        progressData.add(Pair.create(measurementKey, String.format("%d %s", measurement, units)));
+        Log.d(TAG, String.format("%s: %d %s", measurementKey, measurement, units));
         return true;
     }
 
@@ -187,16 +188,16 @@ public class RadarProbe {
         URL reportUrl = null;
         reportUrl = new URL(makeReportUrl(measurement, resultCode));
 
-        Log.d(RadarSessionTask.TAG, String.format("Report URL: %s", reportUrl));
+        Log.d(TAG, String.format("Report URL: %s", reportUrl));
         List<Pair<String, String>> headers = new ArrayList<>();
         headers.add(Pair.create("cedexis-android-network-type", _session.get_networkType()));
         headers.add(Pair.create("cedexis-android-network-subtype", _session.get_networkSubtype()));
-        RadarSessionTask.makeHttpRequest(reportUrl, headers);
+        RadarSession.makeHttpRequest(reportUrl, headers);
     }
 
     public String makeReportUrl(long measurement, int resultCode) {
         StringBuilder result = new StringBuilder("http://");
-        result.append(RadarSessionTask.REPORT_DOMAIN);
+        result.append(RadarSession.REPORT_DOMAIN);
         result.append("/f1/");
         result.append(_session.get_requestSignature());
         result.append("/");

@@ -80,12 +80,12 @@ public class RadarProvider {
         _probes = probeList.toArray(new RadarProbe[probeList.size()]);
     }
 
-    public void process(List<Pair<String, String>> progressData) throws JSONException {
+    public void process() throws JSONException {
         for(RadarProbe probe : _probes) {
             if (probe.getProbeType() == ProbeType.THROUGHPUT && !testThroughputSampleRate(_session)) {
                 break;
             }
-            if (!probe.measure(progressData)) {
+            if (!probe.measure()) {
                 break;
             }
         }
@@ -98,7 +98,7 @@ public class RadarProvider {
             try {
                 URL url = new URL(makeProvidersRequestUrl(protocols[i], sessionProperties));
                 //Log.v(TAG, String.format("Providers URL: %s", url));
-                String response = RadarSessionTask.makeHttpRequest(url);
+                String response = RadarSession.makeHttpRequest(url);
                 JSONArray providersData = new JSONArray(response);
                 for (int j = 0; j < providersData.length(); j++) {
                     providers.add(new RadarProvider(providersData.getJSONObject(j), session));
