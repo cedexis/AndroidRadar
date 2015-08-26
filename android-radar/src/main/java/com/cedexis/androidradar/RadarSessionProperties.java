@@ -1,9 +1,12 @@
 package com.cedexis.androidradar;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Allows the user to configure various properties of the Radar session.
  */
-public class RadarSessionProperties {
+public class RadarSessionProperties implements Parcelable {
     private int _requestorZoneId;
     private int _requestorCustomerId;
     private RadarImpactProperties _impactProperties;
@@ -51,6 +54,25 @@ public class RadarSessionProperties {
         this(requestorZoneId, requestorCustomerId, null);
     }
 
+    protected RadarSessionProperties(Parcel in) {
+        _requestorZoneId = in.readInt();
+        _requestorCustomerId = in.readInt();
+        _throughputSampleRate = in.readDouble();
+        _throughputSampleRateMobile = in.readDouble();
+    }
+
+    public static final Creator<RadarSessionProperties> CREATOR = new Creator<RadarSessionProperties>() {
+        @Override
+        public RadarSessionProperties createFromParcel(Parcel in) {
+            return new RadarSessionProperties(in);
+        }
+
+        @Override
+        public RadarSessionProperties[] newArray(int size) {
+            return new RadarSessionProperties[size];
+        }
+    };
+
     /**
      * @return TODO
      */
@@ -84,5 +106,33 @@ public class RadarSessionProperties {
      */
     public RadarImpactProperties get_impactProperties() {
         return _impactProperties;
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(_requestorZoneId);
+        dest.writeInt(_requestorCustomerId);
+        dest.writeSerializable(_impactProperties);
+        dest.writeDouble(_throughputSampleRate);
+        dest.writeDouble(_throughputSampleRateMobile);
     }
 }
