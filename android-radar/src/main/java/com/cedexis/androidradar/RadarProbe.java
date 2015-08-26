@@ -180,7 +180,7 @@ public class RadarProbe {
             Log.w(TAG, "Error measuring");
             return false;
         }
-        Log.d(TAG, String.format("%s: %d %d", measurementKey, measurement, units));
+        Log.d(TAG, String.format("%s: %d %s", measurementKey, measurement, units));
         return true;
     }
 
