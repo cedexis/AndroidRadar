@@ -59,6 +59,7 @@ public class RadarSessionProperties implements Parcelable {
         _requestorCustomerId = in.readInt();
         _throughputSampleRate = in.readDouble();
         _throughputSampleRateMobile = in.readDouble();
+        _impactProperties = (RadarImpactProperties)in.readSerializable();
     }
 
     public static final Creator<RadarSessionProperties> CREATOR = new Creator<RadarSessionProperties>() {
