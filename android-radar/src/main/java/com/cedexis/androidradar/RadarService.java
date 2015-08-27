@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.content.Context;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
+ * An {@link IntentService} subclass for executing a RadarSession in
  * a service on a separate handler thread.
- * <p/>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
  */
 public class RadarService extends IntentService {
     public static final String EXTRA_SESSION_PROPERTIES = "com.cedexis.androidradar.extra.SESSION_PROPERTIES";

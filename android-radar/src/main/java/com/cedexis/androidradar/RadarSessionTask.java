@@ -26,6 +26,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Use this class to execute a RadarSession in a separate thread.
+ *
+ * @deprecated use {@link RadarService} instead. See README.
+ */
+@Deprecated()
 public class RadarSessionTask extends AsyncTask<RadarSessionProperties, RadarSessionProgress, Void> {
 
     public static final String TAG = RadarSessionTask.class.getSimpleName();
