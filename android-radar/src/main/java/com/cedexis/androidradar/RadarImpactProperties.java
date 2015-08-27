@@ -18,19 +18,19 @@ public class RadarImpactProperties implements Serializable {
         this._sessionId = sessionId;
     }
 
-    public String get_sessionId() {
+    public String getSessionId() {
         return _sessionId;
     }
 
-    public void set_category(String value) {
+    public void setCategory(String value) {
         _category = value;
     }
 
-    public String get_category() {
+    public String getCategory() {
         return _category;
     }
 
-    public HashMap<String, Object> get_kpiTuples() {
+    public HashMap<String, Object> getKpiTuples() {
         return _kpiTuples;
     }
 
@@ -54,11 +54,11 @@ public class RadarImpactProperties implements Serializable {
         _kpiTuples.put(name, value);
     }
 
-    public void set_performanceTestUrl(String _performanceTestUrl) {
-        this._performanceTestUrl = _performanceTestUrl;
+    public void setPerformanceTestUrl(String performanceTestUrl) {
+        this._performanceTestUrl = performanceTestUrl;
     }
 
-    public String get_performanceTestUrl() {
+    public String getPerformanceTestUrl() {
         return _performanceTestUrl;
     }
 }

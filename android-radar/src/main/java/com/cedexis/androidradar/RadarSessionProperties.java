@@ -77,35 +77,35 @@ public class RadarSessionProperties implements Parcelable {
     /**
      * @return TODO
      */
-    public int get_requestorZoneId() {
+    public int getRequestorZoneId() {
         return _requestorZoneId;
     }
 
     /**
      * @return TODO
      */
-    public int get_requestorCustomerId() {
+    public int getRequestorCustomerId() {
         return _requestorCustomerId;
     }
 
     /**
      * @return TODO
      */
-    public double get_throughputSampleRate() {
+    public double getThroughputSampleRate() {
         return _throughputSampleRate;
     }
 
     /**
      * @return TODO
      */
-    public double get_throughputSampleRateMobile() {
+    public double getThroughputSampleRateMobile() {
         return _throughputSampleRateMobile;
     }
 
     /**
      * @return TODO
      */
-    public RadarImpactProperties get_impactProperties() {
+    public RadarImpactProperties getImpactProperties() {
         return _impactProperties;
     }
 

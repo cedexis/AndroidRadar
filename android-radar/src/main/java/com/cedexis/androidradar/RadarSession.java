@@ -49,39 +49,39 @@ public class RadarSession {
     private String _networkType;
     private String _networkSubtype;
 
-    public int get_transactionId() {
+    public int getTransactionId() {
         return _transactionId;
     }
 
-    public long get_sessionTimestamp() {
+    public long getSessionTimestamp() {
         return _sessionTimestamp;
     }
 
-    public String get_requestSignature() {
+    public String getRequestSignature() {
         return _requestSignature;
     }
 
-    public void set_requestSignature(String _requestSignature) {
-        this._requestSignature = _requestSignature;
+    public void setRequestSignature(String requestSignature) {
+        this._requestSignature = requestSignature;
     }
 
-    public int get_requestorZoneId() {
-        return _sessionProperties.get_requestorZoneId();
+    public int getRequestorZoneId() {
+        return _sessionProperties.getRequestorZoneId();
     }
 
-    public int get_requestorCustomerId() {
-        return _sessionProperties.get_requestorCustomerId();
+    public int getRequestorCustomerId() {
+        return _sessionProperties.getRequestorCustomerId();
     }
 
-    public String get_networkType() {
+    public String getNetworkType() {
         return _networkType;
     }
 
-    public String get_networkSubtype() {
+    public String getNetworkSubtype() {
         return _networkSubtype;
     }
 
-    public RadarSessionProperties get_sessionProperties() {
+    public RadarSessionProperties getSessionProperties() {
         return _sessionProperties;
     }
 
@@ -157,11 +157,11 @@ public class RadarSession {
         seed.append("-");
         seed.append(MINOR_VERSION);
         seed.append("-");
-        seed.append(sessionProperties.get_requestorZoneId());
+        seed.append(sessionProperties.getRequestorZoneId());
         seed.append("-");
-        seed.append(sessionProperties.get_requestorCustomerId());
+        seed.append(sessionProperties.getRequestorCustomerId());
         seed.append("-");
-        seed.append(result.get_transactionId());
+        seed.append(result.getTransactionId());
         seed.append("-i");
 
         StringBuilder urlString = new StringBuilder("http://");
@@ -169,25 +169,25 @@ public class RadarSession {
         urlString.append(".");
         urlString.append(INIT_DOMAIN);
         urlString.append("/i1/");
-        urlString.append(result.get_sessionTimestamp());
+        urlString.append(result.getSessionTimestamp());
         urlString.append("/");
-        urlString.append(result.get_transactionId());
+        urlString.append(result.getTransactionId());
         urlString.append("/json?seed=");
         urlString.append(seed.toString());
         //Log.v(TAG, String.format("Init URL: %s", urlString));
 
         List<Pair<String, String>> headers = new ArrayList<>();
-        headers.add(Pair.create("cedexis-android-network-type", result.get_networkType()));
-        headers.add(Pair.create("cedexis-android-network-subtype", result.get_networkSubtype()));
+        headers.add(Pair.create("cedexis-android-network-type", result.getNetworkType()));
+        headers.add(Pair.create("cedexis-android-network-subtype", result.getNetworkSubtype()));
 
         try {
             URL initUrl = new URL(urlString.toString());
             String initResponse = RadarSession.makeHttpRequest(initUrl, headers);
             //Log.d(TAG, initResponse);
             JSONObject json = new JSONObject(initResponse);
-            result.set_requestSignature(json.getString("a"));
+            result.setRequestSignature(json.getString("a"));
 
-            Log.d(TAG, "RequestSignature: " + result.get_requestSignature());
+            Log.d(TAG, "RequestSignature: " + result.getRequestSignature());
 
             return result;
         } catch (MalformedURLException e) {
@@ -202,23 +202,23 @@ public class RadarSession {
     }
 
     public void sendImpactReport() throws JSONException {
-        RadarImpactProperties impact = this.get_sessionProperties().get_impactProperties();
+        RadarImpactProperties impact = this.getSessionProperties().getImpactProperties();
         if (null != impact) {
-            JSONObject performanceTestResult = getImpactPerformanceValue(impact.get_performanceTestUrl());
+            JSONObject performanceTestResult = getImpactPerformanceValue(impact.getPerformanceTestUrl());
             if (!performanceTestResult.getString("result").equals("success")) {
                 Log.w(TAG_IMPACT, performanceTestResult.toString());
                 return;
             }
             JSONObject blob = new JSONObject();
-            String temp = impact.get_sessionId();
+            String temp = impact.getSessionId();
             if (null != temp) {
                 blob.put("sessionID", temp);
             }
-            temp = impact.get_category();
+            temp = impact.getCategory();
             if (null != temp) {
                 blob.put("category", temp);
             }
-            HashMap<String, Object> tuples = impact.get_kpiTuples();
+            HashMap<String, Object> tuples = impact.getKpiTuples();
             if (0 < tuples.size()) {
                 JSONArray kpi = new JSONArray();
                 for (Map.Entry<String, Object> pair : tuples.entrySet()) {
@@ -261,14 +261,14 @@ public class RadarSession {
         urlBuilder.append("/n1/0/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/");
         urlBuilder.append(value + 1);
         urlBuilder.append("/");
-        urlBuilder.append(this.get_requestSignature());
+        urlBuilder.append(this.getRequestSignature());
         urlBuilder.append("/");
         urlBuilder.append(impactString);
         urlBuilder.append("/0");
         URL url = new URL(urlBuilder.toString());
         List<Pair<String, String>> headers = new ArrayList<>();
-        headers.add(Pair.create("cedexis-android-network-type", this.get_networkType()));
-        headers.add(Pair.create("cedexis-android-network-subtype", this.get_networkSubtype()));
+        headers.add(Pair.create("cedexis-android-network-type", this.getNetworkType()));
+        headers.add(Pair.create("cedexis-android-network-subtype", this.getNetworkSubtype()));
         headers.add(Pair.create("connection", "close"));
         //Log.d(TAG_IMPACT, String.format("Impact report URL: %s", url));
         RadarSession.makeHttpRequest(url, headers);
