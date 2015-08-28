@@ -48,6 +48,7 @@ public class RadarSession {
     private RadarSessionProperties _sessionProperties;
     private String _networkType;
     private String _networkSubtype;
+    private Boolean _isCancelled = false;
 
     public int getTransactionId() {
         return _transactionId;
@@ -324,6 +325,10 @@ public class RadarSession {
         Log.d(TAG, providers.toString());
 
         for (int providerIndex = 0; providerIndex < providers.length; providerIndex++) {
+            if (_isCancelled) {
+                Log.d(TAG, "Session cancelled");
+                return;
+            }
             try {
                 providers[providerIndex].process();
             } catch (JSONException e) {
@@ -331,5 +336,9 @@ public class RadarSession {
             };
         }
         Log.d(TAG, "Session complete");
+    }
+
+    public void stop() {
+        _isCancelled = true;
     }
 }
