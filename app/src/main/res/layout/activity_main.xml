@@ -28,5 +28,11 @@
         android:text="@string/button"
         android:textAllCaps="false"
         android:enabled="false"/>
+    <Button
+        android:id="@+id/stop_session"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:onClick="onStopClicked"/>
 
 </LinearLayout>

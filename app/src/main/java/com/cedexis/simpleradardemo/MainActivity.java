@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements
     private int _requestorZoneId = 1;
     private int _requestorCustomerId = 18980;
     private String _impactPerformanceTestUrl = "http://www.cedexis.com/images/homepage/portal-bg-1.jpg";
+    private Intent _radarService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +115,10 @@ public class MainActivity extends AppCompatActivity implements
                 , 0.5
         );
 
-        Intent radarService = new Intent(this, RadarService.class);
-        radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
-        startService(radarService);
+        _radarService = new Intent(this, RadarService.class);
+        _radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
+        startService(_radarService);
+
 
 //        RadarSessionTask task = new RadarSessionTask(this);
 //        task.set_caller(this);
@@ -174,5 +176,10 @@ public class MainActivity extends AppCompatActivity implements
     public void onPostExecute(JSONObject providerNames) {
         _providerNames = providerNames;
         radarButton.setEnabled(true);
+    }
+
+    public void onStopClicked(View view) {
+        Log.d(TAG, "Stop clicked");
+        this.stopService(_radarService);
     }
 }

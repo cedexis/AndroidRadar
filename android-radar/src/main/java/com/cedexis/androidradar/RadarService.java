@@ -2,7 +2,6 @@ package com.cedexis.androidradar;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.Context;
 
 /**
  * An {@link IntentService} subclass for executing a RadarSession in
@@ -10,6 +9,7 @@ import android.content.Context;
  */
 public class RadarService extends IntentService {
     public static final String EXTRA_SESSION_PROPERTIES = "com.cedexis.androidradar.extra.SESSION_PROPERTIES";
+    private RadarSession _session;
 
     public RadarService() {
         super("RadarService");
@@ -19,11 +19,17 @@ public class RadarService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final RadarSessionProperties sessionProperties = intent.getParcelableExtra(EXTRA_SESSION_PROPERTIES);
-            RadarSession session = RadarSession.initializeRadarSession(sessionProperties, this);
-            if (null != session) {
+            _session = RadarSession.initializeRadarSession(sessionProperties, this);
+            if (null != _session) {
                 //Log.d(TAG, session.toString());
-                session.run();
+                _session.run();
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        _session.stop();
+        super.onDestroy();
     }
 }
