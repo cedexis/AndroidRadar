@@ -64,9 +64,9 @@ public class RadarProbe {
         StringBuilder queryString = new StringBuilder("?rnd=");
         queryString.append(_probeType);
         queryString.append("-");
-        queryString.append(_session.get_requestorZoneId());
+        queryString.append(_session.getRequestorZoneId());
         queryString.append("-");
-        queryString.append(_session.get_requestorCustomerId());
+        queryString.append(_session.getRequestorCustomerId());
         queryString.append("-");
         queryString.append(_provider.getOwnerZoneId());
         queryString.append("-");
@@ -74,9 +74,9 @@ public class RadarProbe {
         queryString.append("-");
         queryString.append(_provider.getProviderId());
         queryString.append("-");
-        queryString.append(_session.get_transactionId());
+        queryString.append(_session.getTransactionId());
         queryString.append("-");
-        queryString.append(_session.get_requestSignature());
+        queryString.append(_session.getRequestSignature());
         return _baseUrl + queryString.toString();
     }
 
@@ -190,8 +190,8 @@ public class RadarProbe {
 
         Log.d(TAG, String.format("Report URL: %s", reportUrl));
         List<Pair<String, String>> headers = new ArrayList<>();
-        headers.add(Pair.create("cedexis-android-network-type", _session.get_networkType()));
-        headers.add(Pair.create("cedexis-android-network-subtype", _session.get_networkSubtype()));
+        headers.add(Pair.create("cedexis-android-network-type", _session.getNetworkType()));
+        headers.add(Pair.create("cedexis-android-network-subtype", _session.getNetworkSubtype()));
         RadarSession.makeHttpRequest(reportUrl, headers);
     }
 
@@ -199,7 +199,7 @@ public class RadarProbe {
         StringBuilder result = new StringBuilder("http://");
         result.append(RadarSession.REPORT_DOMAIN);
         result.append("/f1/");
-        result.append(_session.get_requestSignature());
+        result.append(_session.getRequestSignature());
         result.append("/");
         result.append(_provider.getOwnerZoneId());
         result.append("/");

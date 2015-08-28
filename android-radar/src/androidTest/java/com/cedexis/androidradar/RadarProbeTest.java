@@ -1,7 +1,6 @@
 package com.cedexis.androidradar;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +22,7 @@ public class RadarProbeTest extends AndroidTestCase {
                 null,
                 null
         );
-        session.set_requestSignature("A4KkaMfUeamyacifcaeqPfmOGjohHqqWT@RURGu4UoRURGvaYVQ1Gq9kfaGben8bgmf2iiQaGmaekiwaGkaeul2n6WDAeaGbejqbgk9TiaaO3yUaOarGagOtyNv0Dg9UmI5ZzweUAhyUChjVzaaa");
+        session.setRequestSignature("A4KkaMfUeamyacifcaeqPfmOGjohHqqWT@RURGu4UoRURGvaYVQ1Gq9kfaGben8bgmf2iiQaGmaekiwaGkaeul2n6WDAeaGbejqbgk9TiaaO3yUaOarGagOtyNv0Dg9UmI5ZzweUAhyUChjVzaaa");
         JSONObject providerData = new JSONObject("{\"a\":true,\"b\":1,\"p\":{\"z\":0,\"c\":0,\"i\":409,\"p\":{\"a\":{\"a\":{\"u\":\"http://global2.cmdolb.com/ops/akamai/images/r20.gif\",\"t\":2},\"b\":{\"u\":\"http://global2.cmdolb.com/ops/akamai/images/r20.gif\",\"t\":2},\"c\":{\"u\":\"http://global2.cmdolb.com/ops/akamai/images/r20-100KB.png\",\"t\":2}}}}}");
         RadarProvider provider = new RadarProvider(providerData, session);
         RadarProbe probe = provider.getProbes()[0];
@@ -42,7 +41,7 @@ public class RadarProbeTest extends AndroidTestCase {
                 null,
                 null
         );
-        session.set_requestSignature("A4KkaMfUeamyacifcaeqPfmOGjohHqqWT@RURGu4UoRURGvaYVQ1Gq9kfaGben8bgmf2iiQaGmaekiwaGkaeul2n6WDAeaGbejqbgk9TiaaO3yUaOarGagOtyNv0Dg9UmI5ZzweUAhyUChjVzaaa");
+        session.setRequestSignature("A4KkaMfUeamyacifcaeqPfmOGjohHqqWT@RURGu4UoRURGvaYVQ1Gq9kfaGben8bgmf2iiQaGmaekiwaGkaeul2n6WDAeaGbejqbgk9TiaaO3yUaOarGagOtyNv0Dg9UmI5ZzweUAhyUChjVzaaa");
         JSONObject providerData = new JSONObject("{\"a\":true,\"b\":1,\"p\":{\"z\":0,\"c\":0,\"i\":409,\"p\":{\"a\":{\"a\":{\"u\":\"http://global2.cmdolb.com/ops/akamai/images/r20.gif\",\"t\":2},\"b\":{\"u\":\"http://global2.cmdolb.com/ops/akamai/images/r20.gif\",\"t\":2},\"c\":{\"u\":\"http://global2.cmdolb.com/ops/akamai/images/r20-100KB.png\",\"t\":2}}}}}");
         RadarProvider provider = new RadarProvider(providerData, session);
         RadarProbe probe = provider.getProbes()[0];
@@ -76,7 +75,7 @@ public class RadarProbeTest extends AndroidTestCase {
                 null,
                 null
         );
-        session.set_requestSignature("A4KkaMfUeamyacifcaeqPfmOGjohHqqWT@RURGu4UoRURGvaYVQ1Gq9kfaGben8bgmf2iiQaGmaekiwaGkaeul2n6WDAeaGbejqbgk9TiaaO3yUaOarGagOtyNv0Dg9UmI5ZzweUAhyUChjVzaaa");
+        session.setRequestSignature("A4KkaMfUeamyacifcaeqPfmOGjohHqqWT@RURGu4UoRURGvaYVQ1Gq9kfaGben8bgmf2iiQaGmaekiwaGkaeul2n6WDAeaGbejqbgk9TiaaO3yUaOarGagOtyNv0Dg9UmI5ZzweUAhyUChjVzaaa");
         JSONObject providerData = new JSONObject("{\"a\":true,\"b\":1,\"p\":{\"z\":0,\"c\":0,\"i\":409,\"p\":{\"a\":{\"a\":{\"u\":\"http://global2.cmdolb.com/ops/akamai/images/r20.gif\",\"t\":2},\"b\":{\"u\":\"http://global2.cmdolb.com/ops/akamai/images/r20.gif\",\"t\":2},\"c\":{\"u\":\"http://global2.cmdolb.com/ops/akamai/images/r20-100KB.png\",\"t\":2}}}}}");
         JSONObject probeData = providerData.getJSONObject("p").getJSONObject("p").getJSONObject("a").getJSONObject("c");
         RadarProvider provider = new RadarProvider(providerData, session);

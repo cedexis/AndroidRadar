@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements
         //_radarSessionProgressBar.setProgress(0);
 
         RadarImpactProperties impactProperties = new RadarImpactProperties(_impactSessionId);
-        impactProperties.set_performanceTestUrl(_impactPerformanceTestUrl);
-        impactProperties.set_category("cart");
+        impactProperties.setPerformanceTestUrl(_impactPerformanceTestUrl);
+        impactProperties.setCategory("cart");
         impactProperties.addKpi("value", 12.34);
         impactProperties.addKpi("first kpi", 1);
         impactProperties.addKpi("second kpi", "abc");

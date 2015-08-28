@@ -1,7 +1,6 @@
 package com.cedexis.androidradar;
 
 import android.util.Log;
-import android.util.Pair;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -119,9 +118,9 @@ public class RadarProvider {
         result.append("://");
         result.append(PROVIDER_DOMAIN);
         result.append("/");
-        result.append(sessionProperties.get_requestorZoneId());
+        result.append(sessionProperties.getRequestorZoneId());
         result.append("/");
-        result.append(sessionProperties.get_requestorCustomerId());
+        result.append(sessionProperties.getRequestorCustomerId());
         result.append("/radar/");
         result.append(1 + new SecureRandom().nextInt(Integer.MAX_VALUE));
         result.append("/");
@@ -132,13 +131,13 @@ public class RadarProvider {
     }
 
     public static boolean testThroughputSampleRate(RadarSession session) {
-        RadarSessionProperties sessionProperties = session.get_sessionProperties();
+        RadarSessionProperties sessionProperties = session.getSessionProperties();
         double pct;
-        Log.d(TAG, String.format("Network type: %s %s", session.get_networkType(), session.get_networkSubtype()));
-        if (session.get_networkType().equalsIgnoreCase("mobile")) {
-            pct = sessionProperties.get_throughputSampleRateMobile();
+        Log.d(TAG, String.format("Network type: %s %s", session.getNetworkType(), session.getNetworkSubtype()));
+        if (session.getNetworkType().equalsIgnoreCase("mobile")) {
+            pct = sessionProperties.getThroughputSampleRateMobile();
         } else {
-            pct = sessionProperties.get_throughputSampleRate();
+            pct = sessionProperties.getThroughputSampleRate();
         }
         return testPercentage(pct);
     }

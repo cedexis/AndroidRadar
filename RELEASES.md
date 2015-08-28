@@ -2,6 +2,7 @@
 
 ## 0.2.0
 * Allow executing a RadarSession by using the RadarService.
+* Deprecate RadarSessionTask in favor of RadarService
 
 ## 0.1.4
 
