@@ -1,8 +1,9 @@
 # RELEASES
 
-## 0.2.0
+## 0.1.5
 * Allow executing a RadarSession by using the RadarService.
-* Deprecate RadarSessionTask in favor of RadarService
+* Deprecate RadarSessionTask in favor of RadarService.
+* Add network type headers to report.
 
 ## 0.1.4
 
