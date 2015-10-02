@@ -29,7 +29,9 @@ public class RadarService extends IntentService {
 
     @Override
     public void onDestroy() {
-        _session.stop();
+        if (_session != null) {
+            _session.stop();
+        }
         super.onDestroy();
     }
 }
