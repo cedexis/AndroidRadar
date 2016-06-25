@@ -49,7 +49,7 @@ dependencies {
 
 The Radar client requires a couple of permissions in order to get its work done.
 These should be added to your application's AndroidManifest.xml file, inside the
-root <manifest> element and before <application> element:
+root `<manifest>` element and before the `<application>` element:
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
