@@ -115,6 +115,7 @@ public class RadarSession {
         while ((line = bufferedReader.readLine()) != null) {
             result.append(line);
         }
+        in.close();
         return result.toString();
     }
 
@@ -333,7 +334,7 @@ public class RadarSession {
                 providers[providerIndex].process();
             } catch (JSONException e) {
                 e.printStackTrace();
-            };
+            }
         }
         Log.d(TAG, "Session complete");
     }
