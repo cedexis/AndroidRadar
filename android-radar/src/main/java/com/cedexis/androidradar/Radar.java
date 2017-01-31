@@ -8,17 +8,21 @@ import android.webkit.WebView;
 public class Radar {
 
     private Radar instance;
+    private final int zoneId;
+    private final int customerId;
 
-    private Radar() {
+    private Radar(int zoneId, int customerId) {
         instance = this;
+        this.zoneId = zoneId;
+        this.customerId = customerId;
     }
 
-    public static Radar init() {
-        Radar radar = new Radar();
+    public static Radar init(int zoneId, int customerId) {
+        Radar radar = new Radar(zoneId, customerId);
         return radar;
     }
 
-    public void sendRadarEvent(Activity activity, int zoneId, int customerId) {
+    public void sendRadarEvent(Activity activity) {
         ViewGroup viewGroup = (ViewGroup) activity.findViewById(android.R.id.content);
         WebView webView;
         webView = (WebView) viewGroup.findViewWithTag("CEDEXIS_WEBVIEW");

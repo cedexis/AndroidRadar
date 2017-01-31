@@ -3,16 +3,18 @@
 In order to use the same JS tag there is support to insert a WebView and load a simple HTML loading
 the JS tag over all activities.
 
-If you want to use this you have to call (best placed at `onResume` method):
+If you want to use this you have to call:
 
 ````java 
-Radar.init()
+Radar radarObject = Radar.init(zoneId, customerId)
 ````
 
-This will return a `Radar` object that you can use to send events over Activities using:
+This object can be initialized over your `Application#onCreate` method and pass it down to your activities.
+
+`Radar` object can be used to send events over Activities using:
 
 ````java
-radar.sendRadarEvent(this, zoneId, customerId);
+radarObject.sendRadarEvent(this);
 ````
 
 This will load a WebView in your Activity content hidden and will launch everything that you need.

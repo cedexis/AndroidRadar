@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements
                 , 0.5
         );
 
-        Radar radar = Radar.init();
-        radar.sendRadarEvent(this, _requestorZoneId, _requestorCustomerId);
+        Radar radar = Radar.init(_requestorZoneId, _requestorCustomerId);
+        radar.sendRadarEvent(this);
 
 //        _radarService = new Intent(this, RadarService.class);
 //        _radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
