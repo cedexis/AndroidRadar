@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -38,12 +39,14 @@ public class DownloadProviderNamesTask extends AsyncTask<Pair<Integer, Integer>,
         try {
             URL url = new URL(urlBuilder.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            InputStream inputStream = connection.getInputStream();
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder source = new StringBuilder();
             String line;
             while ((line = r.readLine()) != null) {
                 source.append(line);
             }
+            inputStream.close();
             return new JSONObject(source.toString());
         } catch (IOException e) {
             e.printStackTrace();
