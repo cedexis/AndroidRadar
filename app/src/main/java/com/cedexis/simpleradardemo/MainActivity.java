@@ -13,8 +13,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.cedexis.androidradar.Radar;
 import com.cedexis.androidradar.RadarImpactProperties;
-import com.cedexis.androidradar.RadarService;
 import com.cedexis.androidradar.RadarSessionProgress;
 import com.cedexis.androidradar.RadarSessionProperties;
 import com.cedexis.androidradar.RadarSessionTask;
@@ -131,9 +131,12 @@ public class MainActivity extends AppCompatActivity implements
                 , 0.5
         );
 
-        _radarService = new Intent(this, RadarService.class);
-        _radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
-        startService(_radarService);
+        Radar radar = Radar.init();
+        radar.sendRadarEvent(this, _requestorZoneId, _requestorCustomerId);
+
+//        _radarService = new Intent(this, RadarService.class);
+//        _radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
+//        startService(_radarService);
 
 
 //        RadarSessionTask task = new RadarSessionTask(this);
