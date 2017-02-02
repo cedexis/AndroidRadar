@@ -6,7 +6,10 @@ import android.content.Intent;
 /**
  * An {@link IntentService} subclass for executing a RadarSession in
  * a service on a separate handler thread.
+ *
+ * Use {@link Cedexis#initRadar(int zoneId, int customerId)} for future updates.
  */
+@Deprecated
 public class RadarService extends IntentService {
     public static final String EXTRA_SESSION_PROPERTIES = "com.cedexis.androidradar.extra.SESSION_PROPERTIES";
     private RadarSession _session;

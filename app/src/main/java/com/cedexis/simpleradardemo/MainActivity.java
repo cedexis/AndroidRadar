@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.cedexis.androidradar.Cedexis;
 import com.cedexis.androidradar.Radar;
 import com.cedexis.androidradar.RadarImpactProperties;
 import com.cedexis.androidradar.RadarSessionProgress;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements
     String _impactSessionId;
     JSONObject _providerNames = null;
     private int _requestorZoneId = 1;
-    private int _requestorCustomerId = 18980;
+    private int _requestorCustomerId = 22746;
     private String _impactPerformanceTestUrl = "http://www.cedexis.com/images/homepage/portal-bg-1.jpg";
     private Intent _radarService;
 
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements
                 , 0.5
         );
 
-        Radar radar = Radar.init(_requestorZoneId, _requestorCustomerId);
+        Radar radar = Cedexis.initRadar(_requestorZoneId, _requestorCustomerId);
         radar.sendRadarEvent(this);
 
 //        _radarService = new Intent(this, RadarService.class);
