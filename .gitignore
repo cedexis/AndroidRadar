@@ -21,6 +21,7 @@ gen/
 .gradle
 local.properties
 /build/
+/captures
 
 # More files
 *.swp
