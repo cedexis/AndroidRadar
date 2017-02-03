@@ -5,7 +5,7 @@ package com.cedexis.androidradar;
  */
 public final class Cedexis {
 
-    public static Radar initRadar(int zoneId, int customerId) {
+    public static Radar radar(int zoneId, int customerId) {
         return new RadarWebView(zoneId, customerId);
     }
 

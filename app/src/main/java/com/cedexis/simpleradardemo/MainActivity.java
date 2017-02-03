@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build());
 
         setContentView(R.layout.activity_main);
-        radar = Cedexis.initRadar(_requestorZoneId, _requestorCustomerId);
+        radar = Cedexis.radar(_requestorZoneId, _requestorCustomerId);
         radar.init(this);
 
         radarButton = (Button) findViewById(R.id.radar_button);
