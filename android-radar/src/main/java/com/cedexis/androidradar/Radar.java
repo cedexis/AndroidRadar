@@ -4,6 +4,10 @@ import android.app.Activity;
 
 public interface Radar {
 
-    void sendRadarEvent(final Activity activity);
+    void sendRadarEvent();
+
+    void init(final Activity activity);
+
+    void stop();
 
 }

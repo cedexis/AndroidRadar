@@ -15,9 +15,7 @@ import android.widget.ProgressBar;
 
 import com.cedexis.androidradar.Cedexis;
 import com.cedexis.androidradar.Radar;
-import com.cedexis.androidradar.RadarImpactProperties;
 import com.cedexis.androidradar.RadarSessionProgress;
-import com.cedexis.androidradar.RadarSessionProperties;
 import com.cedexis.androidradar.RadarSessionTask;
 
 import org.json.JSONException;
@@ -43,11 +41,11 @@ public class MainActivity extends AppCompatActivity implements
     private int _requestorCustomerId = 22746;
     private String _impactPerformanceTestUrl = "http://www.cedexis.com/images/homepage/portal-bg-1.jpg";
     private Intent _radarService;
+    private Radar radar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Enable Strict Mode for the sample app in order to detect issues on time.
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
@@ -63,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements
                 .build());
 
         setContentView(R.layout.activity_main);
+        radar = Cedexis.initRadar(_requestorZoneId, _requestorCustomerId);
+        radar.init(this);
 
         radarButton = (Button) findViewById(R.id.radar_button);
         radarButton.setOnClickListener(this);
@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements
         _radarSessionProgressBar = (ProgressBar) findViewById(R.id.radar_session_progress_bar);
 
         new DownloadProviderNamesTask(this).execute(Pair.create(_requestorZoneId, _requestorCustomerId));
-
     }
 
     @Override
@@ -87,62 +86,25 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         _impactSessionId = UUID.randomUUID().toString();
         Log.d(TAG, String.format("Impact session id: %s", _impactSessionId));
     }
 
     @Override
     public void onClick(View v) {
-        Log.d(TAG, "Button pressed");
-        //radarButton.setEnabled(false);
-        //AppProviderProgressAdapter adapter = (AppProviderProgressAdapter) radarSessionProgressListView.getAdapter();
-        //adapter.clear();
-        //_radarSessionProgressBar.setProgress(0);
-
-        RadarImpactProperties impactProperties = new RadarImpactProperties(_impactSessionId);
-        impactProperties.setPerformanceTestUrl(_impactPerformanceTestUrl);
-        impactProperties.setCategory("cart");
-        impactProperties.addKpi("value", 12.34);
-        impactProperties.addKpi("first kpi", 1);
-        impactProperties.addKpi("second kpi", "abc");
-        impactProperties.addKpi("third kpi", true);
-
-        RadarSessionProperties radarSessionProperties = new RadarSessionProperties(
-                _requestorZoneId,
-                _requestorCustomerId,
-                impactProperties
-                , 1
-                , 0.5
-        );
-
-        Radar radar = Cedexis.initRadar(_requestorZoneId, _requestorCustomerId);
-        radar.sendRadarEvent(this);
+        radar.sendRadarEvent();
 
 //        _radarService = new Intent(this, RadarService.class);
 //        _radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
 //        startService(_radarService);
 
-
-//        RadarSessionTask task = new RadarSessionTask(this);
-//        task.set_caller(this);
-//        task.execute(radarSessionProperties);
     }
 
     @Override

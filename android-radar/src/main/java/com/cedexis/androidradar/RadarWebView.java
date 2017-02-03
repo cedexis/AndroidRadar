@@ -3,7 +3,6 @@ package com.cedexis.androidradar;
 import android.app.Activity;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -12,15 +11,14 @@ import android.webkit.WebView;
 import java.util.Locale;
 
 /**
- * A WebView {@link Radar} implementation, send radar events, executed on UI thread
- * as it is a WebView.
+ * A WebView {@link Radar} implementation, send radar events.
  */
-@UiThread
 final class RadarWebView implements Radar {
 
     private static final String WEBVIEW_TAG = "CEDEXIS_WEBVIEW";
     static final String RADAR_HOST = "radar.cedexis.com";
 
+    private Activity activity;
     private final int zoneId;
     private final int customerId;
 
@@ -32,11 +30,31 @@ final class RadarWebView implements Radar {
     }
 
     @Override
-    public void sendRadarEvent(final Activity activity) {
+    public void sendRadarEvent() {
         ViewGroup viewGroup = (ViewGroup) activity.findViewById(android.R.id.content);
-        WebView webView = createOrFindWebView(activity, viewGroup);
-        configureWebView(webView, createOrGetWebClient());
+        WebView webView = createOrFindWebView(viewGroup);
+        String startCommand = String.format(Locale.getDefault(), "cedexis.start(%d,%d);", zoneId, customerId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            webView.evaluateJavascript("console.log('sending cedexis commands');", null);
+            webView.evaluateJavascript(startCommand, null);
+        } else {
+            webView.loadUrl("javascript:console.log('sending cedexis commands');");
+            webView.loadUrl("javascript:" + startCommand);
+        }
+    }
+
+    @Override
+    public void init(Activity activity) {
+        this.activity = activity;
+        ViewGroup viewGroup = (ViewGroup) activity.findViewById(android.R.id.content);
+        WebView webView = createOrFindWebView(viewGroup);
         webView.loadUrl(getRadarUrl());
+    }
+
+    @Override
+    public void stop() {
+        activity = null;
+        webViewClient = null;
     }
 
     @NonNull
@@ -78,11 +96,13 @@ final class RadarWebView implements Radar {
     }
 
     @NonNull
-    private WebView createOrFindWebView(Activity activity, ViewGroup viewGroup) {
+    private WebView createOrFindWebView(ViewGroup viewGroup) {
         WebView webView = (WebView) viewGroup.findViewWithTag(WEBVIEW_TAG);
+        CedexisRadarWebClient webClient = createOrGetWebClient();
         if (webView == null) {
             webView = new WebView(activity);
             webView.setTag(WEBVIEW_TAG);
+            configureWebView(webView, webClient);
             viewGroup.addView(webView);
         }
         return webView;
