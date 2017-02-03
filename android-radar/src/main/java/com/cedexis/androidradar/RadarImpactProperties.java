@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * TODO
  */
-public class RadarImpactProperties implements Serializable {
+class RadarImpactProperties implements Serializable {
     private String _sessionId;
     private String _category;
     private HashMap<String, Object> _kpiTuples = new HashMap<>();

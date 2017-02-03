@@ -4,9 +4,6 @@ import android.util.Pair;
 
 import java.util.List;
 
-/**
- * Created by jacob on 10/06/15.
- */
 public class RadarSessionProgress {
 
     private String _step;

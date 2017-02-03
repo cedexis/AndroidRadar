@@ -1,7 +1,7 @@
 package com.cedexis.androidradar;
 
-public abstract class ProbeType {
-    public static final int RTT = 0;
-    public static final int COLD = 1;
-    public static final int THROUGHPUT = 14;
+abstract class ProbeType {
+    static final int RTT = 0;
+    static final int COLD = 1;
+    static final int THROUGHPUT = 14;
 }

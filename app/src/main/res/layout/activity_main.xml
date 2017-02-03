@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="@string/button"
         android:textAllCaps="false"
-        android:enabled="false"/>
+        android:enabled="true"/>
     <Button
         android:id="@+id/stop_session"
         android:layout_width="match_parent"

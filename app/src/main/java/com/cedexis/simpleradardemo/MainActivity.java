@@ -1,46 +1,29 @@
 package com.cedexis.simpleradardemo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.util.Pair;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.cedexis.androidradar.Cedexis;
 import com.cedexis.androidradar.Radar;
-import com.cedexis.androidradar.RadarSessionProgress;
-import com.cedexis.androidradar.RadarSessionTask;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.UUID;
 
-
-public class MainActivity extends AppCompatActivity implements
-        View.OnClickListener,
-        RadarSessionTask.RadarSessionTaskCaller,
-        DownloadProviderNamesTask.Caller {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     private static final String TAG_PROGRESS = "MainActivity.progress";
 
     Button radarButton;
-    ListView radarSessionProgressListView;
     ProgressBar _radarSessionProgressBar;
     String _impactSessionId;
     JSONObject _providerNames = null;
     private int _requestorZoneId = 1;
     private int _requestorCustomerId = 22746;
-    private String _impactPerformanceTestUrl = "http://www.cedexis.com/images/homepage/portal-bg-1.jpg";
-    private Intent _radarService;
     private Radar radar;
 
     @Override
@@ -66,102 +49,14 @@ public class MainActivity extends AppCompatActivity implements
 
         radarButton = (Button) findViewById(R.id.radar_button);
         radarButton.setOnClickListener(this);
-
-        AppProviderProgressAdapter adapter = new AppProviderProgressAdapter(this, R.layout.radar_session_progress_view);
-
-        radarSessionProgressListView = (ListView) findViewById(R.id.radar_session_progress_listview);
-        radarSessionProgressListView.setAdapter(adapter);
-
-        _radarSessionProgressBar = (ProgressBar) findViewById(R.id.radar_session_progress_bar);
-
-        new DownloadProviderNamesTask(this).execute(Pair.create(_requestorZoneId, _requestorCustomerId));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        _impactSessionId = UUID.randomUUID().toString();
-        Log.d(TAG, String.format("Impact session id: %s", _impactSessionId));
     }
 
     @Override
     public void onClick(View v) {
         radar.sendRadarEvent();
-
 //        _radarService = new Intent(this, RadarService.class);
 //        _radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
 //        startService(_radarService);
 
-    }
-
-    @Override
-    public void onProgress(RadarSessionProgress sessionProgress) {
-        Log.d(TAG, sessionProgress.toString());
-        TupleSearcher<String, String> search = new TupleSearcher<String, String>(sessionProgress.get_progressData());
-        switch (sessionProgress.get_step()) {
-            case "sessionComplete":
-                radarButton.setEnabled(true);
-                break;
-            case "gotProviders":
-                Pair<String, String> tuple = search.search("providerCount");
-                if (null != tuple) {
-                    _radarSessionProgressBar.setMax(Integer.parseInt(tuple.second));
-                }
-                break;
-            case "finishedProvider":
-                Log.d(TAG_PROGRESS, sessionProgress.toString());
-                updateListProgress(sessionProgress);
-                _radarSessionProgressBar.incrementProgressBy(1);
-                break;
-        }
-    }
-
-    private void updateListProgress(RadarSessionProgress sessionProgress) {
-        AppProviderProgressAdapter adapter = (AppProviderProgressAdapter) radarSessionProgressListView.getAdapter();
-        TupleSearcher<String, String> search = new TupleSearcher<String, String>(sessionProgress.get_progressData());
-        String providerId = search.search("providerId").second;
-        Log.d(TAG_PROGRESS, String.format("providerId: %s", providerId));
-        try {
-            AppProvider provider = new AppProvider(providerId, _providerNames.getString(providerId));
-            Pair<String, String> temp = search.search("measurement.connect");
-            if (null != temp) {
-                provider.set_connectTimeText(temp.second);
-            }
-            temp = search.search("measurement.rtt");
-            if (null != temp) {
-                provider.set_responseTimeText(temp.second);
-            }
-            temp = search.search("measurement.throughput");
-            if (null != temp) {
-                provider.set_throughputText(temp.second);
-            }
-            adapter.add(provider);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onPostExecute(JSONObject providerNames) {
-        _providerNames = providerNames;
-        radarButton.setEnabled(true);
-    }
-
-    public void onStopClicked(View view) {
-        Log.d(TAG, "Stop clicked");
-        this.stopService(_radarService);
     }
 }

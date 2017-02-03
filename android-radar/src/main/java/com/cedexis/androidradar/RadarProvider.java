@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-/**
- * Created by jrosas on 8/21/15.
- */
-public class RadarProvider {
+class RadarProvider {
     private static final String PROVIDER_DOMAIN = "radar.cedexis.com";
     private static final String TAG = RadarProvider.class.getSimpleName();
 

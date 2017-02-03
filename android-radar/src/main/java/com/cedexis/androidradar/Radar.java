@@ -8,6 +8,4 @@ public interface Radar {
 
     void init(final Activity activity);
 
-    void stop();
-
 }

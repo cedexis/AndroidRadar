@@ -29,9 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by jacob on 10/06/15.
- */
 public class RadarSession {
     // Constants:
     private static final String TAG = RadarSession.class.getSimpleName();

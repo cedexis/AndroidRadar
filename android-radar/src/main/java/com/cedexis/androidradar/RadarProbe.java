@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RadarProbe {
+class RadarProbe {
     private static final String TAG = RadarProbe.class.getSimpleName();
     private static final int STANDARD_TIMEOUT = 4000;
 
