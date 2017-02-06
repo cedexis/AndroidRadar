@@ -5,23 +5,13 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
 import com.cedexis.androidradar.Cedexis;
 import com.cedexis.androidradar.Radar;
 
-import org.json.JSONObject;
-
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "MainActivity";
-    private static final String TAG_PROGRESS = "MainActivity.progress";
-
     Button radarButton;
-    ProgressBar _radarSessionProgressBar;
-    String _impactSessionId;
-    JSONObject _providerNames = null;
     private int _requestorZoneId = 1;
     private int _requestorCustomerId = 22746;
     private Radar radar;
@@ -44,8 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build());
 
         setContentView(R.layout.activity_main);
-        radar = Cedexis.radar(_requestorZoneId, _requestorCustomerId);
-        radar.init(this);
+        radar = Cedexis.radar(this);
 
         radarButton = (Button) findViewById(R.id.radar_button);
         radarButton.setOnClickListener(this);
@@ -53,10 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        radar.sendRadarEvent();
-//        _radarService = new Intent(this, RadarService.class);
-//        _radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
-//        startService(_radarService);
-
+        radar.start(_requestorZoneId, _requestorCustomerId);
     }
 }
