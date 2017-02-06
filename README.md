@@ -94,6 +94,25 @@ session, which usually lasts no more than a couple of seconds.
 If you call `radarObject.start` from `Activity#onResume`, the client will execute
 a Radar session each time the user returns to that activity.
 
+That's it.  Now every time the user navigates or returns to that activity, a
+Radar session will fire.
+
+Note that to start a Radar object requires at least two integer
+arguments, namely your Cedexis zone and customer ids.  You may already know
+these from correspondence with our team.  In a pinch, these can be obtained
+when logged into the Cedexis Portal at https://portal.cedexis.com/ui/radar/tag.
+This page shows the JavaScript Radar tag with your zone and customer ids
+embedded.
+
+![Portal Screenshot](./portal_screenshot.png)
+
+The two numbers in the URL (enclosed by the red box in the screenshot above) are
+your zone id and customer id, respectively.
+
+## Impact
+
+Impact is not currently supported from the Radar Android SDK. Support will be included in future releases and documentation for using Impact will be added when it is available from the SDK.
+ 
 ## Known Issues
 
 ### Possible Error Output when run using StrictMode
@@ -150,22 +169,3 @@ StrictMode policy violation; ~duration=252 ms: android.os.StrictMode$StrictModeD
 
 This comes from a bug in the WebView constructor, you can see more information about this over the
 AOSP bug tracker: [here] (https://code.google.com/p/android/issues/detail?id=77886&can=1&q=strictmode%20webview&colspec=ID%20Status%20Priority%20Owner%20Summary%20Stars%20Reporter%20Opened)
-
-That's it.  Now every time the user navigates or returns to that activity, a
-Radar session will fire.
-
-Note that to start a Radar object requires at least two integer
-arguments, namely your Cedexis zone and customer ids.  You may already know
-these from correspondence with our team.  In a pinch, these can be obtained
-when logged into the Cedexis Portal at https://portal.cedexis.com/ui/radar/tag.
-This page shows the JavaScript Radar tag with your zone and customer ids
-embedded.
-
-![Portal Screenshot](./portal_screenshot.png)
-
-The two numbers in the URL (enclosed by the red box in the screenshot above) are
-your zone id and customer id, respectively.
-
-## Impact
-
-Impact is not currently supported from the Radar Android SDK. Support will be included in future releases and documentation for using Impact will be added when it is available from the SDK. 
