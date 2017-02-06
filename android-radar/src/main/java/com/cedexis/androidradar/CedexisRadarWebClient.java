@@ -17,13 +17,37 @@
 package com.cedexis.androidradar;
 
 import android.net.Uri;
+import android.os.Build;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.util.Locale;
+
 class CedexisRadarWebClient extends WebViewClient {
+
+    private final int zoneId;
+    private final int customerId;
+
+    CedexisRadarWebClient(int zoneId, int customerId) {
+        this.zoneId = zoneId;
+        this.customerId = customerId;
+    }
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         return !Uri.parse(url).getHost().equals(RadarWebView.RADAR_HOST);
+    }
+
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+        String startCommand = String.format(Locale.getDefault(), "cedexis.start(%d,%d);", zoneId, customerId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            view.evaluateJavascript("console.log('sending cedexis commands');", null);
+            view.evaluateJavascript(startCommand, null);
+        } else {
+            view.loadUrl("javascript:console.log('sending cedexis commands');");
+            view.loadUrl("javascript:" + startCommand);
+        }
     }
 }

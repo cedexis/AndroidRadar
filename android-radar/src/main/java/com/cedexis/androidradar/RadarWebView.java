@@ -35,55 +35,37 @@ final class RadarWebView implements Radar {
     private static final String WEBVIEW_TAG = "CEDEXIS_WEBVIEW";
     static final String RADAR_HOST = "radar.cedexis.com";
 
-    private final int zoneId;
-    private final int customerId;
-
     private WebView webView;
 
     private CedexisRadarWebClient webViewClient;
 
-    RadarWebView(int zoneId, int customerId) {
-        this.zoneId = zoneId;
-        this.customerId = customerId;
-    }
-
-    @Override
-    public void start() {
-        if (webView == null) {
-            throw new IllegalAccessError("Call Radar#init method before sending Radar events");
-        }
-
-        String startCommand = String.format(Locale.getDefault(), "cedexis.start(%d,%d);", zoneId, customerId);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView.evaluateJavascript("console.log('sending cedexis commands');", null);
-            webView.evaluateJavascript(startCommand, null);
-        } else {
-            webView.loadUrl("javascript:console.log('sending cedexis commands');");
-            webView.loadUrl("javascript:" + startCommand);
-        }
-    }
-
-    @Override
-    public void init(Activity activity) {
+    RadarWebView(Activity activity) {
         ViewGroup viewGroup = (ViewGroup) activity.findViewById(android.R.id.content);
         webView = new WebView(activity);
         webView.setTag(WEBVIEW_TAG);
         configureWebView(webView);
-        webView.setWebViewClient(createOrGetWebClient());
-        webView.loadUrl(getRadarUrl());
         viewGroup.addView(webView);
     }
 
-    @NonNull
-    private String getRadarUrl() {
-        return String.format(Locale.getDefault(),
-                "http://" + RADAR_HOST + "/%d/%d/radar.html", zoneId, customerId);
+    @Override
+    public void start(int zoneId, int customerId) {
+        webView.setWebViewClient(createOrGetWebClient(zoneId, customerId));
+        webView.loadUrl(getRadarUrl(zoneId, customerId));
+        if (webView == null) {
+            throw new IllegalAccessError("Call Radar#init method before sending Radar events");
+        }
     }
 
     @NonNull
-    private CedexisRadarWebClient createOrGetWebClient() {
+    private String getRadarUrl(int zoneId, int customerId) {
+        return String.format(Locale.getDefault(),
+                "http://%s/%d/%d/radar.html", RADAR_HOST, zoneId, customerId);
+    }
+
+    @NonNull
+    private CedexisRadarWebClient createOrGetWebClient(int zoneId, int customerId) {
         if (webViewClient == null) {
-            webViewClient = new CedexisRadarWebClient();
+            webViewClient = new CedexisRadarWebClient(zoneId, customerId);
         }
         return webViewClient;
     }
@@ -94,7 +76,6 @@ final class RadarWebView implements Radar {
      * Radar host.
      *
      * @param webView
-     * @param client
      */
     @SuppressLint("SetJavaScriptEnabled")
     private void configureWebView(WebView webView) {

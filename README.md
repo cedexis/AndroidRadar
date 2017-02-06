@@ -79,31 +79,24 @@ JavaScript client.
 To use this, call:
 
 ``` java
-Radar radarObject = Cedexis.radar(zoneId, customerId);
+Radar radarObject = Cedexis.radar(Activity activity);
 ```
 
-This object can be initialized in your `Application#onCreate` method and passed
-to any activity in which you would like to execute Radar measurements.
-
-The `Radar` object then can be used to send Radar measurements from Activities
-in `Activity#onCreate`:
-
-``` java
-Radar radarObject = getRadarObject();
-radarObject.init(YourActivity.this);
-```
+This object can be initialized in your `Activity#onCreate` method and used in any part in which 
+you would like to execute Radar measurements.
 
 Each time you would like to send Radar measurements (normally from within
 `Activity#onResume` method), call:
 
 ``` java
-radarObject.start();
+Radar radarObject = getRadarObject();
+radarObject.start(zoneId, customerId);
 ```
 
 This loads a hidden WebView in your Activity content and executes a single Radar
 session, which usually lasts no more than a couple of seconds.
 
-If you call `radarObject.start` from `Activity#onResume`, the client will execute
+If you call `radarObject#start` from `Activity#onResume`, the client will execute
 a Radar session each time the user returns to that activity.
 
 That's it.  Now every time the user navigates or returns to that activity, a

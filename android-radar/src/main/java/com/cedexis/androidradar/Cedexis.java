@@ -16,13 +16,15 @@
 
 package com.cedexis.androidradar;
 
+import android.app.Activity;
+
 /**
  * Cedexis class to initialize SDK objects
  */
 public final class Cedexis {
 
-    public static Radar radar(int zoneId, int customerId) {
-        return new RadarWebView(zoneId, customerId);
+    public static Radar radar(Activity activity) {
+        return new RadarWebView(activity);
     }
 
 }

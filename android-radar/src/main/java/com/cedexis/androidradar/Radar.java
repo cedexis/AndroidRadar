@@ -16,12 +16,8 @@
 
 package com.cedexis.androidradar;
 
-import android.app.Activity;
-
 public interface Radar {
 
-    void start();
-
-    void init(final Activity activity);
+    void start(int zoneId, int customerId);
 
 }
