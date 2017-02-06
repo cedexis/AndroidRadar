@@ -1,3 +1,15 @@
+**Table of Contents**
+
+- [AndroidRadar](#)
+	- [Getting Started](#)
+		- [Add the jCenter repository](#)
+		- [Add dependency on android-radar module](#)
+		- [Add permissions to AndroidManifest.xml](#)
+	- [How it works](#)
+	- [Impact](#)
+	- [Known Issues](#)
+		- [Possible Error Output when run using StrictMode](#)
+		
 # AndroidRadar
 
 The easiest way to get started is by adding the android-radar Maven repository
