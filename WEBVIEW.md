@@ -21,7 +21,7 @@ radarObject.init(YourActivity.this);
 And each time you would like to send an event through Radar (normally on `Activity#onResume` method):
 
 ``` java
-radarObject.sendRadarEvent();
+radarObject.start();
 ```
 
 This will load a WebView in your Activity content hidden and will launch everything that you need.
