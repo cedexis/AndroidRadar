@@ -1,15 +1,15 @@
 **Table of Contents**
 
-- [AndroidRadar](#)
-	- [Getting Started](#)
-		- [Add the jCenter repository](#)
-		- [Add dependency on android-radar module](#)
-		- [Add permissions to AndroidManifest.xml](#)
-	- [How it works](#)
-	- [Impact](#)
-	- [Known Issues](#)
-		- [Possible Error Output when run using StrictMode](#)
-		
+- [AndroidRadar](#androidradar)
+    - [Getting Started](#getting-started)
+        - [Add the jCenter repository](#add-the-jcenter-repository)
+        - [Add dependency on android-radar module](#add-dependency-on-android-radar-module)
+        - [Add permissions to AndroidManifest.xml](#add-permissions-to-androidmanifestxml)
+    - [How it works](#how-it-works)
+    - [Impact](#impact)
+    - [Known Issues](#known-issues)
+        - [Possible Error Output when run using StrictMode](#possible-error-output-when-run-using-strictmode)
+        
 # AndroidRadar
 
 The easiest way to get started is by adding the android-radar Maven repository
