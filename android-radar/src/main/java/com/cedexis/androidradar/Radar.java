@@ -20,7 +20,7 @@ import android.app.Activity;
 
 public interface Radar {
 
-    void sendRadarEvent();
+    void start();
 
     void init(final Activity activity);
 

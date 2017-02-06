@@ -48,7 +48,7 @@ final class RadarWebView implements Radar {
     }
 
     @Override
-    public void sendRadarEvent() {
+    public void start() {
         if (webView == null) {
             throw new IllegalAccessError("Call Radar#init method before sending Radar events");
         }
