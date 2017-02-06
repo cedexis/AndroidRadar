@@ -154,7 +154,7 @@ AOSP bug tracker: [here] (https://code.google.com/p/android/issues/detail?id=778
 That's it.  Now every time the user navigates or returns to that activity, a
 Radar session will fire.
 
-Note that the RadarSessionProperties constructor requires at least two integer
+Note that to start a Radar object requires at least two integer
 arguments, namely your Cedexis zone and customer ids.  You may already know
 these from correspondence with our team.  In a pinch, these can be obtained
 when logged into the Cedexis Portal at https://portal.cedexis.com/ui/radar/tag.
