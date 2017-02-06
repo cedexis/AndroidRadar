@@ -1,40 +1,47 @@
 # Radar events with WebView in Android
 
-In order to use the same JS tag there is support to insert a WebView and load a simple HTML loading
-the JS tag over all activities.
+In order to leverage the Cedexis Radar JavaScript client on Android, there
+is support to insert a WebView and load a simple HTML page containing the
+JavaScript client.
 
-If you want to use this you have to call:
+To use this, call:
 
-``` java 
+``` java
 Radar radarObject = Cedexis.radar(zoneId, customerId);
 ```
 
-This object can be initialized over your `Application#onCreate` method and pass it down to your activities.
+This object can be initialized in your `Application#onCreate` method and passed
+to any activity in which you would like to execute Radar measurements.
 
-`Radar` object can be used to send events over Activities on `Activity#onCreate`:
+The `Radar` object then can be used to send Radar measurements from Activities
+in `Activity#onCreate`:
 
 ``` java
 Radar radarObject = getRadarObject();
 radarObject.init(YourActivity.this);
 ```
 
-And each time you would like to send an event through Radar (normally on `Activity#onResume` method):
+Each time you would like to send Radar measurements (normally from within
+`Activity#onResume` method), call:
 
 ``` java
 radarObject.start();
 ```
 
-This will load a WebView in your Activity content hidden and will launch everything that you need.
+This loads a hidden WebView in your Activity content and executes a single Radar
+session, which usually lasts no more than a couple of seconds.
 
-If your client implements this over the `Activity#onResume` method we will load the script once
-each time your customer comes back to an activity and send automatically a Radar event, just like
-in web.
+If you call `radarObject.start` from `Activity#onResume`, the client will execute
+a Radar session each time the user returns to that activity.
 
-## Possible Error Output on StrictMode
+## Known Issues
+
+### Possible Error Output when run using StrictMode
 
 This only applies if you are using [StrictMode](https://developer.android.com/reference/android/os/StrictMode.html) in your development builds
 
-As we are injecting an invisible WebView, it is possible that you see an error like the following one:
+As we are injecting an invisible WebView on the main UI thread, it is possible
+that you see an error like the following one:
 
 ``` java
 StrictMode policy violation; ~duration=252 ms: android.os.StrictMode$StrictModeDiskReadViolation: policy=65543 violation=2
