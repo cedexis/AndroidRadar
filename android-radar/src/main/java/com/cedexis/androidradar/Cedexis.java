@@ -23,8 +23,18 @@ import android.app.Activity;
  */
 public final class Cedexis {
 
-    public static Radar createRadar(Activity activity) {
-        return new RadarWebView(activity);
+    private final Radar radar;
+
+    private Cedexis(Activity activity) {
+        radar = new RadarWebView(activity);
+    }
+
+    public static Cedexis init(Activity activity) {
+        return new Cedexis(activity);
+    }
+
+    public void start(int zoneId, int customerId) {
+        radar.start(zoneId, customerId);
     }
 
 }

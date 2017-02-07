@@ -7,18 +7,18 @@ import android.view.View;
 import android.widget.Button;
 
 import com.cedexis.androidradar.Cedexis;
-import com.cedexis.androidradar.Radar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button radarButton;
-    private int _requestorZoneId = 1;
-    private int _requestorCustomerId = 22746;
-    private Radar radar;
+    private int requestorZoneId = 1;
+    private int requestorCustomerId = 22746;
+    private Cedexis cedexis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Enable Strict Mode for the sample app in order to detect issues on time.
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .detectNetwork()
                 .penaltyLog()
                 .build());
+
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
                 .detectLeakedSqlLiteObjects()
                 .detectLeakedClosableObjects()
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build());
 
         setContentView(R.layout.activity_main);
-        radar = Cedexis.createRadar(this);
+        cedexis = Cedexis.init(this);
 
         radarButton = (Button) findViewById(R.id.radar_button);
         radarButton.setOnClickListener(this);
@@ -42,6 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        radar.start(_requestorZoneId, _requestorCustomerId);
+        cedexis.start(requestorZoneId, requestorCustomerId);
     }
 }
