@@ -79,7 +79,7 @@ JavaScript client.
 To use this, call:
 
 ``` java
-Radar radarObject = Cedexis.radar(Activity activity);
+Radar radarObject = Cedexis.createRadar(Activity activity);
 ```
 
 This object can be initialized in your `Activity#onCreate` method and used in any part in which 
