@@ -17,14 +17,12 @@
 package com.cedexis.androidradar;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
 
 /**
  * TODO
  */
-class RadarImpactProperties implements Serializable {
+public class RadarImpactProperties implements Serializable {
     private String _sessionId;
     private String _category;
     private HashMap<String, Object> _kpiTuples = new HashMap<>();

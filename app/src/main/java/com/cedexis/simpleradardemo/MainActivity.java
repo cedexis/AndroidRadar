@@ -43,6 +43,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        // New SDK Usage
         cedexis.start(requestorZoneId, requestorCustomerId);
+
+
+        // Old SDK Usage
+//        RadarImpactProperties impactProperties = new RadarImpactProperties(UUID.randomUUID().toString());
+//        impactProperties.setPerformanceTestUrl("http://www.cedexis.com/images/homepage/portal-bg-1.jpg");
+//        impactProperties.setCategory("cart");
+//        impactProperties.addKpi("value", 12.34);
+//        impactProperties.addKpi("first kpi", 1);
+//        impactProperties.addKpi("second kpi", "abc");
+//        impactProperties.addKpi("third kpi", true);
+//
+//        RadarSessionProperties radarSessionProperties =
+//                new RadarSessionProperties(requestorZoneId, requestorCustomerId,
+//                        impactProperties, 1, 0.5);
+//
+//        Intent radarService = new Intent(this, RadarService.class);
+//        radarService.putExtra(RadarService.EXTRA_SESSION_PROPERTIES, radarSessionProperties);
+//        startService(radarService);
+
     }
 }
