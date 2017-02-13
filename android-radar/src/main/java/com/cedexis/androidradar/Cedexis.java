@@ -16,37 +16,25 @@
 
 package com.cedexis.androidradar;
 
-import android.util.Pair;
+import android.app.Activity;
 
-import java.util.List;
+/**
+ * Cedexis class to initialize SDK objects
+ */
+public final class Cedexis {
 
-public class RadarSessionProgress {
+    private final Radar radar;
 
-    private String _step;
-    private List<Pair<String, String>> _progressData;
-
-    public RadarSessionProgress(String step, List<Pair<String, String>> progressData) {
-        _step = step;
-        _progressData = progressData;
+    private Cedexis(Activity activity) {
+        radar = new RadarWebView(activity);
     }
 
-    public RadarSessionProgress(String step) {
-        this(step, null);
+    public static Cedexis init(Activity activity) {
+        return new Cedexis(activity);
     }
 
-    @Override
-    public String toString() {
-        return "RadarSessionProgress{" +
-                "_step='" + _step + '\'' +
-                ", _progressData=" + _progressData +
-                '}';
+    public void start(int zoneId, int customerId) {
+        radar.start(zoneId, customerId);
     }
 
-    public String get_step() {
-        return _step;
-    }
-
-    public List<Pair<String, String>> get_progressData() {
-        return _progressData;
-    }
 }
