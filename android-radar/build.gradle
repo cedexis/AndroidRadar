@@ -13,10 +13,10 @@ ext {
     siteUrl = 'https://github.com/cedexis/AndroidRadar'
     gitUrl = 'https://github.com/cedexis/AndroidRadar.git'
 
-    libraryVersion = '0.1.7'
+    libraryVersion = '0.2.0'
 
-    developerId = 'jacob'
-    developerName = 'Jacob Wan'
+    developerId = 'cedexis'
+    developerName = 'Cedexis'
     developerEmail = 'jacob@wildlemur.com'
 
     licenseName = 'The MIT License (MIT)'
@@ -47,5 +47,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
 }
 
+group = publishedGroupId
+version = libraryVersion
 apply from: 'https://raw.githubusercontent.com/cedexis/JCenter/master/installv1.gradle'
 apply from: 'https://raw.githubusercontent.com/cedexis/JCenter/master/bintrayv1.gradle'

@@ -23,7 +23,7 @@ import android.content.Intent;
  * An {@link IntentService} subclass for executing a RadarSession in
  * a service on a separate handler thread.
  *
- * Use {@link Cedexis#radar(int zoneId, int customerId)} for future updates.
+ * Use {@link Cedexis} for future updates.
  */
 @Deprecated
 public class RadarService extends IntentService {

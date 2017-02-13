@@ -19,7 +19,6 @@ package com.cedexis.androidradar;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -56,13 +55,11 @@ final class RadarWebView implements Radar {
         }
     }
 
-    @NonNull
     private String getRadarUrl(int zoneId, int customerId) {
         return String.format(Locale.getDefault(),
                 "http://%s/%d/%d/radar.html", RADAR_HOST, zoneId, customerId);
     }
 
-    @NonNull
     private CedexisRadarWebClient createOrGetWebClient(int zoneId, int customerId) {
         if (webViewClient == null) {
             webViewClient = new CedexisRadarWebClient(zoneId, customerId);
