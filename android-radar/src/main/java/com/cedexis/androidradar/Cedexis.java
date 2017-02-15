@@ -42,8 +42,8 @@ public final class Cedexis {
     /**
      * Inject a {@link Cedexis} {@link WebView} in the {@link Activity} root view.
      * Using `android.R.id.content` as the root view.
-     * @param activity
-     * @return
+     * @param activity Activity to attach WebView on root
+     * @return {@link Cedexis}
      */
     public static Cedexis init(Activity activity) {
         return new Cedexis(activity);
@@ -51,8 +51,8 @@ public final class Cedexis {
 
     /**
      * Inject a {@link Cedexis} in the provided {@link WebView} and make visibility View.GONE
-     * @param webView
-     * @return
+     * @param webView WebView to update
+     * @return {@link Cedexis}
      */
     public static Cedexis init(WebView webView) {
         return new Cedexis(webView);
@@ -60,8 +60,8 @@ public final class Cedexis {
 
     /**
      * Inject a {@link Cedexis} {@link WebView} in any {@link ViewGroup}
-     * @param viewGroup
-     * @return
+     * @param viewGroup viewGroup to attach a WebView
+     * @return {@link Cedexis}
      */
     public static Cedexis init(ViewGroup viewGroup) {
         return new Cedexis(viewGroup);
