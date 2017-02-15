@@ -18,6 +18,7 @@ package com.cedexis.androidradar;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,21 +39,35 @@ final class RadarWebView implements Radar {
 
     private CedexisRadarWebClient webViewClient;
 
-    RadarWebView(Activity activity) {
-        ViewGroup viewGroup = (ViewGroup) activity.findViewById(android.R.id.content);
-        webView = new WebView(activity);
+    RadarWebView(final Activity activity) {
+        final ViewGroup viewGroup = (ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        createWebView(activity, viewGroup);
+    }
+
+    RadarWebView(ViewGroup viewGroup) {
+        createWebView(viewGroup.getContext(), viewGroup);
+    }
+
+    private void createWebView(Context context, ViewGroup viewGroup) {
+        webView = new WebView(context);
         webView.setTag(WEBVIEW_TAG);
-        configureWebView(webView);
+        webView.setVisibility(View.GONE);
         viewGroup.addView(webView);
     }
 
+    RadarWebView(final WebView webView) {
+        this.webView = webView;
+        this.webView.setVisibility(View.GONE);
+    }
+
     @Override
-    public void start(int zoneId, int customerId) {
-        webView.setWebViewClient(createOrGetWebClient(zoneId, customerId));
-        webView.loadUrl(getRadarUrl(zoneId, customerId));
+    public void start(final int zoneId, final int customerId) {
         if (webView == null) {
             throw new IllegalAccessError("Call Radar#init method before sending Radar events");
         }
+        configureWebView(webView);
+        webView.setWebViewClient(createOrGetWebClient(zoneId, customerId));
+        webView.loadUrl(getRadarUrl(zoneId, customerId));
     }
 
     private String getRadarUrl(int zoneId, int customerId) {
@@ -76,7 +91,6 @@ final class RadarWebView implements Radar {
      */
     @SuppressLint("SetJavaScriptEnabled")
     private void configureWebView(WebView webView) {
-        webView.setVisibility(View.INVISIBLE);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setPluginState(WebSettings.PluginState.ON);
         webView.getSettings().setAllowFileAccess(true);

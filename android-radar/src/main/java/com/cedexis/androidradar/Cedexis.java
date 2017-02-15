@@ -17,6 +17,8 @@
 package com.cedexis.androidradar;
 
 import android.app.Activity;
+import android.view.ViewGroup;
+import android.webkit.WebView;
 
 /**
  * Cedexis class to initialize SDK objects
@@ -29,8 +31,40 @@ public final class Cedexis {
         radar = new RadarWebView(activity);
     }
 
+    private Cedexis(WebView webView) {
+        radar = new RadarWebView(webView);
+    }
+
+    private Cedexis(ViewGroup viewGroup) {
+        radar = new RadarWebView(viewGroup);
+    }
+
+    /**
+     * Inject a {@link Cedexis} {@link WebView} in the {@link Activity} root view.
+     * Using `android.R.id.content` as the root view.
+     * @param activity
+     * @return
+     */
     public static Cedexis init(Activity activity) {
         return new Cedexis(activity);
+    }
+
+    /**
+     * Inject a {@link Cedexis} in the provided {@link WebView} and make visibility View.GONE
+     * @param webView
+     * @return
+     */
+    public static Cedexis init(WebView webView) {
+        return new Cedexis(webView);
+    }
+
+    /**
+     * Inject a {@link Cedexis} {@link WebView} in any {@link ViewGroup}
+     * @param viewGroup
+     * @return
+     */
+    public static Cedexis init(ViewGroup viewGroup) {
+        return new Cedexis(viewGroup);
     }
 
     public void start(int zoneId, int customerId) {

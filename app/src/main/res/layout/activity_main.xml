@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -9,24 +10,31 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/radar_session_progress_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"></ListView>
+        android:layout_weight="1" />
 
     <ProgressBar
         android:id="@+id/radar_session_progress_bar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
-        style="@android:style/Widget.ProgressBar.Horizontal"/>
+        android:layout_height="6dp" />
 
     <Button
         android:id="@+id/radar_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:enabled="true"
         android:text="@string/button"
-        android:textAllCaps="false"
-        android:enabled="true"/>
+        android:textAllCaps="false" />
 
 </LinearLayout>
