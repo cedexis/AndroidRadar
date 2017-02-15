@@ -76,13 +76,27 @@ In order to leverage the Cedexis Radar JavaScript client on Android, there
 is support to insert a WebView and load a simple HTML page containing the
 JavaScript client.
 
-To use this, call:
+There are 3 different methods to use (as of `0.2.1`):
 
-``` java
+Pass an Activity to Cedexis to lookup for the root container of the activity and inject an invisible WebView, using `findViewById`
+
+```java
 Cedexis cedexis = Cedexis.init(Activity activity);
 ```
 
-This object can be initialized in your `Activity#onCreate` method and used in any part in which 
+Pass your own container to inject a new invisible WebView in it:
+
+```java
+Cedexis cedexis = Cedexis.init(ViewGroup container);
+``` 
+
+Pass directly a WebView to use it instead of injecting it. **Warning:** this method will hide the passed WebView from your activity.
+
+```java
+Cedexis cedexis = Cedexis.init(WebView webView);
+```
+
+The Cedexis object can be initialized in your `Activity#onCreate` method and used in any part in which 
 you would like to execute Radar measurements.
 
 Each time you would like to send Radar measurements (normally from within
