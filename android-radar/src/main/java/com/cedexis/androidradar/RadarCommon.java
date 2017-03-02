@@ -12,6 +12,7 @@ public class RadarCommon {
 
     private final static String WTYPE = "WTYPE";
     public static final String WWAN_TYPE = "WWAN_TYPE";
+    public static final String DEVICE_TYPE = "DEVICE_TYPE";
 
     public String getNetworkType(Context context) {
         TelephonyManager telephonyManager = (TelephonyManager)
@@ -46,9 +47,11 @@ public class RadarCommon {
         return connectivityManager.getActiveNetworkInfo();
     }
 
-    public Map<String, String> getParameters(Context context) {
+    Map<String, String> getParameters(Context context) {
         Map<String, String> params = new HashMap<>();
         NetworkInfo networkInfo = obtainNetworkInfo(context);
+        String deviceType = context.getResources().getBoolean(R.bool.is_tablet) ? "tablet" : "phone";
+        params.put(DEVICE_TYPE, deviceType);
         if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
             // WLAN
             params.put(WTYPE, "WLAN");
