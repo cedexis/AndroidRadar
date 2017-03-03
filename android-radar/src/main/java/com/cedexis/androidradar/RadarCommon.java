@@ -8,13 +8,13 @@ import android.telephony.TelephonyManager;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RadarCommon {
+class RadarCommon {
 
     private final static String WTYPE = "WTYPE";
-    public static final String WWAN_TYPE = "WWAN_TYPE";
-    public static final String DEVICE_TYPE = "DEVICE_TYPE";
+    private static final String WWAN_TYPE = "WWAN_TYPE";
+    private static final String DEVICE_TYPE = "DEVICE_TYPE";
 
-    public String getNetworkType(Context context) {
+    private String getNetworkType(Context context) {
         TelephonyManager telephonyManager = (TelephonyManager)
                 context.getSystemService(Context.TELEPHONY_SERVICE);
         int networkType = telephonyManager.getNetworkType();
