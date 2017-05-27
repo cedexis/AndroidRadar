@@ -38,10 +38,13 @@ public class RadarService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final RadarSessionProperties sessionProperties = intent.getParcelableExtra(EXTRA_SESSION_PROPERTIES);
-            _session = RadarSession.initializeRadarSession(sessionProperties, this);
-            if (null != _session) {
-                //Log.d(TAG, session.toString());
-                _session.run();
+            // In case the user forgets to pass session settings
+            if (sessionProperties != null) {
+                _session = RadarSession.initializeRadarSession(sessionProperties, this);
+                if (null != _session) {
+                    //Log.d(TAG, session.toString());
+                    _session.run();
+                }
             }
         }
     }
