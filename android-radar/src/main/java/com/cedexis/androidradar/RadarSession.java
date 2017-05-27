@@ -50,7 +50,7 @@ public class RadarSession {
     private static final String TAG = RadarSession.class.getSimpleName();
     private static final String TAG_IMPACT = "RadarSessionTask.impact";
     private static final int MAJOR_VERSION = 3;
-    private static final int MINOR_VERSION = 0;
+    private static final int MINOR_VERSION = 1;
     private static final String INIT_DOMAIN = "init.cedexis-radar.net";
     public static final String REPORT_DOMAIN = "rpt.cedexis.com";
 
