@@ -17,7 +17,7 @@ ext {
 
     developerId = 'cedexis'
     developerName = 'Cedexis'
-    developerEmail = 'jacob@wildlemur.com'
+    developerEmail = 'support@cedexis.com'
 
     licenseName = 'The MIT License (MIT)'
     licenseUrl = 'http://opensource.org/licenses/MIT'
