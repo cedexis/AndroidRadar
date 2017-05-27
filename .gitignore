@@ -13,7 +13,7 @@ bin/
 gen/
 
 # Android Studio
-#*.iml
+*.iml
 /android-radar/android-radar.iml
 /AndroidRadar.iml
 /app/app.iml
