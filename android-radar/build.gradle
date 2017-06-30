@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/cedexis/AndroidRadar'
     gitUrl = 'https://github.com/cedexis/AndroidRadar.git'
 
-    libraryVersion = '0.2.3'
+    libraryVersion = '0.2.4'
 
     developerId = 'cedexis'
     developerName = 'Cedexis'
