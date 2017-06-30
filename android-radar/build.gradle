@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 ext {
-    bintrayRepo = 'maven'
+    bintrayRepo = 'cedexis-oss-maven'
     bintrayName = 'android-radar'
 
     publishedGroupId = 'com.cedexis'
