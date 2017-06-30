@@ -93,12 +93,14 @@ class RadarProvider {
     }
 
     public void process() throws JSONException {
-        for(RadarProbe probe : _probes) {
-            if (probe.getProbeType() == ProbeType.THROUGHPUT && !testThroughputSampleRate(_session)) {
-                break;
-            }
-            if (!probe.measure()) {
-                break;
+        if (null != _probes) {
+            for (RadarProbe probe : _probes) {
+                if (probe.getProbeType() == ProbeType.THROUGHPUT && !testThroughputSampleRate(_session)) {
+                    break;
+                }
+                if (!probe.measure()) {
+                    break;
+                }
             }
         }
     }

@@ -18,7 +18,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         Intent radarService = new Intent(this, RadarService.class);
-        radarService.putExtra( RadarService.EXTRA_SESSION_PROPERTIES, new RadarSessionProperties(1, 10660));
+        radarService.putExtra(
+                RadarService.EXTRA_SESSION_PROPERTIES,
+                new RadarSessionProperties(1, 10660));
         startService(radarService);
         super.onResume();
     }
