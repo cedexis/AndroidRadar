@@ -206,11 +206,16 @@ public class RadarSession {
 
             return result;
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Log.d(TAG, String.format("Init request failed: %s", e.toString()));
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.d(TAG, String.format("Init request failed: %s", e.toString()));
         } catch (IOException e) {
-            e.printStackTrace();
+            // Covers (among others):
+            // java.net.UnknowHostException
+            // javax.net.ssl.SSLHandshakeException
+            // java.net.SocketException
+            // java.io.FileNotFoundException
+            Log.d(TAG, String.format("Init request failed: %s", e.toString()));
         }
 
         return null;
