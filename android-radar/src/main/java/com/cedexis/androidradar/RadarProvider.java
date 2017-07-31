@@ -108,6 +108,8 @@ class RadarProvider {
     public static RadarProvider[] gatherRadarProviders(RadarSession session, RadarSessionProperties sessionProperties) {
         List<RadarProvider> providers = new ArrayList<RadarProvider>();
         String[] protocols = {"http", "https"};
+        // Break out of the loop if there are any exceptions so we don't make two requests to a
+        // server that may be struggling.
         for (int i = 0; i < protocols.length; i++) {
             try {
                 URL url = new URL(makeProvidersRequestUrl(protocols[i], sessionProperties));
@@ -118,11 +120,14 @@ class RadarProvider {
                     providers.add(new RadarProvider(providersData.getJSONObject(j), session));
                 }
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                Log.d(TAG, String.format("providers.json request failed: %s", e.toString()));
+                break;
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.d(TAG, String.format("providers.json request failed: %s", e.toString()));
+                break;
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.d(TAG, String.format("providers.json request failed: %s", e.toString()));
+                break;
             }
         }
         return providers.toArray(new RadarProvider[providers.size()]);
