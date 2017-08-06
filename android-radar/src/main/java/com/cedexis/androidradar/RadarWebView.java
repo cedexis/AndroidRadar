@@ -26,6 +26,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * A WebView {@link Radar} implementation, send radar events.
@@ -38,6 +39,7 @@ final class RadarWebView implements Radar {
     private WebView webView;
 
     private CedexisRadarWebClient webViewClient;
+    private RadarCommon common = new RadarCommon();
 
     RadarWebView(final Activity activity) {
         final ViewGroup viewGroup = (ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content);
@@ -67,12 +69,19 @@ final class RadarWebView implements Radar {
         }
         configureWebView(webView);
         webView.setWebViewClient(createOrGetWebClient(zoneId, customerId));
-        webView.loadUrl(getRadarUrl(zoneId, customerId));
+        webView.loadUrl(getRadarUrl(zoneId, customerId, common.getParameters(webView.getContext())));
     }
 
-    private String getRadarUrl(int zoneId, int customerId) {
-        return String.format(Locale.getDefault(),
-                "http://%s/%d/%d/radar.html", RADAR_HOST, zoneId, customerId);
+    private String getRadarUrl(int zoneId, int customerId, Map<String, String> parameters) {
+        StringBuilder url = new StringBuilder();
+        String urlWithZoneIdAndCustomerId = String.format(Locale.getDefault(),
+                "http://%s/%d/%d/radar.html?", RADAR_HOST, zoneId, customerId);
+        url.append(urlWithZoneIdAndCustomerId);
+        for (Map.Entry<String, String> parameter : parameters.entrySet()) {
+            url.append(parameter.getKey()).append("=").append(parameter.getValue()).append("&");
+        }
+        url.deleteCharAt(url.length() - 1);
+        return url.toString();
     }
 
     private CedexisRadarWebClient createOrGetWebClient(int zoneId, int customerId) {
