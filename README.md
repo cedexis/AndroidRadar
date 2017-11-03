@@ -6,7 +6,7 @@
         - [Add dependency on android-radar module](#add-dependency-on-android-radar-module)
         - [Add permissions to AndroidManifest.xml](#add-permissions-to-androidmanifestxml)
     - [How it works](#how-it-works)
-    - [Impact](#impact)
+    - [Identifying the data](#identifying-the-data)
     - [Legacy API](#legacy-api)
     - [Known Issues](#known-issues)
         - [Possible Error Output when run using StrictMode](#possible-error-output-when-run-using-strictmode)
