@@ -134,10 +134,6 @@ The long term goal is to distinguish Radar data from webview implementations exp
 
 Android webview user agent strings can be very diverse, but one thing that distinguishes them from regular Chrome for Android user agent strings is the "wv" bit.  This isn't necessarily guaranteed, but seems to be common practice.
 
-## Impact
-
-Impact is not currently supported from the Radar Android SDK. Support will be included in future releases and documentation for using Impact will be added when it is available from the SDK.
-
 ## Legacy API
 
 For backward compatibility with existing implementations, the SDK continues to support the legacy API.
