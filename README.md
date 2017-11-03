@@ -126,6 +126,14 @@ embedded.
 The two numbers in the URL (enclosed by the red box in the screenshot above) are
 your zone id and customer id, respectively.
 
+## Identifying the data
+
+The long term goal is to distinguish Radar data from webview implementations explicitly, but for the time being, the best way is via the user agent string.  A typical Android webview user agent string looks like this:
+
+> Mozilla/5.0 (Linux; Android 8.0.0; Pixel Build/OPR3.170623.008; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36
+
+Android webview user agent strings can be very diverse, but one thing that distinguishes them from regular Chrome for Android user agent strings is the "wv" bit.  This isn't necessarily guaranteed, but seems to be common practice.
+
 ## Impact
 
 Impact is not currently supported from the Radar Android SDK. Support will be included in future releases and documentation for using Impact will be added when it is available from the SDK.
