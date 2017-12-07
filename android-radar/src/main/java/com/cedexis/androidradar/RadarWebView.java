@@ -92,7 +92,6 @@ final class RadarWebView implements Radar {
     @SuppressLint("SetJavaScriptEnabled")
     private void configureWebView(WebView webView) {
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setPluginState(WebSettings.PluginState.ON);
         webView.getSettings().setAllowFileAccess(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
