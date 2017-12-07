@@ -7,7 +7,6 @@
         - [Add permissions to AndroidManifest.xml](#add-permissions-to-androidmanifestxml)
     - [How it works](#how-it-works)
     - [Identifying the data](#identifying-the-data)
-    - [Legacy API](#legacy-api)
     - [Known Issues](#known-issues)
         - [Possible Error Output when run using StrictMode](#possible-error-output-when-run-using-strictmode)
         
@@ -133,39 +132,6 @@ The long term goal is to distinguish Radar data from webview implementations exp
 > Mozilla/5.0 (Linux; Android 8.0.0; Pixel Build/OPR3.170623.008; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36
 
 Android webview user agent strings can be very diverse, but one thing that distinguishes them from regular Chrome for Android user agent strings is the "wv" bit.  This isn't necessarily guaranteed, but seems to be common practice.
-
-## Legacy API
-
-For backward compatibility with existing implementations, the SDK continues to support the legacy API.
-
-Select one or more appropriate spots in your application code where you would
-like to execute a Radar session.  Since every application is different, it's
-hard to suggest a one-size-fits-all approach.  You'd like to strike a balance
-between allowing Radar to do too much network activity and not enough.  In
-general, if your application spends most of its time on a particular activity,
-then that activity's onResume method is a good place to start.
-
-To invoke a Radar session, simply insert the following code, here shown being
-placed in an activity's overridden onResume method.
-
-```java
-@Override
-protected void onResume() {
-    Intent radarService = new Intent(this, RadarService.class);
-    radarService.putExtra(
-        RadarService.EXTRA_SESSION_PROPERTIES,
-        new RadarSessionProperties(1, <your customer id>));
-    startService(radarService);
-
-    super.onResume();
-}
-```
-
-That's it.  Now every time the user navigates or returns to that activity, a
-Radar session will fire.
-
-Note that the RadarSessionProperties constructor requires two integer
-arguments, namely your Cedexis zone and customer ids described earlier.
 
 ## Known Issues
 
