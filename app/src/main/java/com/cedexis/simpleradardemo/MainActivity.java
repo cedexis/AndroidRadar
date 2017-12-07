@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 
 import com.cedexis.androidradar.Cedexis;
+import com.cedexis.androidradar.RadarScheme;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -59,6 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         // New SDK Usage
-        cedexis.start(requestorZoneId, requestorCustomerId);
+        cedexis.start(requestorZoneId, requestorCustomerId, RadarScheme.HTTPS);
     }
 }

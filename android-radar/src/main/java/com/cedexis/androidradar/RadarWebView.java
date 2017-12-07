@@ -20,9 +20,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import java.util.Locale;
@@ -32,9 +32,8 @@ import java.util.Locale;
  */
 final class RadarWebView implements Radar {
 
-    private static final String WEBVIEW_TAG = "CEDEXIS_WEBVIEW";
     static final String RADAR_HOST = "radar.cedexis.com";
-
+    private static final String TAG = RadarWebView.class.getSimpleName();
     private WebView webView;
 
     private CedexisRadarWebClient webViewClient;
@@ -48,31 +47,39 @@ final class RadarWebView implements Radar {
         createWebView(viewGroup.getContext(), viewGroup);
     }
 
-    private void createWebView(Context context, ViewGroup viewGroup) {
-        webView = new WebView(context);
-        webView.setTag(WEBVIEW_TAG);
-        webView.setVisibility(View.GONE);
-        viewGroup.addView(webView);
-    }
-
     RadarWebView(final WebView webView) {
         this.webView = webView;
         this.webView.setVisibility(View.GONE);
     }
 
-    @Override
-    public void start(final int zoneId, final int customerId) {
-        if (webView == null) {
-            throw new IllegalAccessError("Call Radar#init method before sending Radar events");
-        }
-        configureWebView(webView);
-        webView.setWebViewClient(createOrGetWebClient(zoneId, customerId));
-        webView.loadUrl(getRadarUrl(zoneId, customerId));
+    private void createWebView(Context context, ViewGroup viewGroup) {
+        webView = new WebView(context);
+        webView.setTag(TAG);
+        webView.setVisibility(View.GONE);
+        viewGroup.addView(webView);
     }
 
-    private String getRadarUrl(int zoneId, int customerId) {
-        return String.format(Locale.getDefault(),
-                "http://%s/%d/%d/radar.html", RADAR_HOST, zoneId, customerId);
+    @Override
+    public void start(final int zoneId, final int customerId) {
+        this.start(zoneId, customerId, RadarScheme.HTTP);
+    }
+
+    @Override
+    public void start(final int zoneId, final int customerId, final RadarScheme scheme) {
+        if (Build.VERSION.SDK_INT < 24) {
+            // Resource Timing is probably not available, so let's skip.
+            // Also skipping HTTPS on versions of Android where TLS might be a problem (<APIv19)
+            Log.d(TAG, String.format("Skipping on API version %d", Build.VERSION.SDK_INT));
+        } else if (webView == null) {
+            throw new IllegalAccessError("Call Radar#init method before sending Radar events");
+        } else {
+            configureWebView(webView);
+            webView.setWebViewClient(createOrGetWebClient(zoneId, customerId));
+            String url = String.format(Locale.getDefault(),
+                    "%s://%s/%d/%d/radar.html", scheme.toString(), RADAR_HOST, zoneId, customerId);
+            Log.d(TAG, String.format("Radar URL: %s", url));
+            webView.loadUrl(url);
+        }
     }
 
     private CedexisRadarWebClient createOrGetWebClient(int zoneId, int customerId) {

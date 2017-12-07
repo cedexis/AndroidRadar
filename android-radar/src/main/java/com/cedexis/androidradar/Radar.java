@@ -17,7 +17,6 @@
 package com.cedexis.androidradar;
 
 public interface Radar {
-
     void start(int zoneId, int customerId);
-
+    void start(int zoneId, int customerId, RadarScheme scheme);
 }
