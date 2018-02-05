@@ -99,7 +99,7 @@ you would like to execute Radar measurements.
 Each time you would like to send Radar measurements (normally from within
 `Activity#onResume` method), call:
 
-``` java
+```java
 Cedexis cedexis = getCedexis();
 cedexis.start(zoneId, customerId);
 ```
@@ -119,6 +119,16 @@ these from correspondence with our team.  In a pinch, these can be obtained
 when logged into the Cedexis Portal at https://portal.cedexis.com/ui/radar/tag.
 This page shows the JavaScript Radar tag with your zone and customer ids
 embedded.
+
+By default the client measures platforms configured with HTTP URLs. To measure
+platforms with HTTPS URLs, pass an optional RadarScheme argument to `cedexis.start`.
+
+For example:
+
+```java
+Cedexis cedexis = getCedexis();
+cedexis.start(zoneId, customerId, RadarScheme.HTTPS);
+```
 
 ![Portal Screenshot](./portal_screenshot.png)
 
