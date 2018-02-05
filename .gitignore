@@ -27,3 +27,7 @@ local.properties
 *.swp
 .DS_Store
 Thumbs.db
+
+# Deprecated stuff that might creep back in accidentally
+legacysampleapp/
+
