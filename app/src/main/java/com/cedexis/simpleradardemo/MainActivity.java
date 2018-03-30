@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button radarButton;
     private int requestorZoneId = 1;
-    private int requestorCustomerId = 22746;
+    private int requestorCustomerId = 10660;
     private Cedexis cedexis;
 
     @Override

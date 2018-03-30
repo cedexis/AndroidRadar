@@ -16,13 +16,13 @@
 
 package com.cedexis.androidradar;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import java.util.Locale;
@@ -73,10 +73,15 @@ final class RadarWebView implements Radar {
         } else if (webView == null) {
             throw new IllegalAccessError("Call Radar#init method before sending Radar events");
         } else {
-            configureWebView(webView);
+            WebSettings settings = webView.getSettings();
+            settings.setJavaScriptEnabled(true);
+            settings.setAllowFileAccess(true);
+            settings.setAllowContentAccess(true);
+            settings.setAllowFileAccessFromFileURLs(true);
+            settings.setAllowUniversalAccessFromFileURLs(true);
             webView.setWebViewClient(createOrGetWebClient(zoneId, customerId));
             String url = String.format(Locale.getDefault(),
-                    "%s://%s/%d/%d/radar.html", scheme.toString(), RADAR_HOST, zoneId, customerId);
+                    "%s://%s/0/0/radar.html", scheme.toString(), RADAR_HOST);
             Log.d(TAG, String.format("Radar URL: %s", url));
             webView.loadUrl(url);
         }
@@ -88,27 +93,4 @@ final class RadarWebView implements Radar {
         }
         return webViewClient;
     }
-
-    /**
-     * Give all access to the webview to use JavaScript and allow universal access,
-     * only send {@link CedexisRadarWebClient} to only allow redirects on the same
-     * Radar host.
-     *
-     * @param webView
-     */
-    @SuppressLint("SetJavaScriptEnabled")
-    private void configureWebView(WebView webView) {
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setAllowFileAccess(true);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            webView.getSettings().setAllowContentAccess(true);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            webView.getSettings().setAllowFileAccessFromFileURLs(true);
-            webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
-        }
-    }
-
 }

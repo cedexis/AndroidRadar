@@ -26,6 +26,10 @@ import java.util.Locale;
 
 class CedexisRadarWebClient extends WebViewClient {
 
+    // 2 is the client profile code for AndroidRadar
+    final int CLIENT_PROFILE = 2;
+    // Client profile version conveys the version of the WebView wrapper code.
+    final int CLIENT_PROFILE_VERSION = 1;
     final String TAG = CedexisRadarWebClient.class.getSimpleName();
     private final int zoneId;
     private final int customerId;
@@ -43,15 +47,21 @@ class CedexisRadarWebClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
-        String startCommand = String.format(Locale.getDefault(), "cedexis.start(%d,%d);", zoneId, customerId);
+        String startCommand = String.format(
+                Locale.getDefault(),
+                "cedexis.start(%d,%d,%d,%d);",
+                zoneId,
+                customerId,
+                CLIENT_PROFILE,
+                CLIENT_PROFILE_VERSION);
         Log.d(TAG, String.format("Detected version: %d", Build.VERSION.SDK_INT));
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                Log.d(TAG, "Using evaluateJavascript");
+                Log.d(TAG, String.format("Using evaluateJavascript; start command=%s", startCommand));
                 view.evaluateJavascript("console.log('sending cedexis commands');", null);
                 view.evaluateJavascript(startCommand, null);
             } else {
-                Log.d(TAG, "Using loadUrl");
+                Log.d(TAG, String.format("Using loadUrl: start command: %s", startCommand));
                 view.loadUrl("javascript:console.log('sending cedexis commands');");
                 view.loadUrl("javascript:" + startCommand);
             }
