@@ -81,7 +81,7 @@ final class RadarWebView implements Radar {
             settings.setAllowUniversalAccessFromFileURLs(true);
             webView.setWebViewClient(createOrGetWebClient(zoneId, customerId));
             String url = String.format(Locale.getDefault(),
-                    "%s://%s/0/0/radar.html", scheme.toString(), RADAR_HOST);
+                    "%s://%s/%s/%s/radar.html", scheme.toString(), zoneId, customerId, RADAR_HOST);
             Log.d(TAG, String.format("Radar URL: %s", url));
             webView.loadUrl(url);
         }
