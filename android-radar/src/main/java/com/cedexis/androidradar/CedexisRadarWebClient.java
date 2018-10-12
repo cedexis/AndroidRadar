@@ -16,6 +16,7 @@
 
 package com.cedexis.androidradar;
 
+import android.annotation.TargetApi;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -29,7 +30,7 @@ class CedexisRadarWebClient extends WebViewClient {
     // 2 is the client profile code for AndroidRadar
     final int CLIENT_PROFILE = 2;
     // Client profile version conveys the version of the WebView wrapper code.
-    final int CLIENT_PROFILE_VERSION = 1;
+    final int CLIENT_PROFILE_VERSION = 2;
     final String TAG = CedexisRadarWebClient.class.getSimpleName();
     private final int zoneId;
     private final int customerId;
@@ -44,6 +45,7 @@ class CedexisRadarWebClient extends WebViewClient {
         return !Uri.parse(url).getHost().equals(RadarWebView.RADAR_HOST);
     }
 
+    @TargetApi(24)
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
@@ -56,15 +58,10 @@ class CedexisRadarWebClient extends WebViewClient {
                 CLIENT_PROFILE_VERSION);
         Log.d(TAG, String.format("Detected version: %d", Build.VERSION.SDK_INT));
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                Log.d(TAG, String.format("Using evaluateJavascript; start command=%s", startCommand));
-                view.evaluateJavascript("console.log('sending cedexis commands');", null);
-                view.evaluateJavascript(startCommand, null);
-            } else {
-                Log.d(TAG, String.format("Using loadUrl: start command: %s", startCommand));
-                view.loadUrl("javascript:console.log('sending cedexis commands');");
-                view.loadUrl("javascript:" + startCommand);
-            }
+            // `evaluateJavascript` is safe. Gated on API level 24+ upstream.
+            Log.d(TAG, String.format("Using evaluateJavascript; start command=%s", startCommand));
+            view.evaluateJavascript("console.log('sending cedexis commands');", null);
+            view.evaluateJavascript(startCommand, null);
         } catch (java.lang.IllegalStateException e) {
             // Just swallow for now. We believe this only emerges from a custom ROM bug, so it's
             // probably okay to surrender this data.
