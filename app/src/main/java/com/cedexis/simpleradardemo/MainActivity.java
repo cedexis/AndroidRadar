@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         radarButton.setOnClickListener(this);
 
         long l = System.currentTimeMillis();
-        cedexis = Cedexis.init(this);
-        Log.d("INIT WITH ACTIVITY", "Time: " + (System.currentTimeMillis() - l));
+        //cedexis = Cedexis.init(this);
+        //Log.d("INIT WITH ACTIVITY", "Time: " + (System.currentTimeMillis() - l));
 
-        l = System.currentTimeMillis();
-        cedexis = Cedexis.init((WebView) findViewById(R.id.webview));
-        Log.d("INIT WITH WEBVIEW", "Time: " + (System.currentTimeMillis() - l));
+        //l = System.currentTimeMillis();
+        //cedexis = Cedexis.init((WebView) findViewById(R.id.webview));
+        //Log.d("INIT WITH WEBVIEW", "Time: " + (System.currentTimeMillis() - l));
 
         l = System.currentTimeMillis();
         cedexis = Cedexis.init((ViewGroup) findViewById(R.id.content));
