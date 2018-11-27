@@ -30,7 +30,7 @@ class CedexisRadarWebClient extends WebViewClient {
     // 2 is the client profile code for AndroidRadar
     final int CLIENT_PROFILE = 2;
     // Client profile version conveys the version of the WebView wrapper code.
-    final int CLIENT_PROFILE_VERSION = 2;
+    final int CLIENT_PROFILE_VERSION = 3;
     final String TAG = CedexisRadarWebClient.class.getSimpleName();
     private final int zoneId;
     private final int customerId;
