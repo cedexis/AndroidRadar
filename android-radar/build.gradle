@@ -35,20 +35,13 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 pom {
-                    name = 'Android Radar Library'
+                    name = 'Citrix ITM Android Radar Library'
                     description = 'An open source Radar client for Android'
                     url = 'https://github.com/cedexis/AndroidRadar'
                     licenses {
                         license {
                             name = 'The MIT License (MIT)'
                             url = 'http://opensource.org/licenses/MIT'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = 'cedexis'
-                            name = 'Cedexis'
-                            email = 'support@cedexis.com'
                         }
                     }
                 }
