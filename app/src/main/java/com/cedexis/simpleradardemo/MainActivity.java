@@ -2,12 +2,12 @@ package com.cedexis.simpleradardemo;
 
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cedexis.androidradar.Cedexis;
 import com.cedexis.androidradar.RadarScheme;

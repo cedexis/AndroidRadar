@@ -1,28 +1,5 @@
 apply plugin: 'com.android.library'
-
-ext {
-    bintrayRepo = 'cedexis-oss-maven'
-    bintrayName = 'android-radar'
-
-    publishedGroupId = 'com.cedexis'
-    libraryName = 'AndroidRadar'
-    artifact = 'android-radar'
-
-    libraryDescription = 'An open source Radar client for Android'
-
-    siteUrl = 'https://github.com/cedexis/AndroidRadar'
-    gitUrl = 'https://github.com/cedexis/AndroidRadar.git'
-
-    libraryVersion = '0.2.9'
-
-    developerId = 'cedexis'
-    developerName = 'Cedexis'
-    developerEmail = 'support@cedexis.com'
-
-    licenseName = 'The MIT License (MIT)'
-    licenseUrl = 'http://opensource.org/licenses/MIT'
-    allLicenses = ["MIT"]
-}
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 22
@@ -53,7 +30,33 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-group = publishedGroupId
-version = libraryVersion
-apply from: 'https://raw.githubusercontent.com/cedexis/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/cedexis/JCenter/master/bintrayv1.gradle'
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                pom {
+                    name = 'Android Radar Library'
+                    description = 'An open source Radar client for Android'
+                    url = 'https://github.com/cedexis/AndroidRadar'
+                    licenses {
+                        license {
+                            name = 'The MIT License (MIT)'
+                            url = 'http://opensource.org/licenses/MIT'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'cedexis'
+                            name = 'Cedexis'
+                            email = 'support@cedexis.com'
+                        }
+                    }
+                }
+                from components.release
+                groupId = 'com.cedexis'
+                artifactId = 'android-radar'
+                version = '0.2.10'
+            }
+        }
+    }
+}
