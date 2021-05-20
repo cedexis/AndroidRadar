@@ -19,7 +19,7 @@ to your application's gradle build.
 
 To get up and running quickly, we'll follow these steps:
 
-1. Add the jCenter repository.
+1. Add the jitpack repository.
 2. Add a dependency on the android-radar library module.
 3. Specify Android permissions.
 4. Execute Radar sessions programmatically.
@@ -31,12 +31,11 @@ In the allprojects configuration section, add a maven configuration below the jc
 ```groovy
 allprojects {
     repositories {
-        jcenter()
+        google()
+        mavenCentral()
 
-        // For Cedexis Radar
-        maven {
-            url 'https://dl.bintray.com/pureops/cedexis-oss-maven'
-        }
+        // for the radar library
+        maven { url "https://jitpack.io" }
     }
 }
 ```
@@ -44,7 +43,7 @@ allprojects {
 ### Add dependency on android-radar module
 
 In your application grade.build file, add a line to the `dependencies` section
-indicating the android-radar library.  The latest version available: [ ![Download](https://api.bintray.com/packages/pureops/cedexis-oss-maven/android-radar/images/download.svg) ](https://bintray.com/pureops/cedexis-oss-maven/android-radar/_latestVersion)
+indicating the android-radar library.  
 
 ```groovy
 // replace x, y and z with the latest version of the AndroidRadar library.
