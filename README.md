@@ -119,14 +119,14 @@ when logged into the Cedexis Portal at https://portal.cedexis.com/ui/radar/tag.
 This page shows the JavaScript Radar tag with your zone and customer ids
 embedded.
 
-By default the client measures platforms configured with HTTP URLs. To measure
-platforms with HTTPS URLs, pass an optional RadarScheme argument to `cedexis.start`.
+By default the client measures platforms configured with HTTPS URLs. To measure
+platforms with HTTP URLs, pass an optional RadarScheme argument to `cedexis.start` and possibly set android:usesCleartextTraffic="true" to your manifest.
 
 For example:
 
 ```java
 Cedexis cedexis = getCedexis();
-cedexis.start(zoneId, customerId, RadarScheme.HTTPS);
+cedexis.start(zoneId, customerId, RadarScheme.HTTP);
 ```
 
 ![Portal Screenshot](./portal_screenshot.png)
