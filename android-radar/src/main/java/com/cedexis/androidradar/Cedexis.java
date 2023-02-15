@@ -68,10 +68,8 @@ public final class Cedexis {
     }
 
     public void start(int zoneId, int customerId) {
-        // HTTP is the historical default, but users are encouraged to call the version that accepts
-        // a RadarScheme object and specify RadarScheme.HTTPS in order to generate measurements for
-        // HTTPS platforms.
-        this.start(zoneId, customerId, RadarScheme.HTTP);
+        // Default to HTTPS
+        this.start(zoneId, customerId, RadarScheme.HTTPS);
     }
 
     public void start(int zoneId, int customerId, RadarScheme scheme) {
